@@ -1,4 +1,4 @@
-import { Controller, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
@@ -15,20 +15,20 @@ export class UploadController {
   ) {}
 
   @Post('images')
-  @UseInterceptors(FilesInterceptor('images', 2))
+  @UseInterceptors(FilesInterceptor('images'))
   async images(@UploadedFiles() files: ExtendExpressMulterFile[]) {
     return await this.uploadService.save(files, FileTypes.IMAGE, `${this.storagePath}images`);
   }
 
   @Post('docs')
   @UseInterceptors(FilesInterceptor('docs'))
-  async docs(@UploadedFile() files: ExtendExpressMulterFile[]) {
+  async docs(@UploadedFiles() files: ExtendExpressMulterFile[]) {
     return await this.uploadService.save(files, FileTypes.DOCS, `${this.storagePath}docs`);
   }
 
-  @Post('videos')
+  @Post('video')
   @UseInterceptors(FilesInterceptor('video'))
-  async video(@UploadedFile() files: ExtendExpressMulterFile[]) {
+  async video(@UploadedFiles() files: ExtendExpressMulterFile[]) {
     return await this.uploadService.save(files, FileTypes.VIDEO, `${this.storagePath}video`);
   }
 }
