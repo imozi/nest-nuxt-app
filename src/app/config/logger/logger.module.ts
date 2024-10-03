@@ -3,8 +3,6 @@ import { LoggerService } from './logger.service';
 
 @Global()
 @Module({
-  imports: [],
-  controllers: [],
   providers: [LoggerService],
   exports: [LoggerService],
 })

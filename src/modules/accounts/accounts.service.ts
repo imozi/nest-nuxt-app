@@ -1,11 +1,11 @@
-import { PrismaService } from '@/app/config';
 import { Injectable } from '@nestjs/common';
+import { AccountRepository } from './repository/account.repository';
 
 @Injectable()
 export class AccountsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly accountRepository: AccountRepository) {}
 
-  async findTest() {
-    return await this.prisma.account.findMany();
+  async findManyWithPagination() {
+    return await this.accountRepository.findMany();
   }
 }

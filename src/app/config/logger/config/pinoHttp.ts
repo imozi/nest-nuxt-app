@@ -22,6 +22,6 @@ export const httpLogger = pinoHttp({
   genReqId: () => null,
   transport: {
     target: 'pino/file',
-    options: { destination: './log.txt', ignore: 'hostname' },
+    options: { destination: './logs/nest-http.log', ignore: 'hostname' },
   },
 });

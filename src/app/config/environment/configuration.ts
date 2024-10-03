@@ -16,8 +16,7 @@ const schemaEnvironmentVariables = Joi.object<EnvironmentVariables>({
   }),
   MODE: Joi.string().required().valid('development', 'production').messages({
     'any.required': 'Переменная MODE не объявлена в .env',
-    'any.only':
-      'Значение переменной MODE должно быть либо "development", либо "production"',
+    'any.only': 'Значение переменной MODE должно быть либо "development", либо "production"',
   }),
   PREFIX: Joi.string().required().messages({
     'any.required': 'Переменная PREFIX не объявлена в .env',
@@ -44,9 +43,7 @@ ${greenBright('Проверьте наличие файла .env и обязат
   `;
 };
 
-export const validateEnvironment = (
-  config: EnvironmentVariables | Record<string, unknown>,
-) => {
+export const validateEnvironment = (config: EnvironmentVariables | Record<string, unknown>) => {
   const { error, value } = schemaEnvironmentVariables.validate(config, {
     abortEarly: false,
     allowUnknown: true,

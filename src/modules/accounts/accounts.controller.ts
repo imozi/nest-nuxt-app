@@ -38,7 +38,7 @@ export class AccountsController {
 
   @Get('prisma')
   async findTest() {
-    return this.accountsService.findTest();
+    return this.accountsService.findManyWithPagination();
   }
 
   @Post()

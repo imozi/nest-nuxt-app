@@ -1,16 +1,6 @@
-import {
-  LoggerService as DefaultLogerService,
-  Injectable,
-} from '@nestjs/common';
+import { LoggerService as DefaultLogerService, Injectable } from '@nestjs/common';
 import { IncomingMessage, ServerResponse } from 'http';
-import {
-  logger,
-  httpLogger,
-  LogLevel,
-  formatMessage,
-  formatMessageHttp,
-  type CombineHttp,
-} from './config';
+import { logger, httpLogger, LogLevel, formatMessage, formatMessageHttp, type CombineHttp } from './config';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
 
@@ -30,10 +20,7 @@ export class LoggerService implements DefaultLogerService {
   }
 
   error(message: string, trace?: string, context?: string) {
-    this.logger.error(
-      { trace },
-      formatMessage(LogLevel.ERROR, message, context),
-    );
+    this.logger.error({ trace }, formatMessage(LogLevel.ERROR, message, context));
   }
 
   warn(message: string, context?: string) {

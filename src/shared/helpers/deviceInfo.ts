@@ -6,8 +6,7 @@ export const deviceInfo = (req: Request) => {
   const parser = new UAParser();
   const uaResult = parser.setUA(userAgentString).getResult();
 
-  const ipAddress =
-    req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress;
+  const ipAddress = req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress;
 
   return {
     ipAddress,
