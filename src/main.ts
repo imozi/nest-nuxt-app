@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@/app/app.module';
-import { EnvironmentService } from '@/app/config/environment';
-import { LoggerService } from '@/app/config/logger';
+import { ConfigService } from '@/app/common';
+import { LoggerService } from '@/app/common';
 import { LoggingInterceptor } from '@/interceptors/logging.interceptor';
 import { ValidationPipe } from '@nestjs/common';
 
@@ -10,7 +10,7 @@ const bootstrap = async () => {
     bufferLogs: true,
   });
   const logger = app.get(LoggerService);
-  const environments = app.get(EnvironmentService);
+  const environments = app.get(ConfigService);
   const globalPrefix = environments.get('PREFIX');
   const port = environments.get('PORT');
   const cors = environments.get('CORS');
@@ -21,7 +21,7 @@ const bootstrap = async () => {
 
   app.useLogger(logger);
   app.useGlobalInterceptors(new LoggingInterceptor(logger));
-  app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true }));
+  app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true, transform: true }));
 
   app.setGlobalPrefix(globalPrefix);
 

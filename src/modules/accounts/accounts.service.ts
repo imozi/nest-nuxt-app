@@ -5,7 +5,11 @@ import { AccountRepository } from './repository/account.repository';
 export class AccountsService {
   constructor(private readonly accountRepository: AccountRepository) {}
 
-  async findManyWithPagination() {
+  async findMany() {
     return await this.accountRepository.findMany();
+  }
+
+  async findById(uuid: string) {
+    return await this.accountRepository.findById(uuid);
   }
 }

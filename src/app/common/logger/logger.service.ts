@@ -1,15 +1,18 @@
 import { LoggerService as DefaultLogerService, Injectable } from '@nestjs/common';
 import { IncomingMessage, ServerResponse } from 'http';
-import { logger, httpLogger, LogLevel, formatMessage, formatMessageHttp, type CombineHttp } from './config';
+import { logger, httpLogger, LogLevel, formatMessage, formatMessageHttp, type CombineHttp } from './lib';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
+import { ConfigService } from '../config';
 
 dayjs.extend(duration);
 
 @Injectable()
 export class LoggerService implements DefaultLogerService {
   private readonly logger = logger;
-  private readonly httpLogger = httpLogger;
+  private readonly httpLogger = httpLogger(this.config.get('MODE'));
+
+  constructor(private readonly config: ConfigService) {}
 
   info(message: string, context?: string) {
     this.logger.info(formatMessage(LogLevel.INFO, message, context));

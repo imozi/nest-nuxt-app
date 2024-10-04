@@ -1,49 +1,27 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
-import { OnEvent } from '@nestjs/event-emitter';
-import { LoggerService } from '@/app/config/logger';
-
-export interface ExtendExpressMulterFile extends Omit<Express.Multer.File, 'size'> {
-  size: number | { size: number; name: string };
-}
 
 @Controller('accounts')
 export class AccountsController {
-  constructor(
-    private readonly accountsService: AccountsService,
-    private readonly logger: LoggerService,
-  ) {}
-
-  @OnEvent('file.uploaded')
-  async fileLog(files) {
-    this.logger.info(JSON.stringify(files));
-    return files;
-  }
+  constructor(private readonly accountsService: AccountsService) {}
 
   @Get()
-  async findAll() {
-    const promise = new Promise((res) => {
-      setTimeout(() => {
-        const arr = new Array(100)
-          .fill(0)
-          .map((_, i) => i * 2)
-          .join(',');
-
-        res(arr);
-      }, 10000);
-    });
-
-    return await promise;
+  @HttpCode(HttpStatus.OK)
+  async findMany() {
+    return await this.accountsService.findMany();
   }
 
-  @Get('prisma')
-  async findTest() {
-    return this.accountsService.findManyWithPagination();
-  }
-
-  @Post()
-  @HttpCode(200)
-  async createAll(@Body() data) {
-    return data;
+  @Get(':uuid')
+  @HttpCode(HttpStatus.OK)
+  async findById(
+    @Param(
+      'uuid',
+      new ParseUUIDPipe({
+        errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE,
+      }),
+    )
+    uuid: string,
+  ) {
+    return await this.accountsService.findById(uuid);
   }
 }

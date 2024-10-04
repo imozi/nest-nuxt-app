@@ -1,17 +1,16 @@
 import { Controller, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
-
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
 import { ExtendExpressMulterFile, FileTypes } from './lib';
-import { EnvironmentService } from '../environment';
+import { ConfigService } from '../config';
 
 @Controller('upload')
 export class UploadController {
-  private storagePath: string = this.environments.get('STORAGE_PATH');
+  private storagePath: string = this.config.get('STORAGE_PATH');
 
   constructor(
     private readonly uploadService: UploadService,
-    private readonly environments: EnvironmentService,
+    private readonly config: ConfigService,
   ) {}
 
   @Post('images')

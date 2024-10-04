@@ -1,4 +1,4 @@
-export interface ReturnTypeMeta<T> {
+export type ReturnTypeMeta<T> = {
   data: T;
   meta: {
     total: number;
@@ -8,4 +8,4 @@ export interface ReturnTypeMeta<T> {
     prev: number;
     next: number;
   };
-}
+};

@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { PrismaModule } from './prisma';
-import { EnvironmentModule, EnvironmentService } from './environment';
+import { ConfigModule, ConfigService } from './config';
 import { LoggerModule } from './logger';
 import { UploadModule } from './upload';
 
@@ -11,9 +11,9 @@ import { UploadModule } from './upload';
   imports: [
     EventEmitterModule.forRoot(),
     ServeStaticModule.forRootAsync({
-      inject: [EnvironmentService],
-      useFactory: async (environments: EnvironmentService) => {
-        const storagePath = environments.get('STORAGE_PATH');
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => {
+        const storagePath = config.get('STORAGE_PATH');
 
         return [
           {
@@ -24,10 +24,10 @@ import { UploadModule } from './upload';
         ];
       },
     }),
+    ConfigModule,
     LoggerModule,
     PrismaModule,
-    EnvironmentModule,
     UploadModule,
   ],
 })
-export class ConfigModule {}
+export class CommonModule {}

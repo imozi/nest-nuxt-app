@@ -1,6 +1,6 @@
-import { PrismaService } from '@/app/config';
+import { PrismaService } from '@/app/common';
 import { Prisma } from '@prisma/client';
-import { BaseRepository } from '../core/interfaces/base-repository';
+import { BaseRepository } from '../core/interfaces';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { ReturnTypeMeta } from '../core/types';
 

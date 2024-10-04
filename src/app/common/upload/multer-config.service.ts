@@ -3,17 +3,17 @@ import { MulterModuleOptions, MulterOptionsFactory } from '@nestjs/platform-expr
 import { diskStorage } from 'multer';
 import { join } from 'path';
 import { editFileName, isExistFile } from './lib';
-import { EnvironmentService } from '../environment';
+import { ConfigService } from '../config';
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
-  constructor(private readonly environments: EnvironmentService) {}
+  constructor(private readonly config: ConfigService) {}
 
   createMulterOptions(): MulterModuleOptions {
     return {
       storage: diskStorage({
         destination: (req, file, callback) => {
-          const dir = join(process.cwd(), this.environments.get('STORAGE_PATH'), file.fieldname);
+          const dir = join(process.cwd(), this.config.get('STORAGE_PATH'), file.fieldname);
 
           callback(null, dir);
         },
@@ -27,7 +27,7 @@ export class MulterConfigService implements MulterOptionsFactory {
       }),
       fileFilter: async (req, file, callback) => {
         const { repl } = editFileName(file as Express.Multer.File);
-        const filePath = join(process.cwd(), this.environments.get('STORAGE_PATH'), file.fieldname, repl);
+        const filePath = join(process.cwd(), this.config.get('STORAGE_PATH'), file.fieldname, repl);
 
         const isExist = await isExistFile(filePath);
 

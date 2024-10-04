@@ -3,8 +3,8 @@ import { BasePostgresRepository } from '@/shared/data-access';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class AccountRepository extends BasePostgresRepository<'Account'> {
+export class TokenRepository extends BasePostgresRepository<'Token'> {
   constructor(protected readonly prisma: PrismaService) {
-    super(prisma, 'account');
+    super(prisma, 'token');
   }
 }
