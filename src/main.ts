@@ -4,6 +4,7 @@ import { ConfigService } from '@/app/common';
 import { LoggerService } from '@/app/common';
 import { LoggingInterceptor } from '@/interceptors/logging.interceptor';
 import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 const bootstrap = async () => {
   const app = await NestFactory.create(AppModule, {
@@ -14,6 +15,7 @@ const bootstrap = async () => {
   const globalPrefix = environments.get('PREFIX');
   const port = environments.get('PORT');
   const cors = environments.get('CORS');
+  app.use(cookieParser());
 
   app.enableCors({
     origin: cors,

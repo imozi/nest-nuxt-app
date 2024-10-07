@@ -7,10 +7,12 @@ export interface EnvironmentVariables {
   PREFIX: string;
   CORS: string;
   STORAGE_PATH: string;
+  JWT_CRYPT_KEY: string;
   JWT_ACCESS_TOKEN_SECRET: string;
   JWT_ACCESS_TOKEN_EXPIRES_IN: string;
   JWT_REFRESH_TOKEN_SECRET: string;
   JWT_REFRESH_TOKEN_EXPIRES_IN: string;
+  JWT_REFRESH_TOKEN_COOKIE_KEY: string;
 }
 
 const schemaEnvironmentVariables = Joi.object<EnvironmentVariables>({
@@ -42,6 +44,12 @@ const schemaEnvironmentVariables = Joi.object<EnvironmentVariables>({
   }),
   JWT_REFRESH_TOKEN_EXPIRES_IN: Joi.string().required().messages({
     'any.required': 'Переменная JWT_REFRESH_TOKEN_EXPIRES_IN не объявлена в .env',
+  }),
+  JWT_REFRESH_TOKEN_COOKIE_KEY: Joi.string().required().messages({
+    'any.required': 'Переменная JWT_REFRESH_TOKEN_COOKIE_KEY не объявлена в .env',
+  }),
+  JWT_CRYPT_KEY: Joi.string().required().messages({
+    'any.required': 'Переменная JWT_CRYPT_KEY не объявлена в .env',
   }),
 });
 

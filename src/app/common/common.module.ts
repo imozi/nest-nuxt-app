@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma';
 import { ConfigModule, ConfigService } from './config';
 import { LoggerModule } from './logger';
 import { UploadModule } from './upload';
+import { JWTModule } from './jwt';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UploadModule } from './upload';
     LoggerModule,
     PrismaModule,
     UploadModule,
+    JWTModule,
   ],
 })
 export class CommonModule {}
