@@ -10,7 +10,7 @@ const INIT_PAGE = 1;
 export abstract class BasePostgresRepository<T extends Prisma.ModelName> implements BaseRepository {
   constructor(
     protected readonly prisma: PrismaService,
-    protected readonly model: Lowercase<T>,
+    protected readonly model: Prisma.TypeMap['meta']['modelProps'],
     protected readonly searchFields?: (keyof Prisma.TypeMap['model'][T]['fields'])[],
   ) {}
 

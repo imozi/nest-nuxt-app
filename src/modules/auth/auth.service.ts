@@ -7,26 +7,29 @@ import { AuthDto } from './dto/auth.dto';
 import { Request } from 'express';
 import { AccountService } from '../account';
 import { SessionService } from '../session';
-import { TokenRepository } from './repositories/token.repository';
+import { SessionTokenRepository } from './repositories/session-token.repository';
+import { decryptData, encryptData } from '@/shared/helpers';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwt: JWTService,
     private readonly config: ConfigService,
-    private readonly tokenRepository: TokenRepository,
+    private readonly sessionTokenRepository: SessionTokenRepository,
     private readonly accountService: AccountService,
     private readonly sessionService: SessionService,
   ) {}
 
   private async getTokens(accountId: string) {
-    const uuid = randomUUID();
-    const hashedUuid = await bcrypt.hash(uuid, this.config.get('CRYPT_SALT'));
+    const deviceId = randomUUID();
+    const encryptedDeviceId = await encryptData(deviceId, this.config.get('CRYPT_KEY'));
 
     const [accessToken, refreshToken] = await Promise.all([
       await this.jwt.generateAccessToken({ sub: accountId }),
-      await this.jwt.generateRefreshToken({ sub: accountId, jti: uuid }),
+      await this.jwt.generateRefreshToken({ sub: accountId }),
     ]);
+
+    const hashedToken = await bcrypt.hash(refreshToken, this.config.get('CRYPT_SALT'));
 
     const session = await this.sessionService.findUnique(accountId);
 
@@ -34,10 +37,10 @@ export class AuthService {
       await this.sessionService.create(accountId);
     }
 
-    const token = await this.tokenRepository.create({ hash: hashedUuid });
+    const token = await this.sessionTokenRepository.create({ deviceId, hash: hashedToken });
     await this.sessionService.update(session.id, token.id);
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, deviceId: encryptedDeviceId };
   }
 
   async singIn(req: Request, { username, password }: AuthDto) {
@@ -47,9 +50,9 @@ export class AuthService {
       throw new UnauthorizedException('Неверный логин или пароль');
     }
 
-    const uncrypt = await bcrypt.compare(password, account.hash);
+    const isComparePassword = await bcrypt.compare(password, account.hash);
 
-    if (!uncrypt) {
+    if (!isComparePassword) {
       throw new UnauthorizedException('Неверный логин или пароль');
     }
 
@@ -58,21 +61,12 @@ export class AuthService {
 
   async signOut() {}
 
-  async refresh(req: Request) {
-    const { sub, jwi } = req.user as any;
-    const hashedSub = await bcrypt.hash(jwi, this.config.get('CRYPT_SALT'));
+  async refresh(encryptedDeviceId: string, token: string) {
+    const decryptDeviceID = await decryptData(encryptedDeviceId, this.config.get('CRYPT_KEY'));
+    const sessionToken = await this.sessionTokenRepository.findUnique({ where: { deviceId: decryptDeviceID } });
 
-    const session = await this.sessionService.findById(token.sub);
-    const token = await this.tokenRepository.findFirst({ where: { hash: hashedSub } });
+    console.log(await bcrypt.compare(token, sessionToken.hash));
 
-    console.log(token);
-
-    if (!token) {
-      throw new UnauthorizedException();
-    }
-
-    await this.tokenRepository.delete([token.id]);
-
-    return await this.getTokens(session.accountId);
+    return sessionToken;
   }
 }

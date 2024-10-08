@@ -14,15 +14,23 @@ export class CookieInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data) => {
-        if (data && data.refreshToken) {
+        if (data && data.refreshToken && data.deviceId) {
           response.cookie(this.config.get('JWT_REFRESH_TOKEN_COOKIE_KEY'), data.refreshToken, {
             httpOnly: true,
             sameSite: 'strict',
             secure: true,
-            expires: getExpiryDay(this.config.get('JWT_REFRESH_TOKEN_EXPIRES_IN')),
+            expires: getExpiryDay(this.config.get('JWT_REFRESH_TOKEN_AND_DEVICE_KEY_EXPIRES_IN')),
+          });
+
+          response.cookie(this.config.get('COOKIE_DEVICE_KEY'), data.deviceId, {
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: true,
+            expires: getExpiryDay(this.config.get('JWT_REFRESH_TOKEN_AND_DEVICE_KEY_EXPIRES_IN')),
           });
 
           delete data.refreshToken;
+          delete data.deviceId;
 
           return data;
         }

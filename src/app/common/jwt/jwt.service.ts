@@ -20,7 +20,7 @@ export class JWTService {
   async generateRefreshToken(payload: RefresTokenPayload) {
     return await this.jwt.signAsync(payload, {
       secret: this.config.get('JWT_REFRESH_TOKEN_SECRET'),
-      expiresIn: this.config.get('JWT_REFRESH_TOKEN_EXPIRES_IN'),
+      expiresIn: this.config.get('JWT_REFRESH_TOKEN_AND_DEVICE_KEY_EXPIRES_IN'),
     });
   }
 }

@@ -3,11 +3,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AccountModule } from '../account';
 import { SessionModule } from '../session';
-import { TokenRepository } from './repositories/token.repository';
+import { SessionTokenRepository } from './repositories/session-token.repository';
 
 @Module({
   imports: [AccountModule, SessionModule],
   controllers: [AuthController],
-  providers: [AuthService, TokenRepository],
+  providers: [AuthService, SessionTokenRepository],
 })
 export class AuthModule {}

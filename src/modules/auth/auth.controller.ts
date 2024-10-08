@@ -4,10 +4,14 @@ import { JwtRefreshGuard } from '@/guards/jwt-refresh.guard';
 import { CookieInterceptor } from '@/interceptors/cookie.interceptor';
 import { Request } from 'express';
 import { AuthDto } from './dto/auth.dto';
+import { ConfigService } from '@/app/common';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly config: ConfigService,
+  ) {}
 
   @Post('signin')
   @UseInterceptors(CookieInterceptor)
@@ -23,6 +27,9 @@ export class AuthController {
   @Post('refresh')
   @UseGuards(JwtRefreshGuard)
   async refresh(@Req() req: Request) {
-    return await this.authService.refresh(req);
+    const encryptedDeviceId = req.cookies[this.config.get('COOKIE_DEVICE_KEY')];
+    const token = req.cookies[this.config.get('JWT_REFRESH_TOKEN_COOKIE_KEY')];
+
+    return await this.authService.refresh(encryptedDeviceId, token);
   }
 }
