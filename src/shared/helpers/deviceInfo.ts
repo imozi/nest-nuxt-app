@@ -6,22 +6,27 @@ export const deviceInfo = (req: Request) => {
   const parser = new UAParser();
   const uaResult = parser.setUA(userAgentString).getResult();
 
-  const ipAddress = req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress;
+  const ip = req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress;
+
+  console.log(uaResult);
 
   return {
-    ipAddress,
-    browser: {
-      name: uaResult.browser.name,
-      version: uaResult.browser.version,
-    },
-    os: {
-      name: uaResult.os.name,
-      version: uaResult.os.version,
-    },
-    device: {
-      vendor: uaResult.device.vendor || 'Unknown', // Вендор устройства (Apple, Samsung)
-      model: uaResult.device.model || 'Unknown', // Модель устройства
-      type: uaResult.device.type || 'desktop', // Тип устройства (mobile, tablet, desktop)
+    ip,
+    ua: uaResult.ua,
+    description: {
+      browser: {
+        name: uaResult.browser.name,
+        version: uaResult.browser.version,
+      },
+      os: {
+        name: uaResult.os.name,
+        version: uaResult.os.version,
+      },
+      device: {
+        vendor: uaResult.device.vendor || 'unknown',
+        model: uaResult.device.model || 'unknown',
+        type: uaResult.device.type || 'desktop',
+      },
     },
   };
 };

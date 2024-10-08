@@ -95,8 +95,16 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
     }
   }
 
-  async findUnique(options: Prisma.TypeMap['model'][T]['operations']['findMany']['args']) {
+  async findUnique(
+    options: Prisma.TypeMap['model'][T]['operations']['findUnique']['args'],
+  ): Promise<Prisma.TypeMap['model'][T]['operations']['findUnique']['result']> {
     return await (this.prisma[this.model] as any).findUnique(options);
+  }
+
+  async findFirst(
+    options: Prisma.TypeMap['model'][T]['operations']['findFirst']['args'],
+  ): Promise<Prisma.TypeMap['model'][T]['operations']['findFirst']['result']> {
+    return await (this.prisma[this.model] as any).findFirst(options);
   }
 
   async findById(id: Prisma.TypeMap['model'][T]['payload']['scalars']['id']) {
@@ -107,7 +115,9 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
     });
   }
 
-  async create(data: Prisma.TypeMap['model'][T]['operations']['create']['args']['data']) {
+  async create(
+    data: Prisma.TypeMap['model'][T]['operations']['create']['args']['data'],
+  ): Promise<Prisma.TypeMap['model'][T]['operations']['create']['result']> {
     return (this.prisma[this.model] as any).create({ data });
   }
 

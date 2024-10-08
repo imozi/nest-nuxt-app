@@ -1,7 +1,9 @@
-import { Controller, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtRefreshGuard } from '@/guards/jwt-refresh.guard';
 import { CookieInterceptor } from '@/interceptors/cookie.interceptor';
+import { Request } from 'express';
+import { AuthDto } from './dto/auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -9,8 +11,8 @@ export class AuthController {
 
   @Post('signin')
   @UseInterceptors(CookieInterceptor)
-  async signIn() {
-    return await this.authService.singIn();
+  async signIn(@Req() req: Request, @Body() data: AuthDto) {
+    return await this.authService.singIn(req, data);
   }
 
   @Post('signout')
@@ -20,7 +22,7 @@ export class AuthController {
 
   @Post('refresh')
   @UseGuards(JwtRefreshGuard)
-  async refresh() {
-    return await this.authService.refresh();
+  async refresh(@Req() req: Request) {
+    return await this.authService.refresh(req);
   }
 }

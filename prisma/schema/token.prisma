@@ -3,12 +3,6 @@ model Token {
   sessions   Session? @relation(name: "sessions_to_token", fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId  String?  @db.Uuid
   hash       String
-  device     String
-  deviceType String   @map("device_type")
-  browser    String
-  os         String
-  location   String
-  expiresAt  DateTime @map("expires_at")
   createdAt  DateTime @default(now()) @map("created_at")
 
   @@index([sessionId])

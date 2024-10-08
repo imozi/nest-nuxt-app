@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AccountRepository } from './repository/account.repository';
 
 @Injectable()
-export class AccountsService {
+export class AccountService {
   constructor(private readonly accountRepository: AccountRepository) {}
 
   async findMany() {
@@ -11,5 +11,9 @@ export class AccountsService {
 
   async findById(uuid: string) {
     return await this.accountRepository.findById(uuid);
+  }
+
+  async findByEmailOrShortcut(emailOrShortcut: string) {
+    return await this.accountRepository.findByEmailOrShortcut(emailOrShortcut);
   }
 }

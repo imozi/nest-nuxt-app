@@ -1,14 +1,10 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CommonModule } from './common';
-import { AccountsModule } from '@/modules/accounts/accounts.module';
+import { AccountModule } from '@/modules/account';
 import { AuthModule } from '@/modules/auth';
-import { DecryptTokenMiddleware } from '@/middleware/decrypt-token.middleware';
+import { SessionModule } from '@/modules/session';
 
 @Module({
-  imports: [CommonModule, AccountsModule, AuthModule],
+  imports: [CommonModule, AccountModule, AuthModule, SessionModule],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(DecryptTokenMiddleware).forRoutes({ path: 'auth/refresh', method: RequestMethod.POST });
-  }
-}
+export class AppModule {}

@@ -1,14 +1,14 @@
 import { Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe } from '@nestjs/common';
-import { AccountsService } from './accounts.service';
+import { AccountService } from './account.service';
 
 @Controller('accounts')
-export class AccountsController {
-  constructor(private readonly accountsService: AccountsService) {}
+export class AccountController {
+  constructor(private readonly accountService: AccountService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
   async findMany() {
-    return await this.accountsService.findMany();
+    return await this.accountService.findMany();
   }
 
   @Get(':uuid')
@@ -22,6 +22,6 @@ export class AccountsController {
     )
     uuid: string,
   ) {
-    return await this.accountsService.findById(uuid);
+    return await this.accountService.findById(uuid);
   }
 }
