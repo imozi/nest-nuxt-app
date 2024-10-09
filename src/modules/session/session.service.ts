@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SessionRepository } from './repositories/session.repository';
+import { SessionRepository } from './repositories';
 
 @Injectable()
 export class SessionService {
@@ -23,5 +23,9 @@ export class SessionService {
 
   async update(sessionId: string, tokenId: string) {
     return await this.sessionRepository.update({ id: sessionId, list: { connect: { id: tokenId } } });
+  }
+
+  async delete(sessionId: string) {
+    return await this.sessionRepository.delete([sessionId]);
   }
 }

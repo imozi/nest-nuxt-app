@@ -3,8 +3,6 @@ model Session {
   accountId String   @unique @map("account_id") @db.Uuid
   account   Account  @relation(name: "account_to_sessions", fields: [accountId], references: [id], onDelete: Cascade)
   list      SessionToken[]  @relation(name: "sessions_to_session_token")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@index([accountId])
   @@map("sessions")

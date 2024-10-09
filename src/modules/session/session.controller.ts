@@ -1,6 +1,6 @@
 import { Controller, Get, HttpStatus, Param, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { SessionService } from './session.service';
-import { JwtAccessGuard } from '@/guards/jwt-access.guard';
+import { JwtAccessGuard } from '@/guards';
 
 @Controller('sessions')
 export class SessionController {

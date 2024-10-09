@@ -9,3 +9,23 @@ export type ReturnTypeMeta<T> = {
     next: number;
   };
 };
+
+export type DeviceInfo = {
+  ip: string | string[];
+  ua: string;
+  description: {
+    browser: {
+      name: string;
+      version: string;
+    };
+    os: {
+      name: string;
+      version: string;
+    };
+    device: {
+      vendor: string;
+      model: string;
+      type: string;
+    };
+  };
+};

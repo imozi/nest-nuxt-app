@@ -8,8 +8,6 @@ export const deviceInfo = (req: Request) => {
 
   const ip = req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress;
 
-  console.log(uaResult);
-
   return {
     ip,
     ua: uaResult.ua,
@@ -23,8 +21,8 @@ export const deviceInfo = (req: Request) => {
         version: uaResult.os.version,
       },
       device: {
-        vendor: uaResult.device.vendor || 'unknown',
-        model: uaResult.device.model || 'unknown',
+        vendor: uaResult.device.vendor,
+        model: uaResult.device.model,
         type: uaResult.device.type || 'desktop',
       },
     },

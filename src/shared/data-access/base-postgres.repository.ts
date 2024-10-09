@@ -118,11 +118,11 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
   async create(
     data: Prisma.TypeMap['model'][T]['operations']['create']['args']['data'],
   ): Promise<Prisma.TypeMap['model'][T]['operations']['create']['result']> {
-    return (this.prisma[this.model] as any).create({ data });
+    return await (this.prisma[this.model] as any).create({ data });
   }
 
   async update(data: Prisma.TypeMap['model'][T]['operations']['update']['args']['data']) {
-    return (this.prisma[this.model] as any).update({
+    return await (this.prisma[this.model] as any).update({
       where: {
         id: data.id,
       },
@@ -131,14 +131,14 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
   }
 
   async delete(idList: Prisma.TypeMap['model'][T]['payload']['scalars']['id'][]) {
-    const deleted = await (this.prisma[this.model] as any).deleteMany({
+    await (this.prisma[this.model] as any).deleteMany({
       where: {
         id: {
-          in: idList.map((id) => ({ id })),
+          in: idList,
         },
       },
     });
 
-    return deleted;
+    return { status: 'OK' };
   }
 }
