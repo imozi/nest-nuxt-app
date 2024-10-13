@@ -1,5 +1,7 @@
-import { Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Req, UseGuards } from '@nestjs/common';
 import { AccountService } from './account.service';
+import { JwtAccessGuard } from '@/guards';
+import { RequestWithTokenPayload } from '@/shared/core/interfaces';
 
 @Controller('accounts')
 export class AccountController {
@@ -11,17 +13,10 @@ export class AccountController {
     return await this.accountService.findMany();
   }
 
-  @Get(':uuid')
+  @Get('me')
   @HttpCode(HttpStatus.OK)
-  async findById(
-    @Param(
-      'uuid',
-      new ParseUUIDPipe({
-        errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE,
-      }),
-    )
-    uuid: string,
-  ) {
-    return await this.accountService.findById(uuid);
+  @UseGuards(JwtAccessGuard)
+  async findUnique(@Req() { user }: RequestWithTokenPayload) {
+    return await this.accountService.findById(user.sub);
   }
 }

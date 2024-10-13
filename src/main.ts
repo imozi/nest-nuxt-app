@@ -19,6 +19,7 @@ const bootstrap = async () => {
 
   app.enableCors({
     origin: cors,
+    credentials: true,
   });
 
   app.useLogger(logger);

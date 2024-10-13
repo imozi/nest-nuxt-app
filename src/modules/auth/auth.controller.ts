@@ -34,9 +34,9 @@ export class AuthController {
   private getCookieValue(req: Request, key: string): string {
     const cookie = req.cookies[key];
 
-    // if (!cookie) {
-    //   throw new NotFoundException(`Cookie '${key}' не существует`);
-    // }
+    if (!cookie) {
+      throw new NotFoundException(`Cookie '${key}' не существует`);
+    }
 
     return cookie;
   }
