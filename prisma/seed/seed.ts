@@ -1,43 +1,61 @@
 import { PrismaClient } from '@prisma/client';
 import { Roles, Genders, AccountsUser } from './data';
 
-const prisma = new PrismaClient();
+class PrismaSeed {
+  private readonly prisma: PrismaClient;
 
-const createInitialData = async () => {
-  await prisma.role.createManyAndReturn({ data: Roles });
-  await prisma.gender.createManyAndReturn({ data: Genders });
-
-  for (const accountUser of AccountsUser) {
-    const account = await prisma.account.create({
-      data: {
-        ...accountUser.account,
-        roles: {
-          connect: {
-            name: accountUser.roles,
-          },
-        },
-      },
-      include: {
-        user: true,
-      },
-    });
-
-    await prisma.user.update({
-      where: {
-        id: account.user?.id,
-      },
-      data: {
-        ...accountUser.user,
-      },
-    });
+  constructor() {
+    this.prisma = new PrismaClient();
+    this.clearData();
   }
-};
 
-createInitialData()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  private async clearData() {
+    return await this.prisma.$transaction([
+      this.prisma.role.deleteMany(),
+      this.prisma.gender.deleteMany(),
+      this.prisma.account.deleteMany(),
+      this.prisma.user.deleteMany(),
+      this.prisma.settings.deleteMany(),
+    ]);
+  }
+
+  async init() {
+    try {
+      await this.prisma.$transaction([
+        this.prisma.role.createManyAndReturn({ data: Roles }),
+        this.prisma.gender.createManyAndReturn({ data: Genders }),
+      ]);
+
+      for (const accountUser of AccountsUser) {
+        const account = await this.prisma.account.create({
+          data: {
+            ...accountUser.account,
+            roles: {
+              connect: accountUser.roles.map((role) => ({ name: role })),
+            },
+          },
+          include: {
+            user: true,
+          },
+        });
+
+        await this.prisma.user.update({
+          where: {
+            id: account.user?.id,
+          },
+          data: {
+            ...accountUser.user,
+          },
+        });
+      }
+
+      await this.prisma.$disconnect();
+    } catch (error) {
+      console.error(error);
+      process.exit(1);
+    }
+  }
+}
+
+const prismaSeed = new PrismaSeed();
+prismaSeed.init();

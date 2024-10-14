@@ -1,43 +1,37 @@
 import * as bcrypt from 'bcrypt';
 import { Prisma } from '@prisma/client';
-import { GenderEnum, GenderNameEnum, RolesEnum, RolesNameEnum } from '../../../src/shared/core/types';
+import { Seed } from './types';
 
-type AccountsUser = {
-  roles: RolesEnum;
-  account: Prisma.AccountCreateInput;
-  user: Prisma.UserCreateInput;
-};
-
-const { ADMIN_USER, ADMIN_SHORTNAME, ADMIN_PASSWORD, SALT_PASSWORD } = process.env;
+const { ADMIN_USER, ADMIN_SHORTCUT, ADMIN_PASSWORD, CRYPT_SALT } = process.env;
 
 export const Roles: Prisma.RoleCreateInput[] = [
-  { name: RolesEnum.USER, description: RolesNameEnum.USER },
-  { name: RolesEnum.MANAGER, description: RolesNameEnum.MANAGER },
-  { name: RolesEnum.ADMIN, description: RolesNameEnum.ADMIN },
+  { name: Seed.RolesEnum.USER, description: Seed.RolesNameEnum.USER },
+  { name: Seed.RolesEnum.MANAGER, description: Seed.RolesNameEnum.MANAGER },
+  { name: Seed.RolesEnum.ADMIN, description: Seed.RolesNameEnum.ADMIN },
 ];
 
 export const Genders: Prisma.GenderCreateInput[] = [
-  { name: GenderEnum.MALE, description: GenderNameEnum.MALE },
-  { name: GenderEnum.FEMALE, description: GenderNameEnum.FEMALE },
+  { name: Seed.GenderEnum.MALE, description: Seed.GenderNameEnum.MALE },
+  { name: Seed.GenderEnum.FEMALE, description: Seed.GenderNameEnum.FEMALE },
 ];
 
-export const AccountsUser: AccountsUser[] = [
+export const AccountsUser: Seed.AccountsUser[] = [
   {
-    roles: RolesEnum.ADMIN,
+    roles: [Seed.RolesEnum.ADMIN],
     account: {
       email: ADMIN_USER!,
-      hash: bcrypt.hashSync(ADMIN_PASSWORD!, +SALT_PASSWORD!),
-      shortcut: ADMIN_SHORTNAME!,
+      hash: bcrypt.hashSync(ADMIN_PASSWORD!, +CRYPT_SALT!),
+      shortcut: ADMIN_SHORTCUT!,
     },
     user: {
       name: 'ЕСЭД',
-      surname: RolesNameEnum.ADMIN,
+      surname: Seed.RolesNameEnum.ADMIN,
       patronymic: '',
-      fullName: `${RolesNameEnum.ADMIN} ЕСЭД`,
+      fullName: `${Seed.RolesNameEnum.ADMIN} ЕСЭД`,
       birthday: new Date(),
       gender: {
         connect: {
-          name: GenderEnum.MALE,
+          name: Seed.GenderEnum.MALE,
         },
       },
     },

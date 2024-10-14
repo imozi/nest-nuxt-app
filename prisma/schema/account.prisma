@@ -3,7 +3,6 @@ model Account {
   email     String    @unique @db.VarChar(100)
   shortcut  String    @unique @db.VarChar(100)
   hash      String
-  roleId    String?   @map("role_id") @db.Uuid
   roles     Role[]    @relation(name: "account_to_role")
   sessions  Session?  @relation(name: "account_to_sessions")
   user      User?     @relation(name: "account_to_user")

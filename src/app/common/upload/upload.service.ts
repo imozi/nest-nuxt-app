@@ -9,7 +9,14 @@ export class UploadService {
   async save(files: ExtendExpressMulterFile[], type: FileTypes, storage: string) {
     const transformFiles = files.map((file) => formatedFiles(file, type, storage));
 
-    this.eventEmitter.emit('file.uploaded', transformFiles);
-    return transformFiles;
+    return new Promise((res, rej) => {
+      this.eventEmitter.emit('file.uploaded', transformFiles);
+      this.eventEmitter.on('file.error', (error) => {
+        rej(error);
+      });
+      this.eventEmitter.on('file.finish', (files) => {
+        res(files);
+      });
+    });
   }
 }
