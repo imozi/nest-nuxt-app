@@ -29,3 +29,37 @@ export type DeviceInfo = {
     };
   };
 };
+
+export enum RolesEnum {
+  USER = 'user',
+  MANAGER = 'manager',
+  ADMIN = 'admin',
+}
+
+export enum RolesNameEnum {
+  USER = 'Пользователь',
+  MANAGER = 'Менеджер',
+  ADMIN = 'Администратор',
+}
+
+export enum GenderEnum {
+  MALE = 'male',
+  FEMALE = 'female',
+}
+
+export enum GenderNameEnum {
+  MALE = 'Мужской',
+  FEMALE = 'Женский',
+}
+
+export enum FileTypesEnum {
+  IMAGES = 'images',
+  DOCS = 'docs',
+  VIDEO = 'video',
+}
+
+export interface PaginateQuery {
+  page: number;
+  limit: number;
+  search: string;
+}

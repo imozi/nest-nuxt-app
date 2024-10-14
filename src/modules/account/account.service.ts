@@ -16,4 +16,8 @@ export class AccountService {
   async findByEmailOrShortcut(emailOrShortcut: string) {
     return await this.accountRepository.findByEmailOrShortcut(emailOrShortcut);
   }
+
+  async findByIdWithUser(uuid: string) {
+    return await this.accountRepository.findByIdWithUser(uuid);
+  }
 }

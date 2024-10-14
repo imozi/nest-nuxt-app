@@ -1,1 +1,1 @@
-export { ReturnTypeMeta, DeviceInfo } from './types';
+export * from './types';

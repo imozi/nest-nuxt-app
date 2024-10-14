@@ -1,13 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  NotFoundException,
-  Post,
-  Req,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtRefreshGuard } from '@/guards';
 import { CookieInterceptor, CookieClearInterceptor } from '@/interceptors';
@@ -33,10 +24,6 @@ export class AuthController {
 
   private getCookieValue(req: Request, key: string): string {
     const cookie = req.cookies[key];
-
-    if (!cookie) {
-      throw new NotFoundException(`Cookie '${key}' не существует`);
-    }
 
     return cookie;
   }

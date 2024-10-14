@@ -141,4 +141,8 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
 
     return { status: 'OK' };
   }
+
+  async transaction(action: []) {
+    return await this.prisma.$transaction(action);
+  }
 }

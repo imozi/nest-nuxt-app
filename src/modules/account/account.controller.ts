@@ -16,7 +16,7 @@ export class AccountController {
   @Get('me')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAccessGuard)
-  async findUnique(@Req() { user }: RequestWithTokenPayload) {
-    return await this.accountService.findById(user.sub);
+  async findByIdWithUser(@Req() { user }: RequestWithTokenPayload) {
+    return await this.accountService.findByIdWithUser(user.sub);
   }
 }

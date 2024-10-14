@@ -28,8 +28,8 @@ export class AuthService {
     this.refreshDeviceExpiry = this.config.get('JWT_REFRESH_TOKEN_AND_DEVICE_KEY_EXPIRES_IN');
   }
 
-  private async generateAccessToken(accountId: string): Promise<string> {
-    return await this.jwt.generateAccessToken({ sub: accountId });
+  private async generateAccessToken(accountId: string, roles: string[]): Promise<string> {
+    return await this.jwt.generateAccessToken({ sub: accountId, roles });
   }
 
   private async generateRefreshToken(accountId: string, sessionId: string): Promise<string> {
@@ -43,7 +43,7 @@ export class AuthService {
     return token.id;
   }
 
-  private async getTokens(accountId: string, meta: DeviceInfo) {
+  private async getTokens(accountId: string, roles: string[], meta: DeviceInfo) {
     const deviceId = randomUUID();
     const encryptedDeviceId = await encryptData(deviceId, this.cryptKey);
     let session = await this.sessionService.findUnique(accountId);
@@ -53,7 +53,7 @@ export class AuthService {
     }
 
     const [accessToken, refreshToken] = await Promise.all([
-      this.generateAccessToken(accountId),
+      this.generateAccessToken(accountId, roles),
       this.generateRefreshToken(accountId, session.id),
     ]);
 
@@ -63,9 +63,9 @@ export class AuthService {
     return { accessToken, refreshToken, deviceId: encryptedDeviceId };
   }
 
-  private async validateSessionToken(encryptedDeviceId: string, token: string): Promise<void> {
+  private async validateSessionToken(encryptedDeviceId: string, token: string) {
     const decryptDeviceID = await decryptData(encryptedDeviceId, this.cryptKey);
-    const sessionToken = await this.sessionTokenRepository.findUnique({ where: { deviceId: decryptDeviceID } });
+    const sessionToken = await this.sessionTokenRepository.findUniqueWithAccountRole(decryptDeviceID);
 
     if (!sessionToken) {
       throw new UnauthorizedException('Invalid device ID');
@@ -77,6 +77,8 @@ export class AuthService {
     }
 
     await this.sessionTokenRepository.delete([sessionToken.id]);
+
+    return sessionToken.sessions.account.roles.map((role) => role.name);
   }
 
   async singIn({ username, password }: AuthDto, meta: DeviceInfo) {
@@ -92,7 +94,9 @@ export class AuthService {
       throw new UnauthorizedException('Неверный логин или пароль');
     }
 
-    return await this.getTokens(account.id, meta);
+    const roles = account.roles.map((role) => role.name);
+
+    return await this.getTokens(account.id, roles, meta);
   }
 
   async signOut(encryptedDeviceId: string) {
@@ -107,7 +111,7 @@ export class AuthService {
   }
 
   async refresh(encryptedDeviceId: string, token: string, accountId: string, meta: DeviceInfo) {
-    await this.validateSessionToken(encryptedDeviceId, token);
-    return await this.getTokens(accountId, meta);
+    const roles = await this.validateSessionToken(encryptedDeviceId, token);
+    return await this.getTokens(accountId, roles, meta);
   }
 }

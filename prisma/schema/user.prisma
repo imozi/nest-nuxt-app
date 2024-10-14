@@ -10,7 +10,7 @@ model User {
   gender     Gender?   @relation(name: "gender_to_user", fields: [genderId], references: [id])
   genderId   String?   @map("gender_id") @db.Uuid
   birthday   DateTime? @db.Date
-  avatar     String?   @db.VarChar(300)
+  avatar     String?   @default("/public/default/default-avatar.svg")
   createdAt  DateTime? @default(now()) @map("created_at")
   updatedAt  DateTime? @updatedAt @map("updated_at")
 

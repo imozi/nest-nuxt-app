@@ -8,6 +8,6 @@ model SessionToken {
   expiresAt DateTime @map("expires_at") @db.Timestamp()
   createdAt DateTime @default(now()) @map("created_at")
 
-  @@index([deviceId])
+  @@index([sessionId, deviceId])
   @@map("session_tokens")
 }
