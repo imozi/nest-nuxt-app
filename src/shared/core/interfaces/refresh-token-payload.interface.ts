@@ -1,10 +1,10 @@
 import { Request } from 'express';
 
-export interface RefresTokenPayload {
+export interface RefreshTokenPayload {
   sub: string;
   sid: string;
 }
 
-export interface RequestWithTokenPayload extends Request {
-  user?: RefresTokenPayload;
+export interface RequestWithRefreshTokenPayload extends Request {
+  user?: RefreshTokenPayload;
 }

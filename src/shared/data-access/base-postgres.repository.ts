@@ -4,10 +4,10 @@ import { BaseRepository } from '../core/interfaces';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { ReturnTypeMeta } from '../core/types';
 
-const MAX_DEFAULT_LIMIT = 50;
-const INIT_PAGE = 1;
-
 export abstract class BasePostgresRepository<T extends Prisma.ModelName> implements BaseRepository {
+  private readonly MAX_DEFAULT_LIMIT = 50;
+  private readonly INIT_PAGE = 1;
+
   constructor(
     protected readonly prisma: PrismaService,
     protected readonly model: Prisma.TypeMap['meta']['modelProps'],
@@ -16,18 +16,18 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
 
   async findMany(options?: {
     page?: number;
-    perPage?: number;
+    limit?: number;
     search?: string;
     params?: Prisma.TypeMap['model'][T]['operations']['findMany']['args'];
   }): Promise<ReturnTypeMeta<Prisma.TypeMap['model'][T]['operations']['findMany']['result']>> {
-    const page = options ? options.page : INIT_PAGE;
-    const take = options ? options.perPage : MAX_DEFAULT_LIMIT;
+    const page = options ? (options.page ? options.page : this.INIT_PAGE) : 0;
+    const take = options ? (options.limit ? options.limit : this.MAX_DEFAULT_LIMIT) : 0;
 
     const skip = page > 0 ? take * (page - 1) : 0;
 
     const noSearchFn = async () => {
       const [total, data] = await this.prisma.$transaction([
-        (this.prisma[this.model] as any).count(options && options.params),
+        (this.prisma[this.model] as any).count(options && options.params.where),
         (this.prisma[this.model] as any).findMany(options && { ...options.params, take, skip }),
       ]);
 

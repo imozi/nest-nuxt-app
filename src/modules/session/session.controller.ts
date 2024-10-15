@@ -1,27 +1,23 @@
-import { Controller, Get, HttpStatus, Param, ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { SessionService } from './session.service';
-import { JwtAccessGuard } from '@/guards';
+import { JwtAccessGuard, RolesGuard } from '@/guards';
+import { RequestWithAccessTokenPayload } from '@/shared/core/interfaces';
+import { Roles } from '@/decorators';
 
 @Controller('sessions')
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
   @Get()
+  @UseGuards(JwtAccessGuard, RolesGuard)
+  @Roles('admin')
   async findAll() {
     return this.sessionService.findAll();
   }
 
-  @Get(':id')
+  @Get('me')
   @UseGuards(JwtAccessGuard)
-  async findUnique(
-    @Param(
-      'id',
-      new ParseUUIDPipe({
-        errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE,
-      }),
-    )
-    id: string,
-  ) {
-    return await this.sessionService.findUnique(id);
+  async findByIdWithUser(@Req() { user }: RequestWithAccessTokenPayload) {
+    return await this.sessionService.findUnique(user.sub);
   }
 }

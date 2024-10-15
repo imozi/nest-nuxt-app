@@ -5,7 +5,7 @@ import { CookieInterceptor, CookieClearInterceptor } from '@/interceptors';
 import { Request } from 'express';
 import { AuthDto } from './dto';
 import { ConfigService } from '@/app/common';
-import { RequestWithTokenPayload } from '@/shared/core/interfaces';
+import { RequestWithRefreshTokenPayload } from '@/shared/core/interfaces';
 import { DeviceMeta } from '@/decorators';
 import { DeviceInfo } from '@/shared/core/types';
 
@@ -59,14 +59,14 @@ export class AuthController {
   @Post('signout-all')
   @UseGuards(JwtRefreshGuard)
   @UseInterceptors(CookieClearInterceptor)
-  async signOutAll(@Req() { user }: RequestWithTokenPayload) {
+  async signOutAll(@Req() { user }: RequestWithRefreshTokenPayload) {
     return await this.authService.signOutAll(user.sid);
   }
 
   @Post('refresh')
   @UseGuards(JwtRefreshGuard)
   @UseInterceptors(CookieInterceptor)
-  async refresh(@Req() req: RequestWithTokenPayload, @DeviceMeta() meta: DeviceInfo) {
+  async refresh(@Req() req: RequestWithRefreshTokenPayload, @DeviceMeta() meta: DeviceInfo) {
     const encryptedDeviceId = this.getCookieValue(req, this.deviceKey);
     const token = this.getCookieValue(req, this.refreshKey);
     const accountId = req.user.sub;

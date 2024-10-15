@@ -6,7 +6,7 @@ export class SessionService {
   constructor(private readonly sessionRepository: SessionRepository) {}
 
   async findAll() {
-    return await this.sessionRepository.findMany();
+    return await this.sessionRepository.findMany({ params: { include: { list: true } } });
   }
 
   async findById(id: string) {
