@@ -29,8 +29,14 @@ export class AuthController {
   }
 
   private checkActiveSession(req: Request) {
-    const sessionToken = this.getCookieValue(req, this.refreshKey);
-    if (sessionToken) {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader && !authHeader.startsWith('Bearer ')) {
+      return;
+    }
+    const token = authHeader.split(' ')[1];
+
+    if (token !== 'null') {
       throw new BadRequestException('Уже есть активная сессия на этом устройстве!');
     }
   }
