@@ -3,7 +3,7 @@
 <template>
   <NuxtLoadingIndicator />
   <NuxtLayout>
-    <UiToaster position="top-center" :expand="false" rich-colors close-button />
     <NuxtPage />
   </NuxtLayout>
+  <UiToaster position="top-center" :expand="false" rich-colors close-button />
 </template>

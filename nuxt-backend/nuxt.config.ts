@@ -65,6 +65,12 @@ export default defineNuxtConfig({
     baseURL: '/dashboard',
     rootId: 'dashboard',
     buildAssetsDir: isDev ? '/_nuxt/' : '/assets',
+    head: {
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+      htmlAttrs: {
+        lang: 'ru',
+      },
+    },
   },
   colorMode: {
     classSuffix: '',
