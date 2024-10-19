@@ -20,7 +20,7 @@ const signOut = async () => {
     <button type="button" @click="getSessionInfo">Get session info</button>
     <pre>{{ data }}</pre>
     <h3>Account</h3>
-    <pre>{{ account }}</pre>
+    <p>{{ account }}</p>
 
     <button type="button" @click="signOut">Sign Out</button>
 

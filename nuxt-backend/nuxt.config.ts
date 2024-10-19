@@ -63,7 +63,10 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   app: {
     baseURL: '/dashboard',
-    rootId: 'dashboard',
+    rootId: 'portal',
+    rootAttrs: {
+      class: 'dashboard',
+    },
     buildAssetsDir: isDev ? '/_nuxt/' : '/assets',
     head: {
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],

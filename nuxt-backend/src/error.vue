@@ -10,7 +10,7 @@ const onClearError = () => clearError({ redirect: '/' });
 
 <template>
   <ColorTheme class="theme-swicher" />
-  <NuxtLayout>
+  <NuxtLayout name="clear">
     <main class="error">
       <div class="error__wrapper">
         <div class="error__content">

@@ -38,91 +38,83 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <div class="auth auth-wrapper">
-    <UiCard class="auth__card">
-      <UiCardHeader class="auth__card-header">
-        <Logo class="auth__card-logo" />
-        <UiCardTitle class="auth__card-title">Вход в систему</UiCardTitle>
-        <UiCardDescription class="auth__card-description">
-          электронного документооборота: полезные ресурсы и инструменты
-        </UiCardDescription>
-      </UiCardHeader>
-      <UiCardContent class="auth__card-content">
-        <form class="form" @submit="onSubmit">
-          <div class="form__fields">
-            <UiFormField v-slot="{ componentField }" name="username">
-              <UiFormItem v-auto-animate="{ duration: 200 }" class="form__row">
-                <div class="form__label">
-                  <UiFormLabel>Логин</UiFormLabel>
-                </div>
-                <div class="form__input">
-                  <UiFormControl>
-                    <UiInput type="text" placeholder="Email или короткое имя" v-bind="componentField" />
-                  </UiFormControl>
-                </div>
-                <UiFormMessage class="form__error" />
-              </UiFormItem>
-            </UiFormField>
-            <UiFormField v-slot="{ componentField }" name="password">
-              <UiFormItem v-auto-animate="{ duration: 200 }" class="form__row">
-                <div class="form__label">
-                  <UiFormLabel>Пароль</UiFormLabel>
-                </div>
-                <div class="form__input">
-                  <UiFormControl>
-                    <UiInput type="password" v-bind="componentField" />
-                  </UiFormControl>
-                </div>
-                <UiFormMessage class="form__error" />
-              </UiFormItem>
-            </UiFormField>
-          </div>
-          <div class="form__submit">
-            <UiButton :loading="isLoading" type="submit" :disabled="isLoading">
-              <span v-if="!isLoading">Войти</span>
-              <span v-else>Пожалуйста подождите</span>
-            </UiButton>
-          </div>
-        </form>
-      </UiCardContent>
-    </UiCard>
-  </div>
+  <UiCard class="auth-card">
+    <UiCardHeader class="auth-card__header">
+      <Logo class="auth-card__logo" />
+      <UiCardTitle class="auth-card__title">Вход в систему</UiCardTitle>
+      <UiCardDescription class="auth-card__description">
+        электронного документооборота: полезные ресурсы и инструменты
+      </UiCardDescription>
+    </UiCardHeader>
+    <UiCardContent class="auth-card__content">
+      <form class="auth-card__form form" @submit="onSubmit">
+        <div class="form__fields">
+          <UiFormField v-slot="{ componentField }" name="username">
+            <UiFormItem v-auto-animate="{ duration: 200 }" class="form__row">
+              <div class="form__label">
+                <UiFormLabel>Логин</UiFormLabel>
+              </div>
+              <div class="form__input">
+                <UiFormControl>
+                  <UiInput type="text" placeholder="Email или короткое имя" v-bind="componentField" />
+                </UiFormControl>
+              </div>
+              <UiFormMessage class="form__error" />
+            </UiFormItem>
+          </UiFormField>
+          <UiFormField v-slot="{ componentField }" name="password">
+            <UiFormItem v-auto-animate="{ duration: 200 }" class="form__row">
+              <div class="form__label">
+                <UiFormLabel>Пароль</UiFormLabel>
+              </div>
+              <div class="form__input">
+                <UiFormControl>
+                  <UiInput type="password" v-bind="componentField" />
+                </UiFormControl>
+              </div>
+              <UiFormMessage class="form__error" />
+            </UiFormItem>
+          </UiFormField>
+        </div>
+        <div class="form__submit">
+          <UiButton :loading="isLoading" type="submit" :disabled="isLoading">
+            <span v-if="!isLoading">Войти</span>
+            <span v-else>Пожалуйста подождите</span>
+          </UiButton>
+        </div>
+      </form>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <style lang="scss">
-.auth {
-  &-wrapper {
-    @apply relative flex h-dvh items-center justify-center bg-[radial-gradient(theme(colors.border/90%)_1px,transparent_1px)] p-5 [background-size:20px_20px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,#000_50%,transparent_100%)] sm:p-10 sm:[mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_50%,transparent_100%)] lg:p-16;
+.auth-card {
+  @apply w-full min-w-60 max-w-80;
+
+  &__header {
+    @apply flex flex-col items-center gap-1;
   }
 
-  &__card {
-    @apply w-full min-w-60 max-w-80;
-
-    &-header {
-      @apply flex flex-col items-center gap-1;
-    }
-
-    &-logo {
-      @apply mb-1;
-    }
-
-    &-title {
-      @apply text-2xl font-black;
-    }
-
-    &-description {
-      @apply text-center;
-    }
+  &__logo {
+    @apply mb-1;
   }
 
-  & .form {
+  &__title {
+    @apply text-2xl font-black;
+  }
+
+  &__description {
+    @apply text-center;
+  }
+
+  &__form {
     @apply flex flex-col gap-10;
 
-    &__fields {
+    & .from__fields {
       @apply flex flex-col gap-3;
     }
 
-    &__row {
+    & .form__row {
       @apply flex flex-col gap-2;
     }
   }

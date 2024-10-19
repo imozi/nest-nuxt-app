@@ -1,4 +1,5 @@
 import { ConfigService } from '@/app/common';
+import { isDev } from '@/shared/helpers';
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
@@ -16,14 +17,14 @@ export class CookieClearInterceptor implements NestInterceptor {
         response.cookie(this.config.get('JWT_REFRESH_TOKEN_COOKIE_KEY'), '', {
           httpOnly: true,
           sameSite: 'strict',
-          secure: true,
+          secure: !isDev(this.config.get('MODE')),
           expires: new Date(0),
         });
 
         response.cookie(this.config.get('COOKIE_DEVICE_KEY'), '', {
           httpOnly: true,
           sameSite: 'strict',
-          secure: true,
+          secure: !isDev(this.config.get('MODE')),
           expires: new Date(0),
         });
       }),
