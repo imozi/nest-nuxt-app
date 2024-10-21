@@ -89,7 +89,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 <style lang="scss">
 .auth-card {
-  @apply w-full min-w-60 max-w-80;
+  @apply font-lato w-full min-w-60 max-w-80;
 
   &__header {
     @apply flex flex-col items-center gap-1;

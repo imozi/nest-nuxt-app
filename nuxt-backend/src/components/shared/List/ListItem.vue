@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <Primitive :as="as" :as-child="asChild" :class="cn('p-1', props.class)">
+  <Primitive :as="as" :as-child="asChild" :class="cn('', props.class)">
     <slot />
   </Primitive>
 </template>

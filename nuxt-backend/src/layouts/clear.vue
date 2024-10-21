@@ -7,7 +7,7 @@
 
 <style lang="scss" scoped>
 .wrapper {
-  @apply flex h-dvh items-center justify-center bg-[radial-gradient(theme(colors.border/90%)_1px,transparent_1px)] p-5 [background-size:20px_20px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,#000_50%,transparent_100%)] sm:p-10 sm:[mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_50%,transparent_100%)] lg:p-16;
+  @apply flex h-dvh items-center justify-center bg-[radial-gradient(theme(colors.mask/40%)_1px,transparent_1px)] p-5 [background-size:20px_20px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,#000_50%,transparent_100%)] dark:bg-[radial-gradient(theme(colors.mask/40%)_1px,transparent_1px)] sm:p-10 sm:[mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_50%,transparent_100%)] lg:p-16;
 }
 
 .theme-swicher {

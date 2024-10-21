@@ -3,6 +3,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const { resetToken } = useTokenStore();
   const router = useRouter();
 
+  if (to.fullPath.includes('public')) {
+    return;
+  }
+
   const isExistPage = router.getRoutes().some((appRoute) => appRoute.path === to.path);
   if (!isExistPage) {
     return;

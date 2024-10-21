@@ -9,11 +9,15 @@ interface Props extends PrimitiveProps {
 const props = withDefaults(defineProps<Props>(), {
   as: 'nav',
 });
+
+const classList = computed(() => {
+  return props.class ? props.class.split(' ')[0] + '__list' : '';
+});
 </script>
 
 <template>
   <Primitive :as="as" :as-child="asChild" :class="cn('', props.class)">
-    <List>
+    <List :class="classList">
       <slot />
     </List>
   </Primitive>

@@ -11,15 +11,17 @@ export default {
       center: true,
       padding: '2rem',
       screens: {
-        '2xl': '1880px',
+        '2xl': '1840px',
       },
     },
     extend: {
       fontFamily: {
-        sans: `var(--font-lato-sans), ${defaultTheme.fontFamily.sans}`,
+        sans: `var(--font-geist-sans), ${defaultTheme.fontFamily.sans}`,
         mono: `var(--font-geist-mono), ${defaultTheme.fontFamily.mono}`,
+        lato: `var(--font-lato-sans), ${defaultTheme.fontFamily.mono}`,
       },
       colors: {
+        mask: 'hsl(var(--mask))',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

@@ -27,6 +27,11 @@ export default defineNuxtConfig({
       path: '@/components/widgets',
       extensions: ['vue'],
     },
+    {
+      prefix: '',
+      path: '@/components/base',
+      extensions: ['vue'],
+    },
   ],
   imports: {
     dirs: ['types', 'stores'],
