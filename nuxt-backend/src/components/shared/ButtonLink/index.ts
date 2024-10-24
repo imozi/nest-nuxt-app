@@ -8,7 +8,7 @@ export const linkVariants = cva(
         destructive: 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         outline: 'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
         secondary: 'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        ghost: 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
@@ -16,7 +16,7 @@ export const linkVariants = cva(
         xs: 'h-7 rounded px-2',
         sm: 'h-8 rounded-md px-3',
         lg: 'h-10 rounded-md px-8',
-        icon: 'h-9 w-9 border-none',
+        icon: 'flex h-9 w-9 items-center justify-center rounded-md border-none',
       },
     },
     defaultVariants: {
