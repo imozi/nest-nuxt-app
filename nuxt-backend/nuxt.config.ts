@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@formkit/auto-animate/nuxt',
     '@unlazy/nuxt',
+    'nuxt-tiptap-editor',
   ],
   components: [
     {

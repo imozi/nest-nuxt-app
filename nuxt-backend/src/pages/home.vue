@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const { account } = useAccountStore();
 
+definePageMeta({
+  name: 'Главная',
+});
+
 const { data, execute } = await useFetchSecure(`sessions/me`, { immediate: false });
 
 const getSessionInfo = async () => {

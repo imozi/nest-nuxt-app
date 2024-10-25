@@ -1,8 +1,9 @@
 <template>
   <aside class="aside-right">
-    <header class="aside-right__header" />
-    <div class="aside-right__content" />
-    <footer class="aside-right__footer" />
+    <header class="aside-right__header">
+      <div class="aside-right__content" />
+      <footer class="aside-right__footer" />
+    </header>
   </aside>
 </template>
 
