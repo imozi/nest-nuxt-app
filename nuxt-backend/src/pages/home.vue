@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { account } = useAccountStore();
-
+useBreadcrumbs();
 definePageMeta({
   name: 'Главная',
 });

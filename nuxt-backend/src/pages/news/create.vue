@@ -2,6 +2,7 @@
 definePageMeta({
   name: 'Создать новость',
 });
+useBreadcrumbs();
 </script>
 
 <template>

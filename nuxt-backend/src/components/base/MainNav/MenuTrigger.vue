@@ -31,11 +31,9 @@ const onClickCollapse = () => {
           />
         </UiButton>
       </UiTooltipTrigger>
-      <UiTooltipContent v-if="!menu.collapsed" side="right">
-        <p>Свернуть</p>
-      </UiTooltipContent>
-      <UiTooltipContent v-else side="right">
-        <p>Развернуть</p>
+      <UiTooltipContent side="bottom">
+        <p v-if="!menu.collapsed">Свернуть меню</p>
+        <p v-else>Развернуть меню</p>
       </UiTooltipContent>
     </UiTooltip>
   </UiTooltipProvider>
