@@ -5,11 +5,13 @@ const selected = defineModel<number[]>('selected', { required: true });
 const isSelected = computed(() => selected.value.includes(props.id));
 
 const onSelectFile = (event: MouseEvent) => {
-  if (event.ctrlKey && selected.value.includes(props.id)) {
+  const isKeys = event.ctrlKey || event.metaKey;
+
+  if (isKeys && selected.value.includes(props.id)) {
     return;
   }
 
-  if (event.ctrlKey && !selected.value.includes(props.id)) {
+  if (isKeys && !selected.value.includes(props.id)) {
     return selected.value.push(props.id);
   }
 

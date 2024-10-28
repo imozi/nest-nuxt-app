@@ -5,7 +5,7 @@ const selected = defineModel<number[]>('selected', { required: true });
 <template>
   <div class="files">
     <List class="files__list">
-      <ListItem v-for="item of 10" :key="item" class="files__list-item">
+      <ListItem v-for="item of 15" :key="item" class="files__list-item">
         <FilesViewerFileCard :id="item" v-model:selected="selected" />
       </ListItem>
     </List>
@@ -14,10 +14,10 @@ const selected = defineModel<number[]>('selected', { required: true });
 
 <style lang="scss">
 .files {
-  @apply flex;
+  @apply flex flex-col gap-y-1;
 
   &__list {
-    @apply flex w-full flex-col;
+    @apply flex w-full flex-col gap-y-1;
   }
 }
 </style>

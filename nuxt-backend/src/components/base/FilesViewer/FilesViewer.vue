@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const tabModal = defineModel<string>('tab', { default: 'all' });
+import type { FileUploadTypes } from '.';
+
+const tabModal = defineModel<FileUploadTypes>('tab', { default: 'all' });
 const selectedFiles = reactive<number[]>([]);
 </script>
 
@@ -7,11 +9,11 @@ const selectedFiles = reactive<number[]>([]);
   <UiTabs v-model:model-value="tabModal" class="files-viewer" :default-value="tabModal">
     <div class="files-viewer__wrapper">
       <UiTabsList class="files-viewer__list">
-        <UiTabsTrigger value="all"> Все </UiTabsTrigger>
-        <UiTabsTrigger value="images"> Изображения </UiTabsTrigger>
+        <UiTabsTrigger value="all">Все</UiTabsTrigger>
+        <UiTabsTrigger value="images">Изображения</UiTabsTrigger>
       </UiTabsList>
       <div class="files-viewer__collumn">
-        <slot name="files-viewer-header" />
+        <FilesViewerFileControls v-model:typefiles="tabModal" :countfiles="selectedFiles.length" />
       </div>
     </div>
 
@@ -37,7 +39,11 @@ const selectedFiles = reactive<number[]>([]);
   @apply flex flex-col gap-y-5;
 
   &__wrapper {
-    @apply flex items-center;
+    @apply flex items-center gap-x-5;
+  }
+
+  &__collumn {
+    @apply h-full;
   }
 }
 </style>
