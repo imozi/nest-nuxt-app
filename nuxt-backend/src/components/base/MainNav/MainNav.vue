@@ -5,14 +5,14 @@ const { menu } = useMenuStore();
 <template>
   <Navbar v-if="!menu.collapsed" class="main-nav">
     <template v-for="item of menu.list" :key="item.id">
-      <NavbarItem v-if="!item.crud" class="main-nav-item">
-        <ButtonLink :link="{ to: item.to }">
+      <NavbarItem v-if="!item.crud" class="main-nav__item">
+        <ButtonLink :link="{ to: item.to }" class="main-nav__link" active-class="current">
           <Icon :name="item.icon" class="mr-4 size-5" />
           {{ item.name }}
         </ButtonLink>
       </NavbarItem>
 
-      <NavbarItem v-else class="main-nav-item">
+      <NavbarItem v-else class="main-nav__item">
         <UiAccordion type="single" collapsible class="main-nav__accordion">
           <UiAccordionItem value="item">
             <UiAccordionTrigger>
@@ -22,8 +22,20 @@ const { menu } = useMenuStore();
               </span>
             </UiAccordionTrigger>
             <UiAccordionContent class="pl-10">
-              <ButtonLink :link="{ to: item.to }">Все</ButtonLink>
-              <ButtonLink :link="{ to: `${item.to}/create` }"> Создать </ButtonLink>
+              <ButtonLink
+                :link="{ to: item.to }"
+                class="main-nav__link main-nav__accordion-item"
+                active-class="current"
+              >
+                Все
+              </ButtonLink>
+              <ButtonLink
+                :link="{ to: `${item.to}/create` }"
+                class="main-nav__link main-nav__accordion-item"
+                active-class="current"
+              >
+                Создать
+              </ButtonLink>
             </UiAccordionContent>
           </UiAccordionItem>
         </UiAccordion>
@@ -33,11 +45,17 @@ const { menu } = useMenuStore();
 
   <Navbar v-else class="main-nav" :class="{ collapsed: menu.collapsed }">
     <template v-for="item of menu.list" :key="item.id">
-      <NavbarItem v-if="!item.crud" class="main-nav-item">
+      <NavbarItem v-if="!item.crud" class="main-nav__item">
         <UiTooltipProvider :delay-duration="100">
           <UiTooltip>
             <UiTooltipTrigger as-child>
-              <ButtonLink :link="{ to: item.to }" variant="ghost" size="icon">
+              <ButtonLink
+                :link="{ to: item.to }"
+                class="main-nav__link"
+                variant="ghost"
+                size="icon"
+                active-class="current"
+              >
                 <Icon :name="item.icon" class="size-5" />
               </ButtonLink>
             </UiTooltipTrigger>
@@ -48,7 +66,7 @@ const { menu } = useMenuStore();
         </UiTooltipProvider>
       </NavbarItem>
 
-      <NavbarItem v-else class="main-nav-item">
+      <NavbarItem v-else class="main-nav__item">
         <MainNavMenuItemDropdown :icon="item.icon" :name="item.name" :to="item.to" />
       </NavbarItem>
     </template>
@@ -65,6 +83,22 @@ const { menu } = useMenuStore();
 
   &.collapsed {
     @apply min-w-max;
+  }
+
+  &__link {
+    @apply cursor-pointer;
+
+    &.current {
+      @apply bg-accent text-accent-foreground;
+    }
+  }
+
+  &__accordion-item {
+    @apply relative before:absolute before:-left-2 before:h-full before:w-px before:bg-muted after:absolute after:-left-[0.7rem] after:top-1/2 after:h-2 after:w-2 after:-translate-y-1/2 after:rounded-full after:bg-muted;
+
+    &.current {
+      @apply after:bg-primary;
+    }
   }
 }
 </style>

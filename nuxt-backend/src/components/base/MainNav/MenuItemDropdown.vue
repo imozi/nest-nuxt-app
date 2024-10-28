@@ -50,10 +50,12 @@ const onMouseleave = () => {
       <UiDropdownMenuLabel>{{ props.name }}</UiDropdownMenuLabel>
       <UiDropdownMenuSeparator />
       <UiDropdownMenuItem as-child>
-        <ButtonLink :link="{ to: props.to }" active>Все</ButtonLink>
+        <ButtonLink :link="{ to: props.to }" class="main-nav__link" active-class="current">Все</ButtonLink>
       </UiDropdownMenuItem>
       <UiDropdownMenuItem as-child>
-        <ButtonLink :link="{ to: `${props.to}/create` }" active> Создать </ButtonLink>
+        <ButtonLink :link="{ to: `${props.to}/create` }" class="main-nav__link" active-class="current">
+          Создать
+        </ButtonLink>
       </UiDropdownMenuItem>
     </UiDropdownMenuContent>
   </UiDropdownMenu>

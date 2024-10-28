@@ -251,7 +251,7 @@ watch(values, () => {
             <UiCardDescription> Изображение новости </UiCardDescription>
           </UiCardHeader>
           <UiCardContent>
-            <!-- <ChoiceImage @on:update-image="onUpdateImage" /> -->
+            <ChoiceImage @on:update-image="onUpdateImage" />
           </UiCardContent>
         </UiCard>
       </div>
