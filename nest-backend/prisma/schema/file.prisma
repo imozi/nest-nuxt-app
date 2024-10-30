@@ -1,0 +1,19 @@
+enum FileTypes {
+  images
+  docs
+  video
+}
+
+model File {
+  id           String    @id @default(uuid()) @db.Uuid
+  type         FileTypes
+  name         String    @db.Text
+  originalName String    @unique @db.VarChar(300)
+  url          String    @db.Text
+  extention    String    @db.VarChar(50)
+  size         String    @db.VarChar(100)
+  createdAt    DateTime? @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at")
+
+  @@map("files")
+}
