@@ -2,7 +2,31 @@
 import { uploadIcon, type FilePondProps, fileTypes } from '.';
 import type { ResponseError } from '~/types';
 
-const props = defineProps<FilePondProps>();
+interface FileUploadProps extends FilePondProps {
+  showTrigger?: boolean;
+}
+
+const props = defineProps<FileUploadProps>();
+const isOpenDrawer = defineModel<boolean>('isOpenDrawe', { default: false });
+const isOpenTooltip = ref<boolean>(false);
+
+const onClick = () => {
+  isOpenDrawer.value = !isOpenDrawer.value;
+  isOpenTooltip.value = !isOpenTooltip.value;
+};
+
+onMounted(() => {
+  console.log('mount');
+});
+
+const onMouseover = () => {
+  isOpenTooltip.value = true;
+};
+
+const onMouseleave = () => {
+  isOpenTooltip.value = false;
+};
+
 const emit = defineEmits(['on:finished']);
 
 const onLoadedFile = () => {
@@ -13,20 +37,30 @@ const onErrorLoad = (error: string) => {
   const parseError: ResponseError = JSON.parse(error);
 
   // console.log(error);
-  // console.log(parseError);
+  console.log(parseError);
 };
 </script>
 
 <template>
-  <UiDrawer v-if="props.type !== 'all'">
-    <UiDrawerTrigger as-child>
-      <UiButton
-        variant="ghost"
-        size="sm"
-        class="ml-auto flex h-full cursor-pointer items-center justify-start gap-2 p-2 dark:text-white"
-      >
-        <Icon name="solar:download-square-linear" class="size-5" />
-      </UiButton>
+  <UiDrawer v-model:open="isOpenDrawer">
+    <UiDrawerTrigger v-if="!props.showTrigger" as-child>
+      <UiTooltipProvider :delay-duration="100">
+        <UiTooltip :open="isOpenTooltip">
+          <UiTooltipTrigger as-child>
+            <UiButton
+              variant="ghost"
+              size="sm"
+              class="ml-auto flex h-full cursor-pointer items-center justify-start gap-2 p-2 dark:text-white"
+              @click.prevent="onClick"
+              @mouseover="onMouseover"
+              @mouseleave="onMouseleave"
+            >
+              <Icon name="solar:download-square-linear" class="size-5" />
+            </UiButton>
+          </UiTooltipTrigger>
+          <UiTooltipContent> Загрузить </UiTooltipContent>
+        </UiTooltip>
+      </UiTooltipProvider>
     </UiDrawerTrigger>
 
     <UiDrawerContent>
@@ -45,6 +79,7 @@ const onErrorLoad = (error: string) => {
           <div class="rounded-md">
             <div class="max-h-[30rem]">
               <FilePondComponent
+                v-if="props.type !== 'all'"
                 :name="props.type"
                 check-validity
                 :label-idle="uploadIcon"

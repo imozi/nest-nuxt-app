@@ -71,4 +71,9 @@
       "rlig" 1,
       "calt" 1;
   }
+
+
+  .container-fhd {
+    @apply max-w-screen-2xl px-8 mx-auto;
+  }
 }

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { FileUploadTypes } from '../FilesViewer';
+
 interface ChoiceImageProps {
   image?: string;
 }
@@ -9,6 +11,7 @@ const placeholder = computed(() => useAssetsPath('public/default/placeholder.svg
 const isOpen = ref<boolean>(false);
 const isLoadingFiles = ref<boolean>(true);
 const emit = defineEmits(['on:update-image']);
+const typeFile = ref<FileUploadTypes>('images');
 
 const onSelectFile = (url: string) => {
   isOpen.value = false;
@@ -49,7 +52,7 @@ watch(isOpen, () => {
       <div class="grid gap-4 overflow-y-auto px-6 py-4">
         <div class="flex flex-col justify-between">
           <!-- <UiSkeleton v-if="isLoadingFiles" class="h-full w-full dark:bg-zinc-900" /> -->
-          <FilesViewer />
+          <FilesViewer v-model:tab="typeFile" />
           <!-- <FileViewer acvite-tab="images" @on:select-file="onSelectFile" @on:mounted="onMountedFiles" /> -->
         </div>
       </div>

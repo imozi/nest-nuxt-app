@@ -11,6 +11,8 @@ const selectedFiles = reactive<number[]>([]);
       <UiTabsList class="files-viewer__list">
         <UiTabsTrigger value="all">Все</UiTabsTrigger>
         <UiTabsTrigger value="images">Изображения</UiTabsTrigger>
+        <UiTabsTrigger value="docs">Документы</UiTabsTrigger>
+        <UiTabsTrigger value="video">Видео</UiTabsTrigger>
       </UiTabsList>
       <div class="files-viewer__collumn">
         <FilesViewerFileControls v-model:typefiles="tabModal" :countfiles="selectedFiles.length" />
@@ -43,7 +45,7 @@ const selectedFiles = reactive<number[]>([]);
   }
 
   &__collumn {
-    @apply h-full;
+    @apply ml-auto h-full;
   }
 }
 </style>

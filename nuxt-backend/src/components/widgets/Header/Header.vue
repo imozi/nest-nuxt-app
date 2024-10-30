@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <div class="header__wrapper container">
+    <div class="header__wrapper container-fhd">
       <LogoText />
       <ColorTheme />
     </div>
