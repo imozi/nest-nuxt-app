@@ -44,7 +44,7 @@ const onSelectFile = (event: MouseEvent) => {
     <div class="file-card__wrapper">
       <div class="file-card__preview">
         <FilesViewerFileIcon v-if="file.type !== 'images'" :ext="file.extention" />
-        <FilesViewerFileImage v-else :src="file.url" />
+        <FilesViewerFileImage v-else :src="useAssetsPath(file.url)" />
       </div>
       <div class="file-card__title">
         <h3>{{ file.name }}</h3>

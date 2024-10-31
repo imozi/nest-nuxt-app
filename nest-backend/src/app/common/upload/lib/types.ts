@@ -1,11 +1,10 @@
 export enum FileTypes {
-  IMAGE = 'image',
-  DOCS = 'doc',
+  IMAGE = 'images',
+  DOCS = 'docs',
   VIDEO = 'video',
 }
 
-export interface ExtendExpressMulterFile
-  extends Omit<Express.Multer.File, 'size'> {
+export interface ExtendExpressMulterFile extends Omit<Express.Multer.File, 'size'> {
   size: number | { size: number; name: string };
 }
 

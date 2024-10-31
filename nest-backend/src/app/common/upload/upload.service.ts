@@ -6,15 +6,15 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 export class UploadService {
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
-  async save(files: ExtendExpressMulterFile[], type: FileTypes, storage: string) {
+  async save(files: ExtendExpressMulterFile[], type: FileTypes, storage: string, reqId: string) {
     const transformFiles = files.map((file) => formatedFiles(file, type, storage));
 
-    return new Promise((res, rej) => {
-      this.eventEmitter.emit('file.uploaded', transformFiles);
-      this.eventEmitter.on('file.error', (error) => {
+    return await new Promise((res, rej) => {
+      this.eventEmitter.emit(`file.uploaded.${reqId}`, transformFiles);
+      this.eventEmitter.once(`file.error.${reqId}`, (error) => {
         rej(error);
       });
-      this.eventEmitter.on('file.finish', (files) => {
+      this.eventEmitter.once(`file.finish.${reqId}`, (files) => {
         res(files);
       });
     });

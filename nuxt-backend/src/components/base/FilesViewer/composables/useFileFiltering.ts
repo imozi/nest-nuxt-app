@@ -51,6 +51,7 @@ export const useFileFiltering = async ({ limit = 30, type }: { limit?: number; t
     () => currentTab.value,
     () => {
       filteredFiles.type = currentTab.value;
+      selectedFiles.length = 0;
     },
   );
 

@@ -12,7 +12,7 @@ export const formatedFiles = (file: ExtendExpressMulterFile, type: FileTypes, st
     originalName: file.originalname,
     type,
     url: `${storage}/${file.filename}`,
-    extention: ext,
+    extention: ext.toLocaleLowerCase(),
     size: `${Math.round(fileSize.size)} ${fileSize.name}`,
   };
 

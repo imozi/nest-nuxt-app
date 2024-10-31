@@ -40,6 +40,7 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
     const serachFn = async () => {
       const whereConditions = this.searchFields.reduce(
         (acc, column) => {
+          console.log(options.params);
           acc.OR.push({
             [column]: {
               contains: options.search,
@@ -119,6 +120,12 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
     data: Prisma.TypeMap['model'][T]['operations']['create']['args']['data'],
   ): Promise<Prisma.TypeMap['model'][T]['operations']['create']['result']> {
     return await (this.prisma[this.model] as any).create({ data });
+  }
+
+  async createMany(
+    data: Prisma.TypeMap['model'][T]['operations']['createManyAndReturn']['args']['data'],
+  ): Promise<Prisma.TypeMap['model'][T]['operations']['createManyAndReturn']['result']> {
+    return await (this.prisma[this.model] as any).createManyAndReturn({ data });
   }
 
   async update(data: Prisma.TypeMap['model'][T]['operations']['update']['args']['data']) {

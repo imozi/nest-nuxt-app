@@ -8,7 +8,7 @@ type FileControlsProps = {
 
 const { choice = false, deleted = false } = defineProps<FileControlsProps>();
 
-const emit = defineEmits(['on:confirmed-delete', 'on:confirmed-choice']);
+const emit = defineEmits(['on:confirmed-delete', 'on:confirmed-choice', 'on:file-uploaded']);
 
 const uploadTypeFile = defineModel<FileUploadTypes>('typefiles', { required: true });
 const dropDownUploadTypeFile = ref<FileUploadTypes>('all');
@@ -25,6 +25,10 @@ const onConfirmedChoice = () => {
 
 const onConfirmedDelete = () => {
   emit('on:confirmed-delete');
+};
+
+const onFileUploaded = () => {
+  emit('on:file-uploaded');
 };
 </script>
 
@@ -44,12 +48,13 @@ const onConfirmedDelete = () => {
             v-model:typefiles="dropDownUploadTypeFile"
             @on:choiced-upload="openDrawer"
           />
-          <FilesViewerFileUpload v-if="uploadTypeFile !== 'all'" :type="uploadTypeFile" />
+          <FilesViewerFileUpload v-if="uploadTypeFile !== 'all'" :type="uploadTypeFile" @on:finished="onFileUploaded" />
           <FilesViewerFileUpload
             v-else
             v-model:is-open-drawe="isOpenDrawer"
             show-trigger
             :type="dropDownUploadTypeFile"
+            @on:finished="onFileUploaded"
           />
         </ClientOnly>
       </ListItem>

@@ -2,28 +2,29 @@ import { Injectable } from '@nestjs/common';
 import { FileRepository } from './repositories';
 import { PaginateQuery } from '@/shared/core/types';
 import { $Enums } from '@prisma/client';
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class FileService {
   constructor(
     private readonly fileRepository: FileRepository,
     private readonly eventEmitter: EventEmitter2,
-  ) {}
-
-  @OnEvent('file.uploaded')
-  async create(files) {
-    new Promise((res, rej) => {
-      setTimeout(() => {
-        res('');
-      }, 2000);
+  ) {
+    this.eventEmitter.onAny((event: string, files) => {
+      if (event.startsWith('file.uploaded.')) {
+        const reqId = event.split('.').pop();
+        this.create(files, reqId);
+      }
     });
+  }
 
-    this.eventEmitter.emit('file.finish', files);
+  private async create(files, reqId) {
+    const savedFile = await this.fileRepository.createMany(files);
+    this.eventEmitter.emit(`file.finish.${reqId}`, savedFile);
   }
 
   async findAll(query: PaginateQuery) {
-    return await this.fileRepository.findMany(query);
+    return await this.fileRepository.findMany({ ...query, params: { orderBy: { createdAt: 'desc' } } });
   }
 
   async findAllType(query: PaginateQuery, type: string) {

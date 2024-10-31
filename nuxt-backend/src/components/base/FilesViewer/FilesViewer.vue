@@ -10,9 +10,11 @@ type FileViewerProps = {
 };
 
 const props = defineProps<FileViewerProps>();
-const { currentTab, selectedFiles, search, filteredFiles, formatedFilterQuery, data } = await useFileFiltering({
-  type: props.type,
-});
+const { currentTab, selectedFiles, search, filteredFiles, formatedFilterQuery, data, refresh } = await useFileFiltering(
+  {
+    type: props.type,
+  },
+);
 const emit = defineEmits(['on:chice-file']);
 
 const deleteFiles = () => {
@@ -52,6 +54,7 @@ watch(filteredFiles, () => {
           :choice="props.choice"
           @on:confirmed-choice="choiceFile"
           @on:confirmed-delete="deleteFiles"
+          @on:file-uploaded="refresh"
         />
         <div class="relative w-full max-w-sm items-center">
           <UiInput id="search" v-model="search" type="text" placeholder="Поиск..." class="pl-10" />
