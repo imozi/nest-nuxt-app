@@ -2,6 +2,8 @@
 import { uploadIcon, type FilePondProps, fileTypes } from '.';
 import type { ResponseError } from '~/types';
 
+const config = useRuntimeConfig();
+
 interface FileUploadProps extends FilePondProps {
   showTrigger?: boolean;
 }
@@ -14,10 +16,6 @@ const onClick = () => {
   isOpenDrawer.value = !isOpenDrawer.value;
   isOpenTooltip.value = !isOpenTooltip.value;
 };
-
-onMounted(() => {
-  console.log('mount');
-});
 
 const onMouseover = () => {
   isOpenTooltip.value = true;
@@ -48,7 +46,7 @@ const onErrorLoad = (error: string) => {
         <UiTooltip :open="isOpenTooltip">
           <UiTooltipTrigger as-child>
             <UiButton
-              variant="ghost"
+              variant="secondary"
               size="sm"
               class="ml-auto flex h-full cursor-pointer items-center justify-start gap-2 p-2 dark:text-white"
               @click.prevent="onClick"
@@ -91,7 +89,7 @@ const onErrorLoad = (error: string) => {
                 allow-revert="false"
                 item-insert-location="after"
                 :server="{
-                  // url: `/dashboard/api${props.type ? `/${fileTypes[props.type].url}` : ''}`,
+                  url: `${config.app.baseURL}/api${props.type ? `/${fileTypes[props.type].url}` : ''}`,
                   process: {
                     onerror: onErrorLoad,
                   },

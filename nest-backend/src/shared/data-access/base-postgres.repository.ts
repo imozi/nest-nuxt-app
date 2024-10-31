@@ -20,14 +20,14 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
     search?: string;
     params?: Prisma.TypeMap['model'][T]['operations']['findMany']['args'];
   }): Promise<ReturnTypeMeta<Prisma.TypeMap['model'][T]['operations']['findMany']['result']>> {
-    const page = options ? (options.page ? options.page : this.INIT_PAGE) : 0;
-    const take = options ? (options.limit ? options.limit : this.MAX_DEFAULT_LIMIT) : 0;
+    const page = options ? (options.page ? Number(options.page) : this.INIT_PAGE) : 0;
+    const take = options ? (options.limit ? Number(options.limit) : this.MAX_DEFAULT_LIMIT) : 0;
 
     const skip = page > 0 ? take * (page - 1) : 0;
 
     const noSearchFn = async () => {
       const [total, data] = await this.prisma.$transaction([
-        (this.prisma[this.model] as any).count(options && options.params.where),
+        (this.prisma[this.model] as any).count(options && { where: options.params?.where }),
         (this.prisma[this.model] as any).findMany(options && { ...options.params, take, skip }),
       ]);
 

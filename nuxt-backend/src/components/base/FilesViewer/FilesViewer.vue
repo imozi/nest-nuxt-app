@@ -1,30 +1,74 @@
 <script setup lang="ts">
-import type { FileUploadTypes } from '.';
+import { useFileFiltering } from './composables/useFileFiltering';
+import { Tabs, type FileUploadTypes } from '.';
 
-const tabModal = defineModel<FileUploadTypes>('tab', { default: 'all' });
-const selectedFiles = reactive<number[]>([]);
+type FileViewerProps = {
+  type?: FileUploadTypes;
+  disabled?: boolean;
+  choice?: boolean;
+  deleted?: boolean;
+};
+
+const props = defineProps<FileViewerProps>();
+const { currentTab, selectedFiles, search, filteredFiles, formatedFilterQuery, data } = await useFileFiltering({
+  type: props.type,
+});
+const emit = defineEmits(['on:chice-file']);
+
+const deleteFiles = () => {
+  console.log(selectedFiles);
+};
+
+const choiceFile = () => {
+  emit('on:chice-file', selectedFiles[0]);
+};
+
+watch(filteredFiles, () => {
+  // if (props.acviteTab) return;
+
+  const router = useRouter();
+  router.push({ query: formatedFilterQuery() });
+});
 </script>
 
 <template>
-  <UiTabs v-model:model-value="tabModal" class="files-viewer" :default-value="tabModal">
+  <UiTabs v-model:model-value="currentTab" class="files-viewer" :default-value="currentTab">
     <div class="files-viewer__wrapper">
       <UiTabsList class="files-viewer__list">
-        <UiTabsTrigger value="all">Все</UiTabsTrigger>
-        <UiTabsTrigger value="images">Изображения</UiTabsTrigger>
-        <UiTabsTrigger value="docs">Документы</UiTabsTrigger>
-        <UiTabsTrigger value="video">Видео</UiTabsTrigger>
+        <UiTabsTrigger
+          v-for="tab of Tabs"
+          :key="tab.value"
+          :value="tab.value"
+          :disabled="props.disabled && currentTab !== tab.value"
+        >
+          {{ tab.name }}
+        </UiTabsTrigger>
       </UiTabsList>
       <div class="files-viewer__collumn">
-        <FilesViewerFileControls v-model:typefiles="tabModal" :countfiles="selectedFiles.length" />
+        <FilesViewerFileControls
+          v-model:typefiles="currentTab"
+          :countfiles="selectedFiles.length"
+          :deleted="props.deleted"
+          :choice="props.choice"
+          @on:confirmed-choice="choiceFile"
+          @on:confirmed-delete="deleteFiles"
+        />
+        <div class="relative w-full max-w-sm items-center">
+          <UiInput id="search" v-model="search" type="text" placeholder="Поиск..." class="pl-10" />
+          <span class="absolute inset-y-0 start-0 flex items-center justify-center px-2">
+            <Icon name="lucide:search" class="size-4 text-muted-foreground" />
+          </span>
+        </div>
       </div>
     </div>
 
-    <UiTabsContent :value="tabModal" class="files-viewer__content">
+    <UiTabsContent :value="currentTab" class="files-viewer__content">
       <slot name="files-viewer-content" />
 
       <UiContextMenu>
         <UiContextMenuTrigger as-child>
-          <FilesViewerFileList v-model:selected="selectedFiles" />
+          <Empty v-if="!data?.data.length" />
+          <FilesViewerFileList v-else v-model:selected="selectedFiles" :files="data?.data" />
         </UiContextMenuTrigger>
         <UiContextMenuContent>
           <UiContextMenuItem>Скопировать ссылку</UiContextMenuItem>
@@ -45,7 +89,7 @@ const selectedFiles = reactive<number[]>([]);
   }
 
   &__collumn {
-    @apply ml-auto h-full;
+    @apply ml-auto flex h-full gap-x-3;
   }
 }
 </style>

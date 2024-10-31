@@ -6,5 +6,5 @@ useBreadcrumbs();
 </script>
 
 <template>
-  <h1>Menu</h1>
+  <Empty />
 </template>

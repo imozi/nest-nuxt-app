@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FileUploadTypes } from '.';
+import { Tabs, type FileUploadTypes } from '.';
 
 const isOpenDropdown = ref<boolean>(false);
 const isOpenTooltip = ref<boolean>(false);
@@ -33,7 +33,7 @@ const onClickUploadFile = (type: FileUploadTypes) => {
         <UiTooltip :open="isOpenTooltip">
           <UiTooltipTrigger as-child>
             <UiButton
-              variant="ghost"
+              variant="secondary"
               size="sm"
               class="ml-auto flex h-full cursor-pointer items-center justify-start gap-2 p-2 dark:text-white"
               @click.prevent="onClick"
@@ -50,9 +50,17 @@ const onClickUploadFile = (type: FileUploadTypes) => {
     <UiDropdownMenuContent>
       <UiDropdownMenuLabel>Загрузить</UiDropdownMenuLabel>
       <UiDropdownMenuSeparator />
-      <UiDropdownMenuItem @click="onClickUploadFile('images')"> Изображение </UiDropdownMenuItem>
-      <UiDropdownMenuItem @click="onClickUploadFile('docs')"> Документ </UiDropdownMenuItem>
-      <UiDropdownMenuItem @click="onClickUploadFile('video')"> Видео </UiDropdownMenuItem>
+
+      <template v-for="tab of Tabs" :key="tab.value">
+        <UiDropdownMenuItem
+          v-if="tab.value !== 'all'"
+          class="w-full cursor-pointer"
+          as="button"
+          @click="onClickUploadFile(tab.value)"
+        >
+          {{ tab.name }}
+        </UiDropdownMenuItem>
+      </template>
     </UiDropdownMenuContent>
   </UiDropdownMenu>
 </template>

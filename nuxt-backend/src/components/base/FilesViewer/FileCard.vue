@@ -1,26 +1,34 @@
 <script setup lang="ts">
-const props = defineProps<{ id: number }>();
-const selected = defineModel<number[]>('selected', { required: true });
+import { DateFormatter } from '@internationalized/date';
 
-const isSelected = computed(() => selected.value.includes(props.id));
+const { file } = defineProps<{ file: FileApi }>();
+const selected = defineModel<FileApi[]>('selected', { required: true });
+
+const isSelected = computed(() => selected.value.find((item) => item.id === file.id));
+const formatDate = new DateFormatter('ru-Ru', {
+  dateStyle: 'short',
+});
+const formatTime = new DateFormatter('ru-Ru', {
+  timeStyle: 'short',
+});
 
 const onSelectFile = (event: MouseEvent) => {
   const isKeys = event.ctrlKey || event.metaKey;
 
-  if (isKeys && selected.value.includes(props.id)) {
+  if (isKeys && isSelected.value) {
     return;
   }
 
-  if (isKeys && !selected.value.includes(props.id)) {
-    return selected.value.push(props.id);
+  if (isKeys && !isSelected.value) {
+    return selected.value.push(file);
   }
 
-  if (selected.value.includes(props.id) && selected.value.length <= 1 && event.button !== 2) {
+  if (isSelected.value && selected.value.length <= 1 && event.button !== 2) {
     return (selected.value.length = 0);
   }
 
   selected.value.length = 0;
-  selected.value.push(props.id);
+  selected.value.push(file);
 };
 </script>
 
@@ -35,16 +43,16 @@ const onSelectFile = (event: MouseEvent) => {
   >
     <div class="file-card__wrapper">
       <div class="file-card__preview">
-        <FilesViewerFileIcon ext="pdf" />
-        <!-- <FilesViewerFileImage src="/" /> -->
+        <FilesViewerFileIcon v-if="file.type !== 'images'" :ext="file.extention" />
+        <FilesViewerFileImage v-else :src="file.url" />
       </div>
       <div class="file-card__title">
-        <h3>photo_2024_03_28_13_54_35.jpg</h3>
+        <h3>{{ file.name }}</h3>
       </div>
       <div class="file-card__description">
-        <p>8 МБ</p>
-        <p>01.10.2024</p>
-        <p>17:32</p>
+        <p>{{ file.size }}</p>
+        <p>{{ formatDate.format(new Date(file.createdAt)) }}</p>
+        <p>{{ formatTime.format(new Date(file.createdAt)) }}</p>
       </div>
     </div>
   </UiButton>

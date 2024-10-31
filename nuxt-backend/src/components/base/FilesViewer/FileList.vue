@@ -1,12 +1,14 @@
 <script setup lang="ts">
-const selected = defineModel<number[]>('selected', { required: true });
+const { files } = defineProps<{ files: FileApi[] }>();
+
+const selected = defineModel<FileApi[]>('selected', { required: true });
 </script>
 
 <template>
   <div class="files">
     <List class="files__list">
-      <ListItem v-for="item of 15" :key="item" class="files__list-item">
-        <FilesViewerFileCard :id="item" v-model:selected="selected" />
+      <ListItem v-for="file of files" :key="file.id" class="files__list-item">
+        <FilesViewerFileCard v-model:selected="selected" :file="file" />
       </ListItem>
     </List>
   </div>

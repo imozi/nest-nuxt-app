@@ -33,7 +33,7 @@ const onDeleteConfirmed = () => {
           <UiTooltipTrigger as-child>
             <UiButton
               :disabled="!props.count"
-              variant="ghost"
+              variant="secondary"
               size="sm"
               class="ml-auto flex h-full cursor-pointer items-center justify-start gap-2 p-2 dark:text-white"
               @click.prevent="onClick"

@@ -5,6 +5,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class FileRepository extends BasePostgresRepository<'File'> {
   constructor(protected readonly prisma: PrismaService) {
-    super(prisma, 'file');
+    super(prisma, 'file', ['name', 'originalName']);
   }
 }

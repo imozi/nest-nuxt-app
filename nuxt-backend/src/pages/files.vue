@@ -6,5 +6,5 @@ useBreadcrumbs();
 </script>
 
 <template>
-  <FilesViewer />
+  <FilesViewer deleted />
 </template>
