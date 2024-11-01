@@ -6,6 +6,7 @@ import { setOptions } from 'filepond';
 export default defineNuxtPlugin((nuxtApp) => {
   if (import.meta.client) {
     const FilePondComponent = vueFilePond(FilePondPluginFileValidateType);
+
     setOptions(ru_Ru);
 
     nuxtApp.vueApp.component('FilePondComponent', FilePondComponent as Component);

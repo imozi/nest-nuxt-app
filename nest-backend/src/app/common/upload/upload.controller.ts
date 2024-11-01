@@ -1,9 +1,10 @@
-import { Controller, Post, Req, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, Req, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
 import { ExtendExpressMulterFile, FileTypes } from './lib';
 import { ConfigService } from '../config';
 import { Request } from 'express';
+import { JwtAccessGuard } from '@/guards';
 
 @Controller('upload')
 export class UploadController {
@@ -15,6 +16,7 @@ export class UploadController {
   ) {}
 
   @Post('images')
+  @UseGuards(JwtAccessGuard)
   @UseInterceptors(FilesInterceptor('images'))
   async images(@UploadedFiles() files: ExtendExpressMulterFile[], @Req() req: Request) {
     const reqId = req.headers['x-request-id'] as string;
@@ -22,6 +24,7 @@ export class UploadController {
   }
 
   @Post('docs')
+  @UseGuards(JwtAccessGuard)
   @UseInterceptors(FilesInterceptor('docs'))
   async docs(@UploadedFiles() files: ExtendExpressMulterFile[], @Req() req: Request) {
     const reqId = req.headers['x-request-id'] as string;
@@ -29,6 +32,7 @@ export class UploadController {
   }
 
   @Post('video')
+  @UseGuards(JwtAccessGuard)
   @UseInterceptors(FilesInterceptor('video'))
   async video(@UploadedFiles() files: ExtendExpressMulterFile[], @Req() req: Request) {
     const reqId = req.headers['x-request-id'] as string;

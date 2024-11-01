@@ -40,7 +40,6 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
     const serachFn = async () => {
       const whereConditions = this.searchFields.reduce(
         (acc, column) => {
-          console.log(options.params);
           acc.OR.push({
             [column]: {
               contains: options.search,
@@ -60,8 +59,8 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
           where: whereConditions,
         }),
         (this.prisma[this.model] as any).findMany({
-          where: whereConditions,
           ...options.params,
+          where: whereConditions,
           take,
           skip,
         }),

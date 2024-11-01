@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { DateFormatter } from '@internationalized/date';
 
-const { file } = defineProps<{ file: FileApi }>();
+type FileCardProps = {
+  file: FileApi;
+  loading: boolean;
+};
+
+const { file, loading } = defineProps<FileCardProps>();
 const selected = defineModel<FileApi[]>('selected', { required: true });
 
 const isSelected = computed(() => selected.value.find((item) => item.id === file.id));
@@ -13,6 +18,8 @@ const formatTime = new DateFormatter('ru-Ru', {
 });
 
 const onSelectFile = (event: MouseEvent) => {
+  if (loading) return;
+
   const isKeys = event.ctrlKey || event.metaKey;
 
   if (isKeys && isSelected.value) {
@@ -43,16 +50,30 @@ const onSelectFile = (event: MouseEvent) => {
   >
     <div class="file-card__wrapper">
       <div class="file-card__preview">
-        <FilesViewerFileIcon v-if="file.type !== 'images'" :ext="file.extention" />
-        <FilesViewerFileImage v-else :src="useAssetsPath(file.url)" />
+        <template v-if="loading">
+          <UiSkeleton class="h-full w-full" />
+        </template>
+        <template v-else>
+          <FilesViewerFileIcon v-if="file.type !== 'images'" :ext="file.extention" />
+          <FilesViewerFileImage v-else :src="useAssetsPath(file.url)" />
+        </template>
       </div>
       <div class="file-card__title">
-        <h3>{{ file.name }}</h3>
+        <UiSkeleton v-if="loading" class="h-4 w-full" />
+        <h3 v-else>{{ file.name }}</h3>
       </div>
       <div class="file-card__description">
-        <p>{{ file.size }}</p>
-        <p>{{ formatDate.format(new Date(file.createdAt)) }}</p>
-        <p>{{ formatTime.format(new Date(file.createdAt)) }}</p>
+        <template v-if="loading">
+          <UiSkeleton v-if="loading" class="h-4 w-16" />
+          <UiSkeleton v-if="loading" class="h-4 w-16" />
+          <UiSkeleton v-if="loading" class="h-4 w-16" />
+        </template>
+
+        <template v-else>
+          <p>{{ file.size }}</p>
+          <p>{{ formatDate.format(new Date(file.createdAt)) }}</p>
+          <p>{{ formatTime.format(new Date(file.createdAt)) }}</p>
+        </template>
       </div>
     </div>
   </UiButton>

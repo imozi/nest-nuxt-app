@@ -4,6 +4,7 @@ export type { Role } from './api/Role';
 export type { Gender } from './api/Gender';
 export type { FileApi } from './api/File';
 export type { ResponseError } from './api/ResponseError';
+export type { IFetchError } from 'ofetch';
 
 export type Meta = {
   total: number;

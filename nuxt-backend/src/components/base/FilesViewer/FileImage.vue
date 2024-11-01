@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-const placeholder = computed(() => useAssetsPath('public/default/placeholder.svg'));
+const placeholder = computed(() => useAssetsPath('/public/default/placeholder.svg'));
 </script>
 
 <template>

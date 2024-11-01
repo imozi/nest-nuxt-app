@@ -10,24 +10,52 @@ type FileViewerProps = {
 };
 
 const props = defineProps<FileViewerProps>();
-const { currentTab, selectedFiles, search, filteredFiles, formatedFilterQuery, data, refresh } = await useFileFiltering(
-  {
-    type: props.type,
-  },
-);
+const {
+  currentTab,
+  selectedFiles,
+  search,
+  filteredFiles,
+  formatedFilterQuery,
+  data,
+  refresh,
+  status,
+} = await useFileFiltering({
+  type: props.type,
+});
 const emit = defineEmits(['on:chice-file']);
 
-const deleteFiles = () => {
-  console.log(selectedFiles);
+const deleteFiles = async () => {
+  const promise = async () => {
+    try {
+      await $fetchSecure('/files', {
+        method: 'DELETE',
+        body: { files: selectedFiles.map((file) => ({ id: file.id, url: file.url })) },
+      });
+      refresh();
+      selectedFiles.length = 0;
+      return 'Удаление прошло успешно!';
+    } catch (error) {
+      const message = (error as IFetchError<ResponseError>).data!.message;
+      throw new Error(message);
+    }
+  };
+
+  toast.promise(promise, {
+    loading: 'Удаление...',
+    success: (message: string) => {
+      return message;
+    },
+    error: (message: string) => {
+      return message;
+    },
+  });
 };
 
 const choiceFile = () => {
-  emit('on:chice-file', selectedFiles[0]);
+  emit('on:chice-file', selectedFiles[0].url);
 };
 
 watch(filteredFiles, () => {
-  // if (props.acviteTab) return;
-
   const router = useRouter();
   router.push({ query: formatedFilterQuery() });
 });
@@ -71,7 +99,20 @@ watch(filteredFiles, () => {
       <UiContextMenu>
         <UiContextMenuTrigger as-child>
           <Empty v-if="!data?.data.length" />
-          <FilesViewerFileList v-else v-model:selected="selectedFiles" :files="data?.data" />
+          <FilesViewerFileList
+            v-else
+            v-model:selected="selectedFiles"
+            :files="data?.data"
+            :loading="status === 'pending'"
+          />
+          <template v-if="data">
+            <Pagination
+              v-if="data.meta.lastPage > 1"
+              v-model:page="filteredFiles.page"
+              :pagination="data.meta"
+              :default-page="filteredFiles.page"
+            />
+          </template>
         </UiContextMenuTrigger>
         <UiContextMenuContent>
           <UiContextMenuItem>Скопировать ссылку</UiContextMenuItem>
@@ -93,6 +134,10 @@ watch(filteredFiles, () => {
 
   &__collumn {
     @apply ml-auto flex h-full gap-x-3;
+  }
+
+  &__content {
+    @apply flex h-full flex-col gap-y-5;
   }
 }
 </style>

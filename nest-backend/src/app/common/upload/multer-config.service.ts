@@ -32,7 +32,10 @@ export class MulterConfigService implements MulterOptionsFactory {
         const isExist = await isExistFile(filePath);
 
         if (isExist) {
-          return callback(new ConflictException(`Файл ${file.originalname} уже существует`), false);
+          return callback(
+            new ConflictException(`Файл ${Buffer.from(file.originalname, 'latin1').toString('utf-8')} уже существует`),
+            false,
+          );
         }
 
         callback(null, true);

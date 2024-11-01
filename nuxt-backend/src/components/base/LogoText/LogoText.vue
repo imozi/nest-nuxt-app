@@ -3,7 +3,7 @@
 <template>
   <div class="logo-text">
     <div class="mr-2 h-9 w-9">
-      <UnLazyImage :src="useAssetsPath('public/default/logo.svg')" class="rounded" />
+      <UnLazyImage :src="useAssetsPath('/public/default/logo.svg')" class="rounded" />
     </div>
     <div class="flex flex-col">
       <p class="font-medium">ЕСЭД</p>

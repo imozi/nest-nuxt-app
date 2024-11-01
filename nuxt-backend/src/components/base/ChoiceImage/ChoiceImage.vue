@@ -4,8 +4,8 @@ interface ChoiceImageProps {
 }
 
 const { image } = defineProps<ChoiceImageProps>();
-const srcImage = ref<string | undefined>(useAssetsPath(image ? image : 'public/default/placeholder.svg'));
-const placeholder = computed(() => useAssetsPath('public/default/placeholder.svg'));
+const srcImage = ref<string | undefined>(useAssetsPath(image ? image : '/public/default/placeholder.svg'));
+const placeholder = computed(() => useAssetsPath('/public/default/placeholder.svg'));
 const isOpen = ref<boolean>(false);
 const emit = defineEmits(['on:update-image']);
 

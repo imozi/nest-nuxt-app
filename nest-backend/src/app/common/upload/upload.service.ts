@@ -12,7 +12,9 @@ export class UploadService {
     return await new Promise((res, rej) => {
       this.eventEmitter.emit(`file.uploaded.${reqId}`, transformFiles);
       this.eventEmitter.once(`file.error.${reqId}`, (error) => {
-        rej(error);
+        if (error !== null) {
+          rej(error);
+        }
       });
       this.eventEmitter.once(`file.finish.${reqId}`, (files) => {
         res(files);

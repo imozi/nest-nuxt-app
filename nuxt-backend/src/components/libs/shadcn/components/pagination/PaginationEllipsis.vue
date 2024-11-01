@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { cn } from '@/components/libs/shadcn/utils'
-import { DotsHorizontalIcon } from '@radix-icons/vue'
-import { PaginationEllipsis, type PaginationEllipsisProps } from 'radix-vue'
-import { computed, type HTMLAttributes } from 'vue'
+import { DotsHorizontalIcon } from '@radix-icons/vue';
+import { PaginationEllipsis, type PaginationEllipsisProps } from 'radix-vue';
+import { computed, type HTMLAttributes } from 'vue';
+import { cn } from '@/components/libs/shadcn/utils';
 
-const props = defineProps<PaginationEllipsisProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<PaginationEllipsisProps & { class?: HTMLAttributes['class'] }>();
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
+  const { class: _, ...delegated } = props;
 
-  return delegated
-})
+  return delegated;
+});
 </script>
 
 <template>
-  <PaginationEllipsis v-bind="delegatedProps" :class="cn('w-9 h-9 flex items-center justify-center', props.class)">
+  <PaginationEllipsis v-bind="delegatedProps" :class="cn('flex h-7 w-7 items-center justify-center', props.class)">
     <slot>
       <DotsHorizontalIcon />
     </slot>

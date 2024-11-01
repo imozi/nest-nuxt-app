@@ -75,7 +75,7 @@ const { menu } = useMenuStore();
 
 <style lang="scss">
 .main-nav {
-  @apply min-w-64;
+  @apply min-w-56;
 
   &__list {
     @apply flex flex-col gap-y-2;

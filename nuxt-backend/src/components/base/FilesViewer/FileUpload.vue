@@ -3,6 +3,7 @@ import { uploadIcon, type FilePondProps, fileTypes } from '.';
 import type { ResponseError } from '~/types';
 
 const config = useRuntimeConfig();
+const { token } = useTokenStore();
 
 interface FileUploadProps extends FilePondProps {
   showTrigger?: boolean;
@@ -27,15 +28,14 @@ const onMouseleave = () => {
 
 const emit = defineEmits(['on:finished']);
 
-const onLoadedFile = () => {
+const onLoadedFile = (error) => {
+  if (error) return;
   emit('on:finished');
 };
 
 const onErrorLoad = (error: string) => {
   const parseError: ResponseError = JSON.parse(error);
-
-  // console.log(error);
-  console.log(parseError);
+  toast.error(parseError.message);
 };
 </script>
 
@@ -90,11 +90,12 @@ const onErrorLoad = (error: string) => {
                 item-insert-location="after"
                 :server="{
                   url: `${config.app.baseURL}/api${props.type ? `/${fileTypes[props.type].url}` : ''}`,
+                  headers: { Authorization: `Bearer ${token}` },
                   process: {
                     onerror: onErrorLoad,
                   },
                 }"
-                @processfiles="onLoadedFile"
+                @processfile="onLoadedFile"
               />
             </div>
           </div>

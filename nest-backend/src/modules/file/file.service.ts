@@ -1,13 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FileRepository } from './repositories';
 import { PaginateQuery } from '@/shared/core/types';
 import { $Enums } from '@prisma/client';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PrismaService } from '@/app/common';
+import { FilesDeleteDto } from './dto';
+import { join } from 'path';
+import { unlink } from 'fs/promises';
 
 @Injectable()
 export class FileService {
   constructor(
     private readonly fileRepository: FileRepository,
+    private prisma: PrismaService,
     private readonly eventEmitter: EventEmitter2,
   ) {
     this.eventEmitter.onAny((event: string, files) => {
@@ -19,8 +24,14 @@ export class FileService {
   }
 
   private async create(files, reqId) {
-    const savedFile = await this.fileRepository.createMany(files);
-    this.eventEmitter.emit(`file.finish.${reqId}`, savedFile);
+    try {
+      const savedFile = await this.fileRepository.createMany(files);
+
+      this.eventEmitter.emit(`file.finish.${reqId}`, savedFile);
+      this.eventEmitter.emit(`file.error.${reqId}`, null);
+    } catch (error) {
+      this.eventEmitter.emit(`file.error.${reqId}`, error);
+    }
   }
 
   async findAll(query: PaginateQuery) {
@@ -34,7 +45,17 @@ export class FileService {
     });
   }
 
-  async delete(fileId: string) {
-    return await this.fileRepository.delete([fileId]);
+  async delete({ files }: FilesDeleteDto) {
+    try {
+      const data = await this.fileRepository.delete(files.map((file) => file.id));
+
+      files.forEach(async (file) => {
+        await unlink(join(process.cwd(), `${file.url}`));
+      });
+
+      return data;
+    } catch (error) {
+      throw new HttpException(`Произошла ошибка: ${error.message}`, HttpStatus.EXPECTATION_FAILED);
+    }
   }
 }

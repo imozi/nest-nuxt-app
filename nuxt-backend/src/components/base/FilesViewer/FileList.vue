@@ -1,5 +1,10 @@
 <script setup lang="ts">
-const { files } = defineProps<{ files: FileApi[] }>();
+type FileListProps = {
+  files: FileApi[];
+  loading: boolean;
+};
+
+const { files, loading } = defineProps<FileListProps>();
 
 const selected = defineModel<FileApi[]>('selected', { required: true });
 </script>
@@ -8,7 +13,7 @@ const selected = defineModel<FileApi[]>('selected', { required: true });
   <div class="files">
     <List class="files__list">
       <ListItem v-for="file of files" :key="file.id" class="files__list-item">
-        <FilesViewerFileCard v-model:selected="selected" :file="file" />
+        <FilesViewerFileCard v-model:selected="selected" :file="file" :loading="loading" />
       </ListItem>
     </List>
   </div>
