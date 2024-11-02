@@ -3,6 +3,7 @@ export type { User } from './api/User';
 export type { Role } from './api/Role';
 export type { Gender } from './api/Gender';
 export type { FileApi } from './api/File';
+export type { SupportMail } from './api/SupportMail';
 export type { ResponseError } from './api/ResponseError';
 export type { IFetchError } from 'ofetch';
 

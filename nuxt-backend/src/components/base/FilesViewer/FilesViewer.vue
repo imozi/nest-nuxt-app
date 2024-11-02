@@ -94,8 +94,6 @@ watch(filteredFiles, () => {
     </div>
 
     <UiTabsContent :value="currentTab" class="files-viewer__content">
-      <slot name="files-viewer-content" />
-
       <UiContextMenu>
         <UiContextMenuTrigger as-child>
           <Empty v-if="!data?.data.length" />

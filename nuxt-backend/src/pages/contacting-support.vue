@@ -6,5 +6,6 @@ useBreadcrumbs();
 </script>
 
 <template>
-  <Empty />
+  <Support />
+  <!-- <Empty /> -->
 </template>

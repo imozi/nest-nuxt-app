@@ -96,7 +96,7 @@ const onSelectFile = (event: MouseEvent) => {
   }
 
   &__title {
-    @apply flex items-center justify-start;
+    @apply line-clamp-1 flex items-center justify-start;
   }
 
   &__description {

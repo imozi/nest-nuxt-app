@@ -82,4 +82,8 @@
   .container-fhd {
     @apply max-w-screen-2xl px-8 mx-auto;
   }
+
+  .container-h-area {
+    @apply h-[calc(100vh_-_(var(--height-original)_+_(var(--height-inner)_*_2))_-_40px)];
+  }
 }
