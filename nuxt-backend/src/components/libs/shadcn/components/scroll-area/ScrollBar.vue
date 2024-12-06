@@ -3,9 +3,12 @@ import { ScrollAreaScrollbar, type ScrollAreaScrollbarProps, ScrollAreaThumb } f
 import { computed, type HTMLAttributes } from 'vue';
 import { cn } from '@/components/libs/shadcn/utils';
 
-const props = withDefaults(defineProps<ScrollAreaScrollbarProps & { class?: HTMLAttributes['class'] }>(), {
-  orientation: 'vertical',
-});
+const props = withDefaults(
+  defineProps<ScrollAreaScrollbarProps & { class?: HTMLAttributes['class'] }>(),
+  {
+    orientation: 'vertical',
+  },
+);
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props;
@@ -26,6 +29,6 @@ const delegatedProps = computed(() => {
       )
     "
   >
-    <ScrollAreaThumb class="relative flex-1 rounded-full bg-border" />
+    <ScrollAreaThumb class="relative flex-1 cursor-pointer rounded-full bg-border" />
   </ScrollAreaScrollbar>
 </template>

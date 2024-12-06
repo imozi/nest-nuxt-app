@@ -31,9 +31,10 @@ export class AuthController {
   private checkActiveSession(req: Request) {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader && !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return;
     }
+
     const token = authHeader.split(' ')[1];
 
     if (token !== 'null') {

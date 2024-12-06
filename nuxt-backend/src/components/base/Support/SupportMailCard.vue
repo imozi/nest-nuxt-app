@@ -25,6 +25,18 @@ const onSelectMail = () => {
   selected.value.pop();
   selected.value.push(mail);
 };
+
+const statusText = computed(() => {
+  const status = {
+    new: 'Новая',
+    progress: 'В работе',
+    technical: 'Проблемы',
+    closed: 'Выполненна',
+    deferred: 'Отложено',
+    viewed: 'Просмотрена',
+  };
+  return status[mail.status];
+});
 </script>
 
 <template>
@@ -48,15 +60,18 @@ const onSelectMail = () => {
         <p>{{ formatTime.format(new Date(mail.createdAt)) }}</p>
       </div>
     </div>
+    <div class="support-mail-card__status">
+      <UiBadge :variant="mail.status">{{ statusText }} </UiBadge>
+    </div>
   </UiButton>
 </template>
 
 <style lang="scss">
 .support-mail-card {
-  @apply flex h-full whitespace-normal rounded-md border text-left;
+  @apply relative flex h-full whitespace-normal rounded-md border text-left text-sm;
 
   &--selected {
-    @apply bg-muted text-accent-foreground;
+    @apply border-primary bg-muted text-accent-foreground;
   }
 
   &__wrapper {
@@ -64,15 +79,19 @@ const onSelectMail = () => {
   }
 
   &__name {
-    @apply flex;
+    @apply flex font-medium;
   }
 
   &__question {
-    @apply line-clamp-1;
+    @apply line-clamp-1 font-normal;
   }
 
   &__date {
-    @apply flex gap-x-2;
+    @apply flex gap-x-2 font-normal;
+  }
+
+  &__status {
+    @apply absolute right-2 top-2 text-xs;
   }
 }
 </style>

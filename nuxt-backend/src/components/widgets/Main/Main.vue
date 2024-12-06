@@ -39,7 +39,7 @@
   }
 
   &__content {
-    @apply grid h-[calc(100%_-_var(--height-inner))] gap-10 px-16 py-5;
+    @apply grid h-[calc(100%_-_var(--height-inner))] gap-10 px-14 py-5;
   }
 }
 </style>

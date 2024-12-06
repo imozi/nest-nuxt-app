@@ -1,9 +1,18 @@
+<script lang="ts" setup>
+import type { HTMLAttributes } from 'vue';
+import { loaderVariants, type LoaderVariants } from '.';
+
+interface Props {
+  variant?: LoaderVariants['variant'];
+  size?: LoaderVariants['size'];
+  class?: HTMLAttributes['class'];
+}
+
+const props = defineProps<Props>();
+</script>
+
 <template>
-  <span class="loader" />
+  <span class="loader" :class="cn(loaderVariants({ variant, size }), props.class)" />
 </template>
 
-<style lang="scss">
-.loader {
-  @apply mx-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent;
-}
-</style>
+<style lang="scss"></style>

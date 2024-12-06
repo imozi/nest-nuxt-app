@@ -4,8 +4,11 @@ export type SupportMail = {
   email: string;
   position: string;
   organization: string;
+  status: SupportMailStatus;
   question: string;
   remoteId: string;
   createdAt: string;
   updatedAt: string;
 };
+
+type SupportMailStatus = 'new' | 'progress' | 'technical' | 'closed' | 'deferred' | 'viewed';
