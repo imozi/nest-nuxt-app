@@ -2,6 +2,7 @@ import * as Joi from 'joi';
 import { greenBright, yellowBright, redBright, blueBright } from 'chalk';
 
 export interface EnvironmentVariables {
+  DATABASE_URL: string;
   PORT: string;
   MODE: string;
   PREFIX: string;
@@ -18,6 +19,9 @@ export interface EnvironmentVariables {
 }
 
 const schemaEnvironmentVariables = Joi.object<EnvironmentVariables>({
+  DATABASE_URL: Joi.string().required().messages({
+    'any.required': 'Переменная DATABASE_URL не объявлена в .env',
+  }),
   PORT: Joi.number().required().messages({
     'any.required': 'Переменная PORT не объявлена в .env',
     'number.base': 'PORT должен быть числом',

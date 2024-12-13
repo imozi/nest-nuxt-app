@@ -3,5 +3,6 @@ model Settings {
   accountId String  @unique @map("account_id") @db.Uuid
   account   Account @relation(name: "account_to_settings", fields: [accountId], references: [id], onDelete: Cascade)
 
+  @@index([accountId])
   @@map("settings")
 }
