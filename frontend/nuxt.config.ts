@@ -30,7 +30,7 @@ export default defineNuxtConfig({
     },
     {
       prefix: '',
-      path: '@/components/base',
+      path: '@/components/backend',
       extensions: ['vue'],
     },
   ],
@@ -68,10 +68,9 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   app: {
-    baseURL: '/dashboard',
-    rootId: 'portal',
     rootAttrs: {
-      class: 'dashboard',
+      id: 'portal',
+      class: 'wrapper',
     },
     buildAssetsDir: isDev ? '/_nuxt/' : '/assets',
     head: {
@@ -103,15 +102,6 @@ export default defineNuxtConfig({
     inlineStyles: false,
   },
   compatibilityDate: '2024-04-03',
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler',
-        },
-      },
-    },
-  },
   webpack: {
     optimizeCSS: {
       extractCSS: true,

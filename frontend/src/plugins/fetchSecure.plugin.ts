@@ -60,7 +60,7 @@ export default defineNuxtPlugin(() => {
         if (retryCount === 3) {
           retryCount = 0;
 
-          useNuxtApp().runWithContext(() => navigateTo('/', { redirectCode: 301 }));
+          useNuxtApp().runWithContext(() => navigateTo('/dashboard', { redirectCode: 301 }));
         }
       }
     },

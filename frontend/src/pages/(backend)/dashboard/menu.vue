@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   name: 'Меню',
+  layout: 'clear',
 });
 useBreadcrumbs();
 </script>

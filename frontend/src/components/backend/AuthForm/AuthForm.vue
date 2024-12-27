@@ -9,8 +9,12 @@ const isLoading = ref<boolean>(false);
 
 const formSchema = toTypedSchema(
   object({
-    username: string({ required_error: 'Поле не должно быть пустым' }).trim().min(1, 'Поле не должно быть пустым'),
-    password: string({ required_error: 'Поле не должно быть пустым' }).trim().min(1, 'Поле не должно быть пустым'),
+    username: string({ required_error: 'Поле не должно быть пустым' })
+      .trim()
+      .min(1, 'Поле не должно быть пустым'),
+    password: string({ required_error: 'Поле не должно быть пустым' })
+      .trim()
+      .min(1, 'Поле не должно быть пустым'),
   }),
 );
 
@@ -27,7 +31,7 @@ const onSubmit = handleSubmit(async (values) => {
     });
     setToken(accessToken);
 
-    navigateTo('/home');
+    navigateTo('/dashboard/home');
   } catch (error) {
     isLoading.value = false;
     const err = (error as IFetchError<ResponseError>).data;
@@ -56,7 +60,11 @@ const onSubmit = handleSubmit(async (values) => {
               </div>
               <div class="form__input">
                 <UiFormControl>
-                  <UiInput type="text" placeholder="Email или короткое имя" v-bind="componentField" />
+                  <UiInput
+                    type="text"
+                    placeholder="Email или короткое имя"
+                    v-bind="componentField"
+                  />
                 </UiFormControl>
               </div>
               <UiFormMessage class="form__error" />
@@ -89,7 +97,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 <style lang="scss">
 .auth-card {
-  @apply font-lato w-full min-w-60 max-w-80;
+  @apply w-full min-w-60 max-w-80 font-lato;
 
   &__header {
     @apply flex flex-col items-center gap-1;

@@ -1,0 +1,61 @@
+{
+  "name": "@esed/nuxt-backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --host",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "overrides": {
+    "vue": "latest"
+  },
+  "dependencies": {
+    "@formkit/auto-animate": "^0.8.2",
+    "@pinia/nuxt": "^0.9.0",
+    "@radix-icons/vue": "^1.0.0",
+    "@tanstack/vue-table": "^8.20.5",
+    "@tiptap/extension-placeholder": "^2.10.4",
+    "@vee-validate/nuxt": "^4.15.0",
+    "@vee-validate/zod": "^4.15.0",
+    "@vueuse/core": "^12.2.0",
+    "@vueuse/nuxt": "^12.2.0",
+    "dayjs-nuxt": "^2.1.11",
+    "filepond": "^4.32.6",
+    "filepond-plugin-file-validate-type": "^1.2.9",
+    "nuxt": "^3.15.0",
+    "nuxt-tiptap-editor": "^2.1.4",
+    "pinia": "^2.3.0",
+    "pinia-plugin-persistedstate": "^4.2.0",
+    "radix-vue": "^1.9.11",
+    "shadcn-nuxt": "^0.11.3",
+    "tailwind-scrollbar": "^3.1.0",
+    "transliteration": "^2.3.5",
+    "vaul-vue": "^0.2.0",
+    "vee-validate": "^4.15.0",
+    "vue": "latest",
+    "vue-filepond": "^7.0.4",
+    "vue-router": "latest",
+    "vue-sonner": "^1.3.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.20",
+    "@iconify-json/solar": "^1.2.2",
+    "@nuxt/eslint": "^0.7.4",
+    "@nuxt/icon": "^1.10.3",
+    "@nuxtjs/color-mode": "^3.5.2",
+    "@nuxtjs/tailwindcss": "^6.12.2",
+    "@unlazy/nuxt": "^0.12.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "sass-embedded": "^1.83.0",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.7.2"
+  }
+}
