@@ -31,9 +31,9 @@ export const useBreadcrumbsStore = () => {
   const getCrumbs = (currRoute: string): BreadcrumbItem[] => {
     const routes = useRouter().getRoutes();
 
-    const HOMEPAGE = { label: '', url: '/' };
+    const HOMEPAGE = { label: '', url: '/dashboard/home' };
 
-    if (currRoute === '') return [HOMEPAGE];
+    if (currRoute === '/dashboard') return [HOMEPAGE];
 
     const paths = getCrumbs(currRoute.slice(0, currRoute.lastIndexOf('/')));
     const founds = routes.filter((r) => isMathPatternPath(r.path, currRoute));

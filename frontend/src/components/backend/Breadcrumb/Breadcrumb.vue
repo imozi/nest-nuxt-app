@@ -9,7 +9,7 @@ const { breadcrumbs } = useBreadcrumbsStore();
         <template v-for="(breadcrumb, i) of breadcrumbs" :key="breadcrumb.url">
           <UiBreadcrumbItem v-if="i === 0">
             <UiBreadcrumbLink as-child>
-              <NuxtLink to="/home">
+              <NuxtLink to="/dashboard/home">
                 <Icon name="solar:home-2-linear" class="size-4" />
               </NuxtLink>
             </UiBreadcrumbLink>

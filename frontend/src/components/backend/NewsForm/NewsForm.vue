@@ -62,7 +62,7 @@ const onSubmit = handleSubmit(async (values) => {
 });
 
 const onClickCancel = () => {
-  navigateTo('/news');
+  navigateTo('/dashboard/news');
 };
 const onUpdateDate = (date: string) => {
   setFieldValue('date', date);

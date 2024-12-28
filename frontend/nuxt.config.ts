@@ -70,7 +70,7 @@ export default defineNuxtConfig({
   app: {
     rootAttrs: {
       id: 'portal',
-      class: 'wrapper',
+      // class: 'wrapper',
     },
     buildAssetsDir: isDev ? '/_nuxt/' : '/assets',
     head: {

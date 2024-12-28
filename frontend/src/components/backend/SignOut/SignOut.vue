@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const signOut = async () => {
   await $fetchSecure('auth/signout', { method: 'POST' });
-  navigateTo({ path: '/', query: { signout: 'true' } }, { redirectCode: 301 });
+  navigateTo({ path: '/dashboard', query: { signout: 'true' } }, { redirectCode: 301 });
 };
 </script>
 
