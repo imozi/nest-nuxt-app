@@ -1,0 +1,28 @@
+model Menu {
+  id        String     @id @default(uuid()) @db.Uuid
+  name      String     @unique @db.VarChar(300)
+  children  MenuItem[] @relation(name: "menu_to_menu_item")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@map("menu")
+}
+
+model MenuItem {
+  id          String     @id @default(uuid()) @db.Uuid
+  name        String     @db.VarChar(300)
+  slug        String     @unique @db.VarChar(300)
+  menu        Menu[]     @relation(name: "menu_to_menu_item")
+  description String?    @db.Text
+  news        News[]     @relation(name: "news_to_menu_item")
+  order       Int?       @unique @db.Integer
+  materials   Material[] @relation(name: "materials_to_menu_item")
+  pages       Page[]     @relation(name: "pages_to_menu_item")
+  parentId    String?    @unique @map("parent_id") @db.Uuid
+  parent      MenuItem?  @relation(name: "menu_item_to_menu_items", fields: [parentId], references: [id])
+  children    MenuItem[] @relation(name: "menu_item_to_menu_items")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@map("menu_items")
+}

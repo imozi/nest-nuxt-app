@@ -1,0 +1,14 @@
+model Page {
+  id          String     @id @default(uuid()) @db.Uuid
+  name        String     @db.VarChar(300)
+  slug        String     @unique @db.VarChar(300)
+  description String?    @db.Text
+  text        String?    @db.Text
+  materials   Material[] @relation(name: "materials_to_page")
+  menuItemId  String?    @map("menu_item_id") @db.Uuid
+  menuItem    MenuItem?  @relation(name: "pages_to_menu_item", fields: [menuItemId], references: [id])
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@map("pages")
+}

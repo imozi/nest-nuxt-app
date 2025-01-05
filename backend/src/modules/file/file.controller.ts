@@ -9,11 +9,13 @@ export class FileController {
   constructor(private readonly fileService: FileService) {}
 
   @Get()
+  @UseGuards(JwtAccessGuard)
   async findAll(@Query() query: PaginateQuery) {
     return this.fileService.findAll(query);
   }
 
   @Get(':type')
+  @UseGuards(JwtAccessGuard)
   async findAllType(@Param() { type }, @Query() query: PaginateQuery) {
     return this.fileService.findAllType(query, type);
   }

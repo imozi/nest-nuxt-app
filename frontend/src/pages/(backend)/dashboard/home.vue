@@ -1,11 +1,15 @@
 <script setup lang="ts">
-const { account } = useAccountStore();
-useBreadcrumbs();
+useSeoMeta({
+  title: `ЕСЭД | Главная`,
+});
 definePageMeta({
   name: 'Главная',
 });
 
+const { account } = useAccountStore();
 const { data, execute } = await useFetchSecure(`sessions/me`, { immediate: false });
+
+useBreadcrumbs();
 
 const getSessionInfo = async () => {
   execute();
@@ -18,7 +22,10 @@ const signOut = async () => {
 </script>
 
 <template>
-  <div v-auto-animate class="">
+  <Empty>
+    <p>Страница в разработке</p>
+  </Empty>
+  <!-- <div v-auto-animate class="">
     <h1>Secret Page</h1>
     <h2>Session info</h2>
     <button type="button" @click="getSessionInfo">Get session info</button>
@@ -29,5 +36,5 @@ const signOut = async () => {
     <button type="button" @click="signOut">Sign Out</button>
 
     <NuxtLink to="/"> Back </NuxtLink>
-  </div>
+  </div> -->
 </template>

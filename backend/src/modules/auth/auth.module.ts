@@ -3,7 +3,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AccountModule } from '../account';
 import { SessionModule } from '../session';
-import { SessionTokenRepository } from './repositories';
+import { SessionTokenRepository } from './repository';
 
 @Module({
   imports: [AccountModule, SessionModule],

@@ -1,5 +1,4 @@
 import type { FileUploadTypes } from '..';
-import type { FileApi, ResponeWithMeta } from '~/types';
 
 interface FileQueryParams extends QueryParams {
   type: FileUploadTypes;
@@ -36,12 +35,9 @@ export const useFileFiltering = async ({ limit = 15, type }: { limit?: number; t
   const { data, refresh, status } = await useAsyncData(
     'files',
     () =>
-      $fetch<ResponeWithMeta<FileApi>>(
-        `/api/files${`${filteredFiles.type === 'all' ? '' : `/${filteredFiles.type}`}`}`,
-        {
-          query: formatedFilterQuery(),
-        },
-      ),
+      $fetchSecure<ResponeData<FileApi>>(`/files${`${filteredFiles.type === 'all' ? '' : `/${filteredFiles.type}`}`}`, {
+        query: formatedFilterQuery(),
+      }),
     {
       watch: [filteredFiles],
     },

@@ -6,7 +6,6 @@ class PrismaSeed {
 
   constructor() {
     this.prisma = new PrismaClient();
-    this.clearData();
   }
 
   private async clearData() {
@@ -21,6 +20,8 @@ class PrismaSeed {
 
   async init() {
     try {
+      await this.clearData();
+
       await this.prisma.$transaction([
         this.prisma.role.createManyAndReturn({ data: Roles }),
         this.prisma.gender.createManyAndReturn({ data: Genders }),

@@ -1,0 +1,19 @@
+model Material {
+  id          String    @id @default(uuid()) @db.Uuid
+  slug        String?   @unique @db.VarChar(300)
+  name        String    @db.VarChar(300)
+  description String?   @db.Text
+  text        String?   @db.Text
+  date        DateTime  @db.Timestamptz()
+  resources   Json      @db.JsonB
+  tags        Tag[]     @relation(name: "materials_to_tags")
+  isPublished Boolean   @map("is_published")
+  menuItemId  String?   @map("menu_item_id") @db.Uuid
+  menuItem    MenuItem? @relation(name: "materials_to_menu_item", fields: [menuItemId], references: [id])
+  pageId      String?   @map("page_id") @db.Uuid
+  page        Page?     @relation(name: "materials_to_page", fields: [pageId], references: [id])
+  createdAt   DateTime? @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+
+  @@map("materials")
+}

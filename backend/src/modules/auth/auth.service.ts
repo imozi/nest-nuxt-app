@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { AuthDto } from './dto';
 import { AccountService } from '../account';
 import { SessionService } from '../session';
-import { SessionTokenRepository } from './repositories';
+import { SessionTokenRepository } from './repository';
 import { decryptData, encryptData, getExpiryDay } from '@/shared/helpers';
 import { DeviceInfo } from '@/shared/core/types';
 import * as bcrypt from 'bcrypt';

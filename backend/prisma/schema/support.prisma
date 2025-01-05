@@ -1,15 +1,16 @@
 model SupportMail {
-  id           String   @id @default(uuid()) @db.Uuid
-  name         String   @db.Text
-  email        String   @unique @db.VarChar(100)
-  position     String   @db.Text
-  organization String   @db.Text
-  question     String   @db.Text
-  remoteId     String   @map("remote_id") @db.Text
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id           String         @id @default(uuid()) @db.Uuid
+  name         String         @db.Text
+  email        String         @unique @db.VarChar(100)
+  position     String         @db.Text
+  organization String         @db.Text
+  question     String         @db.Text
+  status       SupportStatus? @default(new)
+  remoteId     String         @map("remote_id") @db.Text
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
 
-  @@index([email, createdAt])
+  @@index([email, name, organization, createdAt])
   @@map("support_mails")
 }
 

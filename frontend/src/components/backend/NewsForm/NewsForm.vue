@@ -4,9 +4,9 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import type { IFetchError } from 'ofetch';
 
-// const { data } = useAsyncData<ResponeWithPagination<Tags>>('tags', () => {
-//   return $fetch(`/api/tags`);
-// });
+const { data: tags } = useAsyncData<ResponeData<Tags>>('tags', () => {
+  return $fetchSecure(`/tags`);
+});
 
 const formSchema = toTypedSchema(
   object({
@@ -39,7 +39,7 @@ const onSubmit = handleSubmit(async (values) => {
 
   const promise = async () => {
     try {
-      await $fetch(`/api/posts`, { body: values, method: 'POST' });
+      await $fetchSecure(`/news`, { body: values, method: 'POST' });
       return 'Новость успешно создана!';
     } catch (error) {
       const err = (error as IFetchError<ResponseError>).data;
@@ -51,7 +51,7 @@ const onSubmit = handleSubmit(async (values) => {
     loading: 'Сохранение...',
     success: (message: string) => {
       isSaved.value = false;
-      navigateTo('/news');
+      navigateTo('/dashboard/news');
       return message;
     },
     error: (message: string) => {
@@ -94,10 +94,11 @@ watch(values, () => {
 </script>
 
 <template>
-  <form class="grid gap-8" @submit="onSubmit">
+  <form class="grid gap-5" @submit="onSubmit">
     <div class="flex items-center">
-      <div class="mr-auto flex items-center">
-        <h3 class="text-2xl font-semibold leading-none tracking-tight">Создать новость</h3>
+      <div class="mr-auto flex items-center gap-x-2">
+        <Icon name="solar:hashtag-square-linear" class="size-5" />
+        <p>Создать новость</p>
       </div>
       <div class="flex items-center gap-4">
         <UiAlertDialog>
@@ -239,7 +240,7 @@ watch(values, () => {
             <UiFormField name="tags">
               <UiFormItem v-auto-animate="{ duration: 200 }" class="flex flex-col gap-y-2">
                 <UiFormLabel>Теги</UiFormLabel>
-                <ChoiceTags :tags="[{ id: 'sad', name: 'Инструкции' }]" @on:change-tags="onUpdateTags" />
+                <ChoiceTags v-if="tags" :tags="tags.data" @on:change-tags="onUpdateTags" />
                 <UiFormMessage />
               </UiFormItem>
             </UiFormField>

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: `ЕСЭД | Авторизация`,
+});
+
 definePageMeta({
   layout: 'clear',
 });

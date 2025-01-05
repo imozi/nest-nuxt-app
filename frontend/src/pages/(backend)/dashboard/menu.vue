@@ -1,11 +1,13 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: `ЕСЭД | Меню`,
+});
 definePageMeta({
   name: 'Меню',
-  layout: 'clear',
 });
 useBreadcrumbs();
 </script>
 
 <template>
-  <Empty />
+  <Menu />
 </template>

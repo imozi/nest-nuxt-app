@@ -34,6 +34,13 @@ export const useMenuStore = defineStore(
         },
         {
           id: useId(),
+          name: 'Страницы',
+          to: '/dashboard/pages',
+          icon: 'solar:book-linear',
+          crud: true,
+        },
+        {
+          id: useId(),
           name: 'Файлы',
           to: '/dashboard/files',
           icon: 'solar:folder-with-files-linear',
@@ -48,10 +55,10 @@ export const useMenuStore = defineStore(
         },
         {
           id: useId(),
-          name: 'Страницы',
-          to: '/dashboard/pages',
-          icon: 'solar:book-linear',
-          crud: true,
+          name: 'Теги',
+          to: '/dashboard/tags',
+          icon: 'solar:tag-linear',
+          crud: false,
         },
       ],
     });

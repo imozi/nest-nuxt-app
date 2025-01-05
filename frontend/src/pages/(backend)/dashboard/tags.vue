@@ -1,0 +1,13 @@
+<script setup lang="ts">
+useSeoMeta({
+  title: `ЕСЭД | Теги`,
+});
+definePageMeta({
+  name: 'Теги',
+});
+useBreadcrumbs();
+</script>
+
+<template>
+  <Tags />
+</template>

@@ -1,5 +1,6 @@
-export type SupportMail = {
-  id: string;
+import type { Entity } from './common';
+
+export interface SupportMail extends Entity {
   name: string;
   email: string;
   position: string;
@@ -9,6 +10,6 @@ export type SupportMail = {
   remoteId: string;
   createdAt: string;
   updatedAt: string;
-};
+}
 
 type SupportMailStatus = 'new' | 'progress' | 'technical' | 'closed' | 'deferred' | 'viewed';

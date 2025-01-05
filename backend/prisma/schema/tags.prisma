@@ -1,0 +1,8 @@
+model Tag {
+  id        String     @id @default(uuid()) @db.Uuid
+  name      String
+  news      News[]     @relation(name: "news_to_tags")
+  materials Material[] @relation(name: "materials_to_tags")
+
+  @@map("tags")
+}

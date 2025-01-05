@@ -12,7 +12,22 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
     protected readonly prisma: PrismaService,
     protected readonly model: Prisma.TypeMap['meta']['modelProps'],
     protected readonly searchFields?: (keyof Prisma.TypeMap['model'][T]['fields'])[],
+    protected readonly excludedField?: (keyof Prisma.TypeMap['model'][T]['fields'])[],
   ) {}
+
+  public selectedField() {
+    const fields = Object.keys(this.prisma[this.model].fields).reduce(
+      (acc, key) => {
+        if (!this.excludedField.includes(key as keyof Prisma.TypeMap['model'][T]['fields'])) {
+          acc[key] = true;
+        }
+        return acc;
+      },
+      {} as Record<string, boolean>,
+    );
+
+    return fields;
+  }
 
   async findMany(options?: {
     page?: number;
@@ -150,5 +165,9 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
 
   async transaction(action: []) {
     return await this.prisma.$transaction(action);
+  }
+
+  async aggregate(data: Prisma.TypeMap['model'][T]['operations']['aggregate']['args']) {
+    return await (this.prisma[this.model] as any).aggregate(data);
   }
 }

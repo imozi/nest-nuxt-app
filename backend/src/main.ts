@@ -5,6 +5,7 @@ import { LoggerService } from '@/app/common';
 import { LoggingInterceptor } from '@/interceptors/logging.interceptor';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { RequestIdInterceptor } from './interceptors';
 
 const bootstrap = async () => {
   const app = await NestFactory.create(AppModule, {
@@ -23,7 +24,7 @@ const bootstrap = async () => {
   });
 
   app.useLogger(logger);
-  app.useGlobalInterceptors(new LoggingInterceptor(logger));
+  app.useGlobalInterceptors(new LoggingInterceptor(logger), new RequestIdInterceptor());
   app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true, transform: true }));
 
   app.setGlobalPrefix(globalPrefix);

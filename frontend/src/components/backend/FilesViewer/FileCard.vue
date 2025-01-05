@@ -84,7 +84,7 @@ const onSelectFile = (event: MouseEvent) => {
   @apply h-full justify-stretch;
 
   &--selected {
-    @apply bg-muted text-accent-foreground;
+    @apply bg-zinc-200 text-accent-foreground dark:bg-zinc-900;
   }
 
   &__wrapper {

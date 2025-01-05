@@ -39,6 +39,7 @@ export class AccountRepository extends BasePostgresRepository<'Account'> {
         shortcut: true,
         roles: {
           select: {
+            name: true,
             description: true,
           },
         },

@@ -10,16 +10,7 @@ type FileViewerProps = {
 };
 
 const props = defineProps<FileViewerProps>();
-const {
-  currentTab,
-  selectedFiles,
-  search,
-  filteredFiles,
-  formatedFilterQuery,
-  data,
-  refresh,
-  status,
-} = await useFileFiltering({
+const { currentTab, selectedFiles, search, filteredFiles, formatedFilterQuery, data, refresh, status } = await useFileFiltering({
   type: props.type,
 });
 const emit = defineEmits(['on:chice-file']);
@@ -52,7 +43,7 @@ const deleteFiles = async () => {
 };
 
 const choiceFile = () => {
-  emit('on:chice-file', selectedFiles[0].url);
+  emit('on:chice-file', selectedFiles[0]?.url);
 };
 
 watch(filteredFiles, () => {
@@ -64,13 +55,12 @@ watch(filteredFiles, () => {
 <template>
   <UiTabs v-model:model-value="currentTab" class="files-viewer" :default-value="currentTab">
     <div class="files-viewer__wrapper">
+      <div class="files-viewer__title">
+        <Icon name="solar:hashtag-square-linear" class="size-5" />
+        <p>Файлы</p>
+      </div>
       <UiTabsList class="files-viewer__list">
-        <UiTabsTrigger
-          v-for="tab of Tabs"
-          :key="tab.value"
-          :value="tab.value"
-          :disabled="props.disabled && currentTab !== tab.value"
-        >
+        <UiTabsTrigger v-for="tab of Tabs" :key="tab.value" :value="tab.value" :disabled="props.disabled && currentTab !== tab.value">
           {{ tab.name }}
         </UiTabsTrigger>
       </UiTabsList>
@@ -97,12 +87,7 @@ watch(filteredFiles, () => {
       <UiContextMenu>
         <UiContextMenuTrigger as-child>
           <Empty v-if="!data?.data.length" />
-          <FilesViewerFileList
-            v-else
-            v-model:selected="selectedFiles"
-            :files="data?.data"
-            :loading="status === 'pending'"
-          />
+          <FilesViewerFileList v-else v-model:selected="selectedFiles" :files="data?.data" :loading="status === 'pending'" />
           <template v-if="data">
             <Pagination
               v-if="data.meta.lastPage > 1"
@@ -127,7 +112,11 @@ watch(filteredFiles, () => {
   @apply flex flex-col gap-y-5;
 
   &__wrapper {
-    @apply flex items-center gap-x-5;
+    @apply flex items-center gap-x-5 border-b pb-5;
+  }
+
+  &__title {
+    @apply flex items-center gap-x-2 border-r pr-4;
   }
 
   &__collumn {

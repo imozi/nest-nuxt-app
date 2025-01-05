@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { FileRepository } from './repositories';
+import { FileRepository } from './repository';
 import { PaginateQuery } from '@/shared/core/types';
 import { $Enums } from '@prisma/client';
 import { EventEmitter2 } from '@nestjs/event-emitter';

@@ -21,7 +21,7 @@ const { menu } = useMenuStore();
                 {{ item.name }}
               </span>
             </UiAccordionTrigger>
-            <UiAccordionContent class="pl-10">
+            <UiAccordionContent class="mt-1 pl-10">
               <ButtonLink
                 :link="{ to: item.to }"
                 class="main-nav__link main-nav__accordion-item"

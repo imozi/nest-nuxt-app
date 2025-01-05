@@ -9,9 +9,14 @@ export const useAccountStore = () => {
     account.value = null;
   };
 
+  const isIncludeRole = (role: string) => {
+    return account.value?.roles.some((item) => item.name === role);
+  };
+
   return {
     account,
     setAccount,
     resetAccount,
+    isIncludeRole,
   };
 };

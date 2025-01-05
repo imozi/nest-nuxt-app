@@ -89,7 +89,7 @@ const onErrorLoad = (error: string) => {
                 allow-revert="false"
                 item-insert-location="after"
                 :server="{
-                  url: `${config.app.baseURL}/api${props.type ? `/${fileTypes[props.type].url}` : ''}`,
+                  url: `/api${props.type ? `/${fileTypes[props.type].url}` : ''}`,
                   headers: { Authorization: `Bearer ${token}` },
                   process: {
                     onerror: onErrorLoad,
