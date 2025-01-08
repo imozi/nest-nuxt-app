@@ -68,7 +68,7 @@ watch(values, () => {
       </UiDialogHeader>
       <form class="tags__form" @submit="onSubmit">
         <UiFormField v-slot="{ componentField }" name="name">
-          <UiFormItem v-auto-animate="{ duration: 200 }" class="flex flex-col gap-y-2">
+          <UiFormItem class="flex flex-col gap-y-2">
             <UiFormLabel>Наименование</UiFormLabel>
 
             <UiFormControl>

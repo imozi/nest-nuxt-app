@@ -22,18 +22,8 @@ const { menu } = useMenuStore();
               </span>
             </UiAccordionTrigger>
             <UiAccordionContent class="mt-1 pl-10">
-              <ButtonLink
-                :link="{ to: item.to }"
-                class="main-nav__link main-nav__accordion-item"
-                active-class="current"
-              >
-                Все
-              </ButtonLink>
-              <ButtonLink
-                :link="{ to: `${item.to}/create` }"
-                class="main-nav__link main-nav__accordion-item"
-                active-class="current"
-              >
+              <ButtonLink :link="{ to: item.to }" class="main-nav__link main-nav__accordion-item" active-class="current"> Все </ButtonLink>
+              <ButtonLink :link="{ to: `${item.to}/create` }" class="main-nav__link main-nav__accordion-item" active-class="current">
                 Создать
               </ButtonLink>
             </UiAccordionContent>
@@ -49,13 +39,7 @@ const { menu } = useMenuStore();
         <UiTooltipProvider :delay-duration="100">
           <UiTooltip>
             <UiTooltipTrigger as-child>
-              <ButtonLink
-                :link="{ to: item.to }"
-                class="main-nav__link"
-                variant="ghost"
-                size="icon"
-                active-class="current"
-              >
+              <ButtonLink :link="{ to: item.to }" class="main-nav__link" variant="ghost" size="icon" active-class="current">
                 <Icon :name="item.icon" class="size-5" />
               </ButtonLink>
             </UiTooltipTrigger>
@@ -89,7 +73,7 @@ const { menu } = useMenuStore();
     @apply cursor-pointer;
 
     &.current {
-      @apply bg-accent text-accent-foreground;
+      @apply bg-accent text-accent-foreground dark:bg-zinc-900;
     }
   }
 

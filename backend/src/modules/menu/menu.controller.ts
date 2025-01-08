@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
 import { MenuService } from './menu.service';
-import { MenuDto, MenuItemDto } from './dto';
+import { MenuDeleteDto, MenuDto, MenuItemDto } from './dto';
 import { PaginateQuery } from '@/shared/core/types';
-import { JwtAccessGuard } from '@/guards';
+import { JwtAccessGuard, RolesGuard } from '@/guards';
+import { Roles } from '@/decorators';
 
 @Controller('menu')
 export class MenuController {
@@ -24,5 +25,12 @@ export class MenuController {
   @UseGuards(JwtAccessGuard)
   async createMenuItem(@Body() data: MenuItemDto) {
     return await this.menuService.createMenuItem(data);
+  }
+
+  @Delete()
+  @UseGuards(JwtAccessGuard, RolesGuard)
+  @Roles('admin')
+  async deleteMenu(@Body() data: MenuDeleteDto) {
+    return await this.menuService.deleteMenu(data);
   }
 }

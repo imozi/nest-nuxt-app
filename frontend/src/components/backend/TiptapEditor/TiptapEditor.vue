@@ -24,7 +24,7 @@ const editor = useEditor({
   extensions: [
     TiptapStarterKit,
     Placeholder.configure({
-      placeholder: 'Текст новости...',
+      placeholder: 'Текст...',
     }),
     Link.configure({
       HTMLAttributes: {

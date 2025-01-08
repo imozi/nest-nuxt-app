@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MenuRepository, MenuItemRepository } from './repository';
-import { MenuDto, MenuItemDto } from './dto';
+import { MenuDeleteDto, MenuDto, MenuItemDto } from './dto';
 import { PaginateQuery } from '@/shared/core/types';
 
 @Injectable()
@@ -14,6 +14,15 @@ export class MenuService {
     if (maximumLevel === 1) {
       return {
         children: {
+          include: {
+            pages: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
+              },
+            },
+          },
           orderBy: {
             order: 'asc',
           },
@@ -58,5 +67,9 @@ export class MenuService {
       },
       order: maxOrder._max.order + 1,
     });
+  }
+
+  async deleteMenu({ id }: MenuDeleteDto) {
+    return await this.menuRepository.delete([id]);
   }
 }
