@@ -8,7 +8,14 @@ export class PageService {
   constructor(private readonly pageRepository: PageRepository) {}
 
   async findAll(query: PaginateQuery) {
-    return await this.pageRepository.findMany({ ...query, params: { orderBy: { createdAt: 'desc' } } });
+    return await this.pageRepository.findMany({
+      ...query,
+      params: { include: { menuItem: { select: { name: true } } }, orderBy: { createdAt: 'desc' } },
+    });
+  }
+
+  async findBySlug(slug: string) {
+    return await this.pageRepository.findUnique({ where: { slug } });
   }
 
   async create(data: PageDto) {

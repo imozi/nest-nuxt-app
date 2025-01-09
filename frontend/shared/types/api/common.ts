@@ -7,7 +7,7 @@ export type ResponseError = {
   statusCode: number;
 };
 
-export type ResponeData<E> = {
+export type ResponseData<E> = {
   data: E[];
   meta: Meta;
 };

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MenuRepository, MenuItemRepository } from './repository';
-import { MenuDeleteDto, MenuDto, MenuItemDto } from './dto';
+import { MenuDeleteDto, MenuDto, MenuItemDto, MenuItemsDeleteDto } from './dto';
 import { PaginateQuery } from '@/shared/core/types';
 
 @Injectable()
@@ -15,6 +15,12 @@ export class MenuService {
       return {
         children: {
           include: {
+            menu: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
             pages: {
               select: {
                 id: true,
@@ -35,6 +41,17 @@ export class MenuService {
         children: this._includeChildren(maximumLevel - 1),
       },
     };
+  }
+
+  async findMenuItemsAll(query: PaginateQuery) {
+    return await this.menuItemRepository.findMany({
+      ...query,
+      params: {
+        orderBy: {
+          order: 'asc',
+        },
+      },
+    });
   }
 
   async findMenuAll(query: PaginateQuery) {
@@ -69,7 +86,20 @@ export class MenuService {
     });
   }
 
+  async updateMenuItem(data: MenuItemDto) {
+    return await this.menuItemRepository.update({
+      ...data,
+      menu: {
+        set: data.menu.map((item) => ({ id: item })),
+      },
+    });
+  }
+
   async deleteMenu({ id }: MenuDeleteDto) {
     return await this.menuRepository.delete([id]);
+  }
+
+  async deleteMenuItems({ id }: MenuItemsDeleteDto) {
+    return await this.menuItemRepository.delete([id]);
   }
 }

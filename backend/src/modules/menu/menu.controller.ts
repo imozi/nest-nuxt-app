@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { MenuService } from './menu.service';
-import { MenuDeleteDto, MenuDto, MenuItemDto } from './dto';
+import { MenuDeleteDto, MenuDto, MenuItemDto, MenuItemsDeleteDto } from './dto';
 import { PaginateQuery } from '@/shared/core/types';
 import { JwtAccessGuard, RolesGuard } from '@/guards';
 import { Roles } from '@/decorators';
@@ -13,6 +13,12 @@ export class MenuController {
   @UseGuards(JwtAccessGuard)
   async findMenuAll(query: PaginateQuery) {
     return await this.menuService.findMenuAll(query);
+  }
+
+  @Get('items')
+  @UseGuards(JwtAccessGuard)
+  async findMenuItemsAll(query: PaginateQuery) {
+    return await this.menuService.findMenuItemsAll(query);
   }
 
   @Post()
@@ -32,5 +38,17 @@ export class MenuController {
   @Roles('admin')
   async deleteMenu(@Body() data: MenuDeleteDto) {
     return await this.menuService.deleteMenu(data);
+  }
+
+  @Delete('items')
+  @UseGuards(JwtAccessGuard)
+  async deleteMenuItem(@Body() data: MenuItemsDeleteDto) {
+    return await this.menuService.deleteMenuItems(data);
+  }
+
+  @Patch('items')
+  @UseGuards(JwtAccessGuard)
+  async updateMenuItem(@Body() data: MenuItemDto) {
+    return await this.menuService.updateMenuItem(data);
   }
 }

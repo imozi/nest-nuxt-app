@@ -1,11 +1,9 @@
-export interface News extends Entity {
+export interface Page extends Entity {
+  name: string;
   slug: string;
-  title: string;
   description: string;
   text: string;
-  date: string;
-  image: string;
-  isPublished: boolean;
+  menuItem: { name: string };
   menuItemId: string;
   createdAt: string;
   updatedAt: string;

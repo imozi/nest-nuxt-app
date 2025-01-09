@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { uploadIcon, type FilePondProps, fileTypes } from '.';
-import type { ResponseError } from '~/types';
 
-const config = useRuntimeConfig();
 const { token } = useTokenStore();
 
 interface FileUploadProps extends FilePondProps {
@@ -571,10 +569,7 @@ const onErrorLoad = (error: string) => {
   opacity: 0;
 }
 
-[data-filepond-item-state~='processing']
-  .filepond--action-abort-item-processing
-  ~ .filepond--file-status
-  .filepond--file-status-sub {
+[data-filepond-item-state~='processing'] .filepond--action-abort-item-processing ~ .filepond--file-status .filepond--file-status-sub {
   opacity: 0.5;
 }
 
@@ -582,10 +577,7 @@ const onErrorLoad = (error: string) => {
   opacity: 0;
 }
 
-[data-filepond-item-state='processing-error']
-  .filepond--action-retry-item-processing
-  ~ .filepond--file-status
-  .filepond--file-status-sub {
+[data-filepond-item-state='processing-error'] .filepond--action-retry-item-processing ~ .filepond--file-status .filepond--file-status-sub {
   opacity: 0.5;
 }
 
@@ -617,10 +609,7 @@ const onErrorLoad = (error: string) => {
   opacity: 0;
 }
 
-[data-filepond-item-state='processing-complete']
-  .filepond--action-revert-item-processing
-  ~ .filepond--file-info
-  .filepond--file-info-sub {
+[data-filepond-item-state='processing-complete'] .filepond--action-revert-item-processing ~ .filepond--file-info .filepond--file-info-sub {
   opacity: 0.5;
 }
 

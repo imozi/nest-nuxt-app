@@ -1,8 +1,26 @@
 <script setup lang="ts">
-const { data: menu, refresh } = await useFetchSecure<ResponeData<Menu>>('/menu', { key: 'menu' });
+const { data: menu, refresh } = await useFetchSecure<ResponseData<Menu>>('/menu', { key: 'menu' });
 const currentTab = ref<string | undefined>(menu.value?.data[0]?.id);
+const isOpenAlertDialog = ref<boolean>(false);
+const isOpenEditDialog = ref<boolean>(false);
+const currentMenuItem = ref<MenuItem>();
 
 const menuItems = computed(() => menu.value?.data.filter((item) => item.id === currentTab.value)[0]?.children);
+
+const refreshBeforeSaved = () => {
+  isOpenEditDialog.value = !isOpenEditDialog.value;
+  refresh();
+};
+
+const showDeleteDialog = (item: MenuItem) => {
+  currentMenuItem.value = item;
+  isOpenAlertDialog.value = !isOpenAlertDialog.value;
+};
+
+const showEditDialog = (item: MenuItem) => {
+  currentMenuItem.value = item;
+  isOpenEditDialog.value = !isOpenEditDialog.value;
+};
 </script>
 
 <template>
@@ -46,7 +64,7 @@ const menuItems = computed(() => menu.value?.data.filter((item) => item.id === c
                     </List>
                   </UiAccordionContent>
                 </UiAccordionItem>
-                <MenuItemDropdown />
+                <MenuItemDropdown @on:delete="showDeleteDialog(item)" @on:edit="showEditDialog(item)" />
               </UiAccordion>
             </ListItem>
           </List>
@@ -54,6 +72,8 @@ const menuItems = computed(() => menu.value?.data.filter((item) => item.id === c
         <Empty v-else />
       </UiTabsContent>
     </ClientOnly>
+    <MenuItemDelete v-model:open="isOpenAlertDialog" v-model:item="currentMenuItem" @on:deleted="refresh" />
+    <MenuItemEdit v-model:open="isOpenEditDialog" v-model:item="currentMenuItem" @on:saved="refreshBeforeSaved" />
   </UiTabs>
 
   <Empty v-else />
@@ -79,6 +99,8 @@ const menuItems = computed(() => menu.value?.data.filter((item) => item.id === c
     @apply grid grid-cols-[1fr,max-content] gap-x-1;
 
     &-trigger {
+      @apply text-base;
+
       &[data-state='open'] {
         @apply bg-zinc-100 text-black dark:bg-zinc-900 dark:text-white;
       }

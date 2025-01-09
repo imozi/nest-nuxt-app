@@ -8,7 +8,7 @@ definePageMeta({
 });
 useBreadcrumbs();
 
-const { data: response } = await useFetchSecure<ResponeData<News>>('/news');
+const { data: response } = await useFetchSecure<ResponseData<News>>('/news');
 </script>
 
 <template>

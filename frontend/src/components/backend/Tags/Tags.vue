@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-const { data: tags, refresh } = await useFetchSecure<ResponeData<Tags>>('/tags');
+const { data: tags, refresh } = await useFetchSecure<ResponseData<Tags>>('/tags');
 const isOpenAlertDialog = ref<boolean>(false);
 const isOpenEditDialog = ref<boolean>(false);
 const isOpenCreateDialog = ref<boolean>(false);

@@ -1,3 +1,15 @@
+<script setup lang="ts">
+useSeoMeta({
+  title: `ЕСЭД | Страницы`,
+});
+
+definePageMeta({
+  name: 'Страницы',
+});
+
+useBreadcrumbs();
+</script>
+
 <template>
-  <Empty />
+  <Pages />
 </template>

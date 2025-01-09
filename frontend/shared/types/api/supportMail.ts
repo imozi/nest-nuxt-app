@@ -1,5 +1,3 @@
-import type { Entity } from './common';
-
 export interface SupportMail extends Entity {
   name: string;
   email: string;

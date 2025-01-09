@@ -2,7 +2,7 @@
 import { object, string } from 'zod';
 import { useForm } from 'vee-validate';
 
-const { data: menu } = useNuxtData<ResponeData<Menu>>('menu');
+const { data: menu } = useNuxtData<ResponseData<Menu>>('menu');
 
 const isOpenDialog = ref<boolean>(false);
 const isOpenTooltip = ref<boolean>(false);

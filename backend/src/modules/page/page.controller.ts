@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { PageService } from './page.service';
 import { PaginateQuery } from '@/shared/core/types';
 import { PageDeleteDto, PageDto } from './dto';
@@ -12,6 +12,11 @@ export class PageController {
   @UseGuards(JwtAccessGuard)
   async findAll(@Query() query: PaginateQuery) {
     return await this.pageService.findAll({ ...query });
+  }
+
+  @Get(':slug')
+  async findBySlug(@Param('slug') slug: string) {
+    return await this.pageService.findBySlug(slug);
   }
 
   @Post()

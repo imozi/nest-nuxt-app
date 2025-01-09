@@ -4,6 +4,7 @@ export interface MenuItem extends Entity {
   description: string | null;
   order: number;
   pages: Page[];
+  menu: Menu[];
 }
 
 export interface Menu extends Entity {
@@ -11,7 +12,7 @@ export interface Menu extends Entity {
   children: MenuItem[];
 }
 
-export interface Page extends Entity {
+interface Page extends Entity {
   name: string;
   slug: string;
 }

@@ -1,5 +1,4 @@
-export interface FileApi {
-  id: string;
+export interface FileApi extends Entity {
   type: string;
   name: string;
   originalName: string;

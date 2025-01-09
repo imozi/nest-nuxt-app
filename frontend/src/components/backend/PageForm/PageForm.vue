@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { object, string, array } from 'zod';
+import { object, string } from 'zod';
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import type { IFetchError } from 'ofetch';
 
-const { data: tags } = useAsyncData<ResponseData<Tags>>('tags', () => {
-  return $fetchSecure(`/tags`);
+const { data: menu } = useAsyncData<ResponseData<MenuItem>>('menu-items', () => {
+  return $fetchSecure(`/menu/items`);
 });
 
 const formSchema = toTypedSchema(
   object({
-    title: string({
+    name: string({
       required_error: 'Поле не должно быть пустым',
     }).trim(),
     slug: string({
@@ -18,14 +18,11 @@ const formSchema = toTypedSchema(
     }).trim(),
     description: string({
       required_error: 'Поле не должно быть пустым',
-    }).trim(),
-    tags: array(string()).optional().default([]),
-    text: string({ required_error: 'Поле не должно быть пустым' }).trim(),
-    date: string({ required_error: 'Выберите дату' }).refine((v) => v, { message: 'Выберите дату' }),
-    image: string().optional().default('default/placeholder.svg'),
-    isPublished: string({
-      required_error: 'Выберите статус',
-    }).transform((value) => Boolean(value)),
+    })
+      .trim()
+      .optional(),
+    text: string({ required_error: 'Поле не должно быть пустым' }).trim().optional(),
+    menuItem: string({ required_error: 'Поле не должно быть пустым' }).trim(),
   }),
 );
 
@@ -39,8 +36,8 @@ const onSubmit = handleSubmit(async (values) => {
 
   const promise = async () => {
     try {
-      await $fetchSecure(`/news`, { body: values, method: 'POST' });
-      return 'Новость успешно создана!';
+      await $fetchSecure(`/pages`, { body: values, method: 'POST' });
+      return 'Страница успешно создана!';
     } catch (error) {
       const err = (error as IFetchError<ResponseError>).data;
       throw createError({ message: err?.message, statusCode: err?.statusCode });
@@ -51,7 +48,7 @@ const onSubmit = handleSubmit(async (values) => {
     loading: 'Сохранение...',
     success: (message: string) => {
       isSaved.value = false;
-      navigateTo('/dashboard/news');
+      navigateTo('/dashboard/pages');
       return message;
     },
     error: (message: string) => {
@@ -62,29 +59,18 @@ const onSubmit = handleSubmit(async (values) => {
 });
 
 const onClickCancel = () => {
-  navigateTo('/dashboard/news');
-};
-const onUpdateDate = (date: string) => {
-  setFieldValue('date', date);
+  navigateTo('/dashboard/pages');
 };
 
-const onUpdateImage = (image: string) => {
-  setFieldValue('image', image);
-};
-
-const onUpdateTags = (arr: string[]) => {
-  setFieldValue('tags', arr);
-};
-
-const setAliasOnBlurTitle = () => {
-  if (values.title && !values.slug) {
-    setFieldValue('slug', createAlias(values.title));
+const setAliasOnBlurName = () => {
+  if (values.name && !values.slug) {
+    setFieldValue('slug', createAlias(values.name));
   }
 };
 
 watch(values, () => {
-  if (values.title === '') {
-    setFieldValue('title', undefined);
+  if (values.name === '') {
+    setFieldValue('name', undefined);
   }
 
   if (values.slug === '') {
@@ -98,7 +84,7 @@ watch(values, () => {
     <div class="flex items-center">
       <div class="mr-auto flex items-center gap-x-2">
         <Icon name="solar:hashtag-square-linear" class="size-5" />
-        <p>Создать новость</p>
+        <p>Создать страницу</p>
       </div>
       <div class="flex items-center gap-4">
         <UiAlertDialog>
@@ -108,7 +94,7 @@ watch(values, () => {
           <UiAlertDialogContent>
             <UiAlertDialogHeader>
               <UiAlertDialogTitle>Вы уверены?</UiAlertDialogTitle>
-              <UiAlertDialogDescription> Вы уверены что хотите отменить создание новости? </UiAlertDialogDescription>
+              <UiAlertDialogDescription> Вы уверены что хотите отменить создание страницы? </UiAlertDialogDescription>
             </UiAlertDialogHeader>
             <UiAlertDialogFooter>
               <UiAlertDialogCancel>Нет</UiAlertDialogCancel>
@@ -125,16 +111,16 @@ watch(values, () => {
       <div class="col-span-2 grid auto-rows-max gap-8 break-all">
         <UiCard>
           <UiCardHeader class="pb-2">
-            <UiCardTitle>Название новости</UiCardTitle>
-            <UiCardDescription> Описание новости </UiCardDescription>
+            <UiCardTitle>Название страницы</UiCardTitle>
+            <UiCardDescription> Описание страницы </UiCardDescription>
           </UiCardHeader>
           <UiCardContent class="flex flex-col gap-y-5">
-            <UiFormField v-slot="{ componentField }" name="title">
+            <UiFormField v-slot="{ componentField }" name="name">
               <UiFormItem class="flex flex-col gap-y-2">
-                <UiFormLabel>Заголовок</UiFormLabel>
+                <UiFormLabel>Наименование</UiFormLabel>
 
                 <UiFormControl>
-                  <UiInput type="text" placeholder="Заголовок" v-bind="componentField" @blur="setAliasOnBlurTitle" />
+                  <UiInput type="text" placeholder="Наименование" v-bind="componentField" @blur="setAliasOnBlurName" />
                 </UiFormControl>
 
                 <UiFormMessage />
@@ -145,7 +131,7 @@ watch(values, () => {
                 <UiFormLabel>Алиас (ЧПУ)</UiFormLabel>
 
                 <UiFormControl>
-                  <UiInput type="text" placeholder="алиас" v-bind="componentField" />
+                  <UiInput type="text" placeholder="Алиас" v-bind="componentField" />
                 </UiFormControl>
 
                 <UiFormMessage />
@@ -154,7 +140,7 @@ watch(values, () => {
 
             <UiFormField v-slot="{ componentField }" name="description">
               <UiFormItem class="flex flex-col gap-y-2">
-                <UiFormLabel>Краткое описание</UiFormLabel>
+                <UiFormLabel>Краткое описание (не обязательно)</UiFormLabel>
 
                 <UiFormControl>
                   <TiptapEditor v-bind="componentField" size="xs" />
@@ -169,13 +155,13 @@ watch(values, () => {
         <div class="grid gap-8">
           <UiCard>
             <UiCardHeader class="pb-2">
-              <UiCardTitle>Текст новости</UiCardTitle>
-              <UiCardDescription> Основной текст новости </UiCardDescription>
+              <UiCardTitle>Текст</UiCardTitle>
+              <UiCardDescription> Основной текст на странице </UiCardDescription>
             </UiCardHeader>
             <UiCardContent>
               <UiFormField v-slot="{ componentField }" name="text">
                 <UiFormItem class="flex flex-col gap-y-2">
-                  <UiFormLabel>Текст</UiFormLabel>
+                  <UiFormLabel>Текст (не обязательно)</UiFormLabel>
 
                   <UiFormControl>
                     <TiptapEditor v-bind="componentField" size="md" />
@@ -191,66 +177,32 @@ watch(values, () => {
       <div class="grid auto-rows-max gap-8">
         <UiCard>
           <UiCardHeader class="pb-2">
-            <UiCardTitle>Статус</UiCardTitle>
-            <UiCardDescription> Публикации </UiCardDescription>
+            <UiCardTitle>Прикрепить</UiCardTitle>
+            <UiCardDescription> Выберите пункт меню </UiCardDescription>
           </UiCardHeader>
           <UiCardContent>
-            <UiFormField v-slot="{ componentField }" name="isPublished">
+            <UiFormField v-slot="{ componentField }" name="menuItem">
               <UiFormItem class="flex flex-col gap-y-2">
-                <UiFormLabel>Cтатус</UiFormLabel>
+                <UiFormLabel>Наименование</UiFormLabel>
 
                 <UiSelect v-bind="componentField">
                   <UiFormControl>
                     <UiSelectTrigger class="group">
                       <UiSelectValue
-                        placeholder="Выберите статус"
-                        :class="!values.isPublished && 'text-muted-foreground group-hover:dark:text-white'"
+                        placeholder="Выберите из списка"
+                        :class="!values.menuItem && 'text-muted-foreground group-hover:dark:text-white'"
                       />
                     </UiSelectTrigger>
                   </UiFormControl>
                   <UiSelectContent>
                     <UiSelectGroup>
-                      <UiSelectItem value="true"> Опубликован </UiSelectItem>
-                      <UiSelectItem value="false"> Не опубликован </UiSelectItem>
+                      <UiSelectItem v-for="item of menu?.data" :key="item.id" :value="item.id"> {{ item.name }} </UiSelectItem>
                     </UiSelectGroup>
                   </UiSelectContent>
                 </UiSelect>
                 <UiFormMessage />
               </UiFormItem>
             </UiFormField>
-          </UiCardContent>
-        </UiCard>
-        <UiCard>
-          <UiCardHeader class="pb-2">
-            <UiCardTitle>Дата</UiCardTitle>
-            <UiCardDescription> Дата новости </UiCardDescription>
-          </UiCardHeader>
-          <UiCardContent>
-            <DatePicker name="date" @on:update-date="onUpdateDate" />
-          </UiCardContent>
-        </UiCard>
-        <UiCard>
-          <UiCardHeader class="pb-2">
-            <UiCardTitle>Теги</UiCardTitle>
-            <UiCardDescription> Теги новости </UiCardDescription>
-          </UiCardHeader>
-          <UiCardContent>
-            <UiFormField name="tags">
-              <UiFormItem class="flex flex-col gap-y-2">
-                <UiFormLabel>Теги (не обязательно)</UiFormLabel>
-                <ChoiceTags v-if="tags" :tags="tags.data" @on:change-tags="onUpdateTags" />
-                <UiFormMessage />
-              </UiFormItem>
-            </UiFormField>
-          </UiCardContent>
-        </UiCard>
-        <UiCard class="overflow-hidden">
-          <UiCardHeader>
-            <UiCardTitle>Изображение</UiCardTitle>
-            <UiCardDescription> Изображение новости </UiCardDescription>
-          </UiCardHeader>
-          <UiCardContent>
-            <ChoiceImage @on:update-image="onUpdateImage" />
           </UiCardContent>
         </UiCard>
       </div>
