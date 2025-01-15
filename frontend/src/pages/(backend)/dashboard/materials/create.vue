@@ -1,3 +1,14 @@
+<script setup lang="ts">
+useSeoMeta({
+  title: `ЕСЭД | Создать материал`,
+});
+definePageMeta({
+  name: 'Создать материал',
+});
+
+useBreadcrumbs();
+</script>
+
 <template>
-  <h1>New material</h1>
+  <MaterialForm />
 </template>

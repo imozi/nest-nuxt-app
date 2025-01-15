@@ -9,10 +9,10 @@ const placeholder = computed(() => useAssetsPath('/public/default/placeholder.sv
 const isOpen = ref<boolean>(false);
 const emit = defineEmits(['on:update-image']);
 
-const onSelectFile = (url: string) => {
+const onSelectFile = (file: FileApi) => {
   isOpen.value = false;
-  srcImage.value = useAssetsPath(url as string);
-  emit('on:update-image', url);
+  srcImage.value = useAssetsPath(file.url as string);
+  emit('on:update-image', file.url);
 };
 </script>
 
@@ -20,13 +20,7 @@ const onSelectFile = (url: string) => {
   <UiDialog v-model:open="isOpen">
     <UiDialogTrigger as-child>
       <UiButton variant="ghost" class="flex h-full w-full p-0">
-        <UnLazyImage
-          :key="srcImage"
-          :src="srcImage"
-          :data-src="srcImage"
-          :placeholder-src="placeholder"
-          class="h-full w-full rounded-md"
-        />
+        <UnLazyImage :key="srcImage" :src="srcImage" :data-src="srcImage" :placeholder-src="placeholder" class="h-full w-full rounded-md" />
       </UiButton>
     </UiDialogTrigger>
     <UiDialogContent class="h-full max-h-[95dvh] max-w-screen-xl grid-rows-[auto_minmax(0,1fr)_auto] p-0">

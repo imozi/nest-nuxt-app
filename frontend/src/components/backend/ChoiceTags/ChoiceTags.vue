@@ -1,30 +1,29 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends { id: string; name: string }[]">
 import { ComboboxAnchor, ComboboxContent, ComboboxViewport, ComboboxRoot, ComboboxTrigger } from 'radix-vue';
 
-const { tags, selected } = defineProps<{
+const { tags } = defineProps<{
   tags: { id: string; name: string }[];
-  selected?: { id: string; name: string }[];
 }>();
-const selectedTags = ref<string[]>([]);
-const emit = defineEmits(['on:change-tags']);
 
+const modelValue = defineModel<string[] | undefined>({ required: true });
+
+const selectedTags = ref<string[]>([]);
 const filteredTags = computed(() => tags.filter((i) => !selectedTags.value.includes(i.name)));
 
-watch(
-  selectedTags,
-  () => {
-    emit(
-      'on:change-tags',
-      selectedTags.value.map((tag) => tags.find((e) => e.name === tag)?.id),
-    );
-  },
-  { deep: true },
-);
+watch(filteredTags, () => {
+  modelValue.value = selectedTags.value.map((tag) => tags.find((e) => e.name === tag)!.id);
+});
+
+watch(modelValue, () => {
+  if (modelValue.value === undefined) {
+    selectedTags.value.length = 0;
+  }
+});
 
 onMounted(() => {
-  if (!selected) return;
+  if (!modelValue.value) return;
 
-  selectedTags.value = selected.map((tag) => tag.name);
+  selectedTags.value = modelValue.value.map((item) => tags.find((el) => el.id === item)!.name);
 });
 </script>
 
@@ -33,12 +32,7 @@ onMounted(() => {
     <ComboboxAnchor as-child class="flex-nowrap p-0">
       <UiTagsInput class="w-full gap-0 px-0" :model-value="selectedTags">
         <div class="flex flex-wrap items-center gap-2 p-2">
-          <UiTagsInputItem
-            v-if="!selectedTags.length"
-            :key="'empty'"
-            value="Выберите теги"
-            class="bg-transparent text-muted-foreground"
-          >
+          <UiTagsInputItem v-if="!selectedTags.length" :key="'empty'" value="Выберите теги" class="bg-transparent text-muted-foreground">
             <UiTagsInputItemText />
           </UiTagsInputItem>
 
@@ -75,7 +69,7 @@ onMounted(() => {
               @select.prevent="
                 (ev) => {
                   if (typeof ev.detail.value === 'string') {
-                    selectedTags.push(ev.detail.value);
+                    selectedTags = [...selectedTags, ev.detail.value];
                   }
                 }
               "

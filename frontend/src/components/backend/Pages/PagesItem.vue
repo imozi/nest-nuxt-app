@@ -46,7 +46,7 @@ const props = defineProps<PagesItemProps>();
   }
 
   &__slug {
-    @apply border-l pl-2 text-sm text-muted-foreground;
+    @apply border-l pl-2 text-xs text-muted-foreground;
   }
 
   &__menu-item {

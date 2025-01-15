@@ -46,7 +46,7 @@ const onSubmit = handleSubmit(async (values) => {
       return 'Пункт меню успешно создано!';
     } catch (error) {
       const err = (error as IFetchError<ResponseError>).data;
-      throw createError({ message: err?.message, statusCode: err?.statusCode });
+      throw new Error(err?.message);
     }
   };
 
@@ -56,9 +56,9 @@ const onSubmit = handleSubmit(async (values) => {
       isSaved.value = false;
       return message;
     },
-    error: (message: string) => {
+    error: (err: ResponseError) => {
       isSaved.value = false;
-      return message;
+      return err.message;
     },
   });
 });

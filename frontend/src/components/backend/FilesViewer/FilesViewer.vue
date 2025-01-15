@@ -43,7 +43,7 @@ const deleteFiles = async () => {
 };
 
 const choiceFile = () => {
-  emit('on:chice-file', selectedFiles[0]?.url);
+  emit('on:chice-file', selectedFiles[0]);
 };
 
 watch(filteredFiles, () => {

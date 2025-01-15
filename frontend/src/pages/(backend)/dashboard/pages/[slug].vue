@@ -1,16 +1,18 @@
 <script setup lang="ts">
 const { params } = useRoute();
-const { data: page } = await useFetchSecure<Page>(`pages/${params.slug}`);
+const { data: page } = await useFetchSecure<Page>(`pages/${params.slug}`, { key: 'page' });
 
 useSeoMeta({
   title: `ЕСЭД | ${page.value?.name}`,
 });
-// definePageMeta({
-//   name: page.value.name,
-// });
-// useBreadcrumbs({ label: page.value?.name });
+
+useBreadcrumbs({
+  label: page.value!.name,
+  url: `/dashboard/pages/${page.value!.slug}`,
+  parent: { slug: '/dashboard/pages', title: 'Страницы' },
+});
 </script>
 
 <template>
-  <h1>{{ page }}</h1>
+  <PageFormEdit />
 </template>

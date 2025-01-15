@@ -16,6 +16,26 @@ export class MaterialResources {
   readonly url: string;
 
   @IsString()
+  @IsNotEmpty()
+  readonly name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly type: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly originalName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly extention: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly size: string;
+
+  @IsString()
   @IsOptional()
   readonly text: string;
 

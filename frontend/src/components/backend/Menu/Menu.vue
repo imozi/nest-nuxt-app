@@ -50,7 +50,8 @@ const showEditDialog = (item: MenuItem) => {
               <UiAccordion type="single" collapsible class="menu__accordion">
                 <UiAccordionItem :value="item.id">
                   <UiAccordionTrigger class="menu__accordion-trigger">
-                    {{ item.name }}
+                    <p>{{ item.name }}</p>
+                    <span>алиас: {{ item.slug }}</span>
                   </UiAccordionTrigger>
 
                   <UiAccordionContent>
@@ -99,10 +100,14 @@ const showEditDialog = (item: MenuItem) => {
     @apply grid grid-cols-[1fr,max-content] gap-x-1;
 
     &-trigger {
-      @apply text-base;
+      @apply gap-x-3 text-base;
 
       &[data-state='open'] {
         @apply bg-zinc-100 text-black dark:bg-zinc-900 dark:text-white;
+      }
+
+      & > span {
+        @apply border-l pl-2 text-xs;
       }
     }
   }

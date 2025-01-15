@@ -7,7 +7,7 @@ const menuItem = defineModel<MenuItem>('item');
 const isOpenDialog = ref<boolean>(false);
 const isSaved = ref<boolean>(false);
 
-const { data: menu } = useNuxtData<ResponeData<Menu>>('menu');
+const { data: menu } = useNuxtData<ResponseData<Menu>>('menu');
 
 const emit = defineEmits(['on:saved']);
 

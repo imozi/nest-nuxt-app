@@ -8,8 +8,11 @@ const { data: menu } = useAsyncData<ResponseData<MenuItem>>('menu-items', () => 
   return $fetchSecure(`/menu/items`);
 });
 
+const { data: page } = useNuxtData<Page>('page');
+
 const formSchema = toTypedSchema(
   object({
+    id: string(),
     name: string({
       required_error: 'Поле не должно быть пустым',
     }).trim(),
@@ -36,11 +39,11 @@ const onSubmit = handleSubmit(async (values) => {
 
   const promise = async () => {
     try {
-      await $fetchSecure(`/pages`, { body: values, method: 'POST' });
-      return 'Страница успешно создана!';
+      await $fetchSecure(`/pages`, { body: values, method: 'PATCH' });
+      return 'Страница успешно изменена!';
     } catch (error) {
-      const err = (error as IFetchError<ResponseError>).data;
-      throw createError({ message: err?.message, statusCode: err?.statusCode });
+      const message = (error as IFetchError<ResponseError>).data!.message;
+      throw new Error(message);
     }
   };
 
@@ -51,9 +54,9 @@ const onSubmit = handleSubmit(async (values) => {
       navigateTo('/dashboard/pages');
       return message;
     },
-    error: (message: string) => {
+    error: (err: ResponseError) => {
       isSaved.value = false;
-      return message;
+      return err.message;
     },
   });
 });
@@ -67,6 +70,15 @@ const setAliasOnBlurName = () => {
     setFieldValue('slug', createAlias(values.name));
   }
 };
+
+onMounted(() => {
+  setFieldValue('id', page.value?.id);
+  setFieldValue('name', page.value?.name);
+  setFieldValue('slug', page.value?.slug);
+  setFieldValue('description', page.value?.description ? page.value?.description : undefined);
+  setFieldValue('text', page.value?.text ? page.value?.text : undefined);
+  setFieldValue('menuItem', page.value?.menuItemId);
+});
 
 watch(values, () => {
   if (values.name === '') {
@@ -84,7 +96,7 @@ watch(values, () => {
     <div class="flex items-center">
       <div class="mr-auto flex items-center gap-x-2">
         <Icon name="solar:hashtag-square-linear" class="size-5" />
-        <p>Создать страницу</p>
+        <p>Редактировать страницу</p>
       </div>
       <div class="flex items-center gap-4">
         <UiAlertDialog>

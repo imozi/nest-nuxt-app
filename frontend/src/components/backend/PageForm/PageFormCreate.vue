@@ -40,7 +40,7 @@ const onSubmit = handleSubmit(async (values) => {
       return 'Страница успешно создана!';
     } catch (error) {
       const err = (error as IFetchError<ResponseError>).data;
-      throw createError({ message: err?.message, statusCode: err?.statusCode });
+      throw new Error(err?.message);
     }
   };
 
@@ -51,9 +51,9 @@ const onSubmit = handleSubmit(async (values) => {
       navigateTo('/dashboard/pages');
       return message;
     },
-    error: (message: string) => {
+    error: (err: ResponseError) => {
       isSaved.value = false;
-      return message;
+      return err.message;
     },
   });
 });

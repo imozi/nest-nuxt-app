@@ -9,5 +9,5 @@ useBreadcrumbs();
 </script>
 
 <template>
-  <PageForm />
+  <PageFormCreate />
 </template>
