@@ -7,6 +7,7 @@ type FileViewerProps = {
   disabled?: boolean;
   choice?: boolean;
   deleted?: boolean;
+  doubleClickChoice?: boolean;
 };
 
 const props = defineProps<FileViewerProps>();
@@ -87,7 +88,14 @@ watch(filteredFiles, () => {
       <UiContextMenu>
         <UiContextMenuTrigger as-child>
           <Empty v-if="!data?.data.length" />
-          <FilesViewerFileList v-else v-model:selected="selectedFiles" :files="data?.data" :loading="status === 'pending'" />
+          <FilesViewerFileList
+            v-else
+            v-model:selected="selectedFiles"
+            :files="data?.data"
+            :loading="status === 'pending'"
+            :double-click-choice="props.doubleClickChoice"
+            @on:dblclick-choice="choiceFile"
+          />
           <template v-if="data">
             <Pagination
               v-if="data.meta.lastPage > 1"

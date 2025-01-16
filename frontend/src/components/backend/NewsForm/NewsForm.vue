@@ -64,16 +64,9 @@ const onSubmit = handleSubmit(async (values) => {
 const onClickCancel = () => {
   navigateTo('/dashboard/news');
 };
-const onUpdateDate = (date: string) => {
-  setFieldValue('date', date);
-};
 
 const onUpdateImage = (image: string) => {
   setFieldValue('image', image);
-};
-
-const onUpdateTags = (arr: string[]) => {
-  setFieldValue('tags', arr);
 };
 
 const setAliasOnBlurTitle = () => {
@@ -226,19 +219,25 @@ watch(values, () => {
             <UiCardDescription> Дата новости </UiCardDescription>
           </UiCardHeader>
           <UiCardContent>
-            <DatePicker name="date" @on:update-date="onUpdateDate" />
+            <UiFormField v-slot="{ componentField }" name="date">
+              <UiFormItem class="flex flex-col gap-y-2">
+                <UiFormLabel>Дата</UiFormLabel>
+                <DatePicker v-bind="componentField as any" />
+                <UiFormMessage />
+              </UiFormItem>
+            </UiFormField>
           </UiCardContent>
         </UiCard>
         <UiCard>
           <UiCardHeader class="pb-2">
             <UiCardTitle>Теги</UiCardTitle>
-            <UiCardDescription> Теги новости </UiCardDescription>
+            <UiCardDescription> Теги материала </UiCardDescription>
           </UiCardHeader>
           <UiCardContent>
-            <UiFormField name="tags">
+            <UiFormField v-slot="{ componentField }" name="tags">
               <UiFormItem class="flex flex-col gap-y-2">
-                <UiFormLabel>Теги (не обязательно)</UiFormLabel>
-                <ChoiceTags v-if="tags" :tags="tags.data" @on:change-tags="onUpdateTags" />
+                <UiFormLabel>Теги</UiFormLabel>
+                <ChoiceTags v-if="tags" v-bind="componentField as any" :tags="tags.data" />
                 <UiFormMessage />
               </UiFormItem>
             </UiFormField>

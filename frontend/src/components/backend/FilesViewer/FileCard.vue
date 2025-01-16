@@ -4,10 +4,12 @@ import { DateFormatter } from '@internationalized/date';
 type FileCardProps = {
   file: FileApi;
   loading: boolean;
+  doubleClickChoice?: boolean;
 };
 
-const { file, loading } = defineProps<FileCardProps>();
+const { file, loading, doubleClickChoice } = defineProps<FileCardProps>();
 const selected = defineModel<FileApi[]>('selected', { required: true });
+const emit = defineEmits(['on:dblclick-choice']);
 
 const isSelected = computed(() => selected.value.find((item) => item.id === file.id));
 const formatDate = new DateFormatter('ru-Ru', {
@@ -16,6 +18,16 @@ const formatDate = new DateFormatter('ru-Ru', {
 const formatTime = new DateFormatter('ru-Ru', {
   timeStyle: 'short',
 });
+
+const onSelectDoubleClickFile = () => {
+  if (!doubleClickChoice) return;
+
+  console.log('dblclick');
+
+  selected.value.length = 0;
+  selected.value.push(file);
+  emit('on:dblclick-choice');
+};
 
 const onSelectFile = (event: MouseEvent) => {
   if (loading) return;
@@ -47,6 +59,7 @@ const onSelectFile = (event: MouseEvent) => {
     :class="{ 'file-card--selected': isSelected }"
     @click="onSelectFile"
     @click.right="onSelectFile"
+    @dblclick="onSelectDoubleClickFile"
   >
     <div class="file-card__wrapper">
       <div class="file-card__preview">

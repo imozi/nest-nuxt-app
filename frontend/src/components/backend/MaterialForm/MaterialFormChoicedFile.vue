@@ -13,6 +13,11 @@ type MaterialChoicedFile = {
 };
 
 const { file } = defineProps<MaterialChoicedFile>();
+const emit = defineEmits(['on:remove']);
+
+const onClickRemove = () => {
+  emit('on:remove', file.name);
+};
 </script>
 
 <template>
@@ -23,12 +28,17 @@ const { file } = defineProps<MaterialChoicedFile>();
     </div>
     <div class="choiced-file__name">{{ file.name }}</div>
     <div class="choiced-file__size">{{ file.size }}</div>
+    <div class="choiced-file__remove">
+      <UiButton variant="ghost" size="icon" type="button" @click="onClickRemove">
+        <Icon name="solar:close-square-outline" class="size-5" />
+      </UiButton>
+    </div>
   </div>
 </template>
 
 <style lang="scss">
 .choiced-file {
-  @apply p-1;
+  @apply rounded-md bg-zinc-50 px-4 py-3 dark:bg-zinc-700;
   @apply flex items-center gap-x-5;
 
   &__extention {

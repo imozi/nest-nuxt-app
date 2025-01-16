@@ -20,7 +20,7 @@ const formSchemaMaterial = toTypedSchema(
         url: string(),
         name: string(),
         type: string(),
-        originalName: string(),
+        originalName: string().refine((value) => value.slice(0, value.lastIndexOf('.'))),
         extention: string(),
         size: string(),
         text: string().optional(),
@@ -94,9 +94,13 @@ const setAliasOnBlurTitle = () => {
   }
 };
 
-watch(values, () => {
-  console.log(values);
+const onFileRemove = (name: string) => {
+  const newResources = values.resources?.filter((file) => file.name !== name);
 
+  setFieldValue('resources', newResources);
+};
+
+watch(values, () => {
   if (values.name === '') {
     setFieldValue('name', undefined);
   }
@@ -127,7 +131,7 @@ watch(
 
 <template>
   <div class="grid grid-cols-3 gap-8">
-    <div class="col-span-2 grid auto-rows-max gap-8 break-all">
+    <div class="col-span-2 grid gap-8 break-all" :class="{ 'auto-rows-max': mode === 'material' }">
       <UiCard>
         <UiCardHeader class="mb-2">
           <UiCardTitle>Название материала</UiCardTitle>
@@ -219,7 +223,7 @@ watch(
         </UiCardContent>
       </UiCard>
 
-      <UiCard>
+      <UiCard v-if="mode === 'material'">
         <UiCardHeader>
           <UiCardTitle>Прикрепить файл</UiCardTitle>
         </UiCardHeader>
@@ -228,40 +232,12 @@ watch(
             <UiFormItem class="flex flex-col">
               <UiFormLabel />
 
-              <ChoiceFile v-bind="componentField as any" :mode="mode === 'material' ? `single` : `many`" />
+              <ChoiceFile v-bind="componentField as any" />
               <List v-if="values.resources?.length" class="flex flex-col gap-3 pt-5">
-                <template v-if="mode === 'material'">
-                  <ListItem v-for="item of values.resources" :key="item.url">
-                    <MaterialFormChoicedFile :file="item" />
-                  </ListItem>
-                </template>
-
-                <template v-else>
-                  <ListItem v-for="item of values.resources" :key="item.url">
-                    <MaterialFormFileForm :file="item" />
-                  </ListItem>
-                </template>
+                <ListItem v-for="item of values.resources" :key="item.url">
+                  <MaterialFormChoicedFile :file="item" @on:remove="onFileRemove" />
+                </ListItem>
               </List>
-              <UiFormMessage />
-            </UiFormItem>
-          </UiFormField>
-        </UiCardContent>
-      </UiCard>
-
-      <UiCard v-if="mode === 'material-page'">
-        <UiCardHeader class="pb-2">
-          <UiCardTitle>Текст</UiCardTitle>
-          <UiCardDescription> Основной текст на странице</UiCardDescription>
-        </UiCardHeader>
-        <UiCardContent>
-          <UiFormField v-slot="{ componentField }" name="text">
-            <UiFormItem class="flex flex-col gap-y-2">
-              <UiFormLabel>Текст</UiFormLabel>
-
-              <UiFormControl>
-                <TiptapEditor v-bind="componentField" size="md" />
-              </UiFormControl>
-
               <UiFormMessage />
             </UiFormItem>
           </UiFormField>
@@ -303,7 +279,7 @@ watch(
       <UiCard>
         <UiCardHeader class="pb-2">
           <UiCardTitle>Дата</UiCardTitle>
-          <UiCardDescription> Дата новости </UiCardDescription>
+          <UiCardDescription> Дата материала </UiCardDescription>
         </UiCardHeader>
         <UiCardContent>
           <UiFormField v-slot="{ componentField }" name="date">
@@ -331,6 +307,46 @@ watch(
         </UiCardContent>
       </UiCard>
     </div>
-    <div class="col-span-full" />
+    <div v-if="mode === 'material-page'" class="col-span-full grid gap-8">
+      <UiCard>
+        <UiCardHeader class="pb-2">
+          <UiCardTitle>Текст</UiCardTitle>
+          <UiCardDescription> Основной текст на странице</UiCardDescription>
+        </UiCardHeader>
+        <UiCardContent>
+          <UiFormField v-slot="{ componentField }" name="text">
+            <UiFormItem class="flex flex-col gap-y-2">
+              <UiFormLabel>Текст</UiFormLabel>
+
+              <UiFormControl>
+                <TiptapEditor v-bind="componentField" size="md" />
+              </UiFormControl>
+
+              <UiFormMessage />
+            </UiFormItem>
+          </UiFormField>
+        </UiCardContent>
+      </UiCard>
+      <UiCard>
+        <UiCardHeader>
+          <UiCardTitle>Прикрепить файлы</UiCardTitle>
+        </UiCardHeader>
+        <UiCardContent class="flex flex-col gap-y-2">
+          <UiFormField v-slot="{ componentField }" name="resources">
+            <UiFormItem class="flex flex-col">
+              <UiFormLabel />
+
+              <ChoiceFile v-bind="componentField as any" mode="many" />
+              <List v-if="values.resources?.length" class="flex flex-col gap-3 pt-5">
+                <ListItem v-for="item of values.resources" :key="item.url">
+                  <MaterialFormFileForm :file="item" @on:remove="onFileRemove" />
+                </ListItem>
+              </List>
+              <UiFormMessage />
+            </UiFormItem>
+          </UiFormField>
+        </UiCardContent>
+      </UiCard>
+    </div>
   </div>
 </template>

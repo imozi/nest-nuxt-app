@@ -14,10 +14,10 @@ const onSelectFile = (file: FileApi) => {
 
   if (mode === 'single') {
     modelValue.value.length = 0;
-    return (modelValue.value = [file]);
+    return (modelValue.value = [{ ...file, originalName: file.originalName.slice(0, file.originalName.lastIndexOf('.')) }]);
   }
 
-  modelValue.value = [...modelValue.value, file];
+  modelValue.value = [...modelValue.value, { ...file, originalName: file.originalName.slice(0, file.originalName.lastIndexOf('.')) }];
 };
 
 const onClick = () => {
@@ -64,7 +64,7 @@ const onMouseleave = () => {
       </UiDialogHeader>
       <div class="file-content-dialog grid gap-4 overflow-y-auto px-6 py-4">
         <div class="flex flex-col justify-between">
-          <FilesViewer choice @on:chice-file="onSelectFile" />
+          <FilesViewer choice double-click-choice @on:chice-file="onSelectFile" />
         </div>
       </div>
     </UiDialogContent>
