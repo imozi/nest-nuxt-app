@@ -13,9 +13,20 @@ type MaterialChoicedFile = {
 const file = defineModel<MaterialChoicedFile>('file', { required: true });
 const emit = defineEmits(['on:remove']);
 
+const text = ref<string>(file.value?.text || '');
+const description = ref<string>(file.value?.description || '');
+
 const onClickRemove = () => {
   emit('on:remove', file.value.name);
 };
+
+watch(text, () => {
+  file.value.text = text.value;
+});
+
+watch(description, () => {
+  file.value.description = description.value;
+});
 </script>
 
 <template>
@@ -37,7 +48,7 @@ const onClickRemove = () => {
         <UiFormItem class="flex flex-col gap-y-2">
           <UiFormLabel>Краткое описание</UiFormLabel>
           <UiFormControl>
-            <TiptapEditor :model-value="file.description" size="default" />
+            <TiptapEditor v-model:model-value="description" size="default" />
           </UiFormControl>
           <UiFormMessage />
         </UiFormItem>
@@ -46,7 +57,7 @@ const onClickRemove = () => {
         <UiFormItem class="flex flex-col gap-y-2">
           <UiFormLabel>Текст</UiFormLabel>
           <UiFormControl>
-            <TiptapEditor :model-value="file.text" size="sm" />
+            <TiptapEditor v-model:model-value="text" size="sm" />
           </UiFormControl>
           <UiFormMessage />
         </UiFormItem>

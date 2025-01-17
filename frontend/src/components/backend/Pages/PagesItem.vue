@@ -20,11 +20,12 @@ const props = defineProps<PagesItemProps>();
       </div>
       <Icon
         name="solar:link-square-outline"
-        class="ml-auto size-5 text-muted-foreground transition-all duration-300 group-hover:text-black dark:group-hover:text-white"
+        class="ml-auto size-5 text-muted-foreground transition-all duration-300 group-hover:text-blue-500 dark:group-hover:text-blue-500"
       />
     </div>
     <div class="page__menu-item">
-      <p># {{ props.page.menuItem.name }}</p>
+      <Icon name="solar:link-circle-bold" class="text-blue-500" />
+      <p>{{ props.page.menuItem.name }}</p>
     </div>
   </NuxtLink>
 </template>
@@ -50,7 +51,7 @@ const props = defineProps<PagesItemProps>();
   }
 
   &__menu-item {
-    @apply text-xs text-muted-foreground;
+    @apply flex items-center gap-x-1 text-xs text-muted-foreground;
   }
 }
 </style>

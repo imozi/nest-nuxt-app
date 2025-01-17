@@ -9,6 +9,7 @@ const mode = defineModel<'material' | 'material-page'>('mode', { required: true 
 
 const formSchemaMaterial = toTypedSchema(
   object({
+    id: string(),
     name: string({
       required_error: 'Поле не должно быть пустым',
     }).trim(),
@@ -53,8 +54,8 @@ const onSubmit = handleSubmit(async (values) => {
 
   const promise = async () => {
     try {
-      await $fetchSecure(`/materials`, { body: values, method: 'POST' });
-      return 'Материал успешно создан!';
+      await $fetchSecure(`/materials`, { body: values, method: 'PATCH' });
+      return 'Материал успешно изменен!';
     } catch (error) {
       const err = (error as IFetchError<ResponseError>).data;
       throw createError({ message: err?.message, statusCode: err?.statusCode });
@@ -83,6 +84,7 @@ defineExpose({
 const { data: tags } = await useFetchSecure<ResponseData<Tags>>(`/tags`);
 const { data: menu } = await useFetchSecure<ResponseData<MenuItem>>('/menu/items');
 const { data: pages } = await useFetchSecure<ResponseData<Page>>('/pages');
+const { data: material } = useNuxtData<MaterialSingle>('material');
 
 const setAliasOnBlurTitle = () => {
   if (mode.value === 'material') {
@@ -127,6 +129,30 @@ watch(
     }
   },
 );
+
+onBeforeMount(() => {
+  setFieldValue('id', material.value?.id);
+  setFieldValue('name', material.value?.name);
+  setFieldValue('slug', material.value?.slug ? material.value?.slug : undefined);
+  setFieldValue('description', material.value?.description ? material.value?.description : undefined);
+  setFieldValue('text', material.value?.text ? material.value?.text : undefined);
+  setFieldValue('date', material.value?.date);
+
+  if (material.value?.menuItemId) {
+    setFieldValue('menuItem', material.value?.menuItemId);
+  }
+
+  if (material.value?.pageId) {
+    setFieldValue('page', material.value?.pageId);
+  }
+
+  setFieldValue('resources', material.value?.resources);
+  setFieldValue('isPublished', `${material.value?.isPublished}`);
+  setFieldValue(
+    'tags',
+    material.value?.tags.map((tag) => tag.id),
+  );
+});
 </script>
 
 <template>

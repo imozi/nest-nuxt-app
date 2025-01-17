@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { MaterialService } from './material.service';
 import { PaginateQuery } from '@/shared/core/types';
-import { MaterialDto, MaterialDeleteDto } from './dto';
+import { MaterialDto, MaterialDeleteDto, MaterialSlugOrIdDto } from './dto';
 import { JwtAccessGuard } from '@/guards';
 
 @Controller('materials')
@@ -12,6 +12,12 @@ export class MaterialController {
   @UseGuards(JwtAccessGuard)
   async findAll(@Query() query: PaginateQuery) {
     return await this.materialService.findAll(query);
+  }
+
+  @Get(':slugOrId')
+  @UseGuards(JwtAccessGuard)
+  async findBySlugOrId(@Param() { slugOrId }: MaterialSlugOrIdDto) {
+    return await this.materialService.findBySlugOrId(slugOrId);
   }
 
   @Post()

@@ -22,8 +22,6 @@ const formatTime = new DateFormatter('ru-Ru', {
 const onSelectDoubleClickFile = () => {
   if (!doubleClickChoice) return;
 
-  console.log('dblclick');
-
   selected.value.length = 0;
   selected.value.push(file);
   emit('on:dblclick-choice');

@@ -4,6 +4,7 @@ import { PaginateQuery } from '@/shared/core/types';
 import { MaterialDto } from './dto/material.dto';
 import { Prisma } from '@prisma/client';
 import { MaterialDeleteDto } from './dto';
+import { validateUuid } from '@/shared/helpers';
 
 @Injectable()
 export class MaterialService {
@@ -12,8 +13,23 @@ export class MaterialService {
   async findAll(query: PaginateQuery) {
     return await this.materialRepository.findMany({
       ...query,
-      params: { select: { ...this.materialRepository.selectedField(), menuItem: true, page: true, tags: true } },
+      params: {
+        select: { ...this.materialRepository.selectedField(), menuItem: true, page: true, tags: true },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      },
     });
+  }
+
+  async findBySlugOrId(slugOrId: string) {
+    const valid = validateUuid(slugOrId);
+
+    if (valid) {
+      return await this.materialRepository.findFirst({ where: { id: slugOrId }, include: { tags: true } });
+    } else {
+      return await this.materialRepository.findFirst({ where: { slug: slugOrId }, include: { tags: true } });
+    }
   }
 
   async create(data: MaterialDto) {

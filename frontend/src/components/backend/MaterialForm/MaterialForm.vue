@@ -1,5 +1,11 @@
 <script setup lang="ts">
-const currentTab = ref<'material' | 'material-page'>('material');
+type MaterialFormProps = {
+  mode?: 'create' | 'edit';
+  type?: 'material' | 'material-page';
+};
+const { mode = 'create', type = 'material' } = defineProps<MaterialFormProps>();
+
+const currentTab = ref<'material' | 'material-page'>(type);
 const formRef = useTemplateRef('formRef');
 
 const isSaved = ref<boolean>(false);
@@ -23,8 +29,8 @@ watch(currentTab, () => {
         </div>
         <ClientOnly>
           <UiTabsList class="material__list">
-            <UiTabsTrigger value="material"> материал </UiTabsTrigger>
-            <UiTabsTrigger value="material-page"> страницу с материалами </UiTabsTrigger>
+            <UiTabsTrigger value="material" :disabled="mode === 'edit' && type === 'material-page'"> материал </UiTabsTrigger>
+            <UiTabsTrigger value="material-page" :disabled="mode === 'edit' && type === 'material'"> страницу с материалами </UiTabsTrigger>
           </UiTabsList>
         </ClientOnly>
         <div class="menu__collumn">
@@ -35,7 +41,9 @@ watch(currentTab, () => {
             <UiAlertDialogContent>
               <UiAlertDialogHeader>
                 <UiAlertDialogTitle>Вы уверены?</UiAlertDialogTitle>
-                <UiAlertDialogDescription> Вы уверены что хотите отменить создание материала? </UiAlertDialogDescription>
+                <UiAlertDialogDescription>
+                  Вы уверены что хотите отменить {{ mode === 'edit' ? 'редактирование' : 'создание' }} материала?
+                </UiAlertDialogDescription>
               </UiAlertDialogHeader>
               <UiAlertDialogFooter>
                 <UiAlertDialogCancel>Нет</UiAlertDialogCancel>
@@ -49,7 +57,8 @@ watch(currentTab, () => {
       </div>
 
       <UiTabsContent :value="currentTab" class="material__content">
-        <MaterialFormCreate ref="formRef" :mode="currentTab" />
+        <MaterialFormEdit v-if="mode === 'edit'" ref="formRef" :mode="currentTab" />
+        <MaterialFormCreate v-else ref="formRef" :mode="currentTab" />
       </UiTabsContent>
     </form>
   </UiTabs>

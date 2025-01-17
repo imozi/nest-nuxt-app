@@ -9,3 +9,4 @@ export type { Tags } from './tags';
 export type { FileApi } from './file';
 export type { Menu, MenuItem } from './menu';
 export type { Page } from './page';
+export type { Material, MaterialSingle } from './material';

@@ -18,7 +18,9 @@ const { breadcrumbs } = useBreadcrumbsStore();
           <UiBreadcrumbItem v-else>
             <UiBreadcrumbLink as-child>
               <NuxtLink>
-                <NuxtLink :to="i !== breadcrumbs.length - 1 ? breadcrumb.url : ''">{{ breadcrumb.label }} </NuxtLink>
+                <NuxtLink :to="i !== breadcrumbs.length - 1 ? breadcrumb.url : ''" class="line-clamp-1 max-w-sm">
+                  {{ breadcrumb.label }}
+                </NuxtLink>
               </NuxtLink>
             </UiBreadcrumbLink>
           </UiBreadcrumbItem>

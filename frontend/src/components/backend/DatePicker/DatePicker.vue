@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DateFormatter, type DateValue } from '@internationalized/date';
+import { CalendarDate, DateFormatter, type DateValue } from '@internationalized/date';
 import { toDate } from 'radix-vue/date';
 
 const modelValue = defineModel<string | undefined>({ required: true });
@@ -9,6 +9,15 @@ const df = new DateFormatter('ru-Ru', {
 });
 const value = ref<DateValue>();
 const isOpen = ref<boolean>();
+
+onMounted(() => {
+  if (!modelValue.value) return;
+
+  const date = df.format(new Date(modelValue.value)).toString();
+  const splitDate = date.split('.').map((e) => +e);
+
+  value.value = new CalendarDate(splitDate[2]!, splitDate[1]!, splitDate[0]!);
+});
 
 watch(value, () => {
   isOpen.value = false;
