@@ -25,7 +25,7 @@ watch(currentTab, () => {
       <div class="material__wrapper">
         <div class="material__title">
           <Icon name="solar:hashtag-square-linear" class="size-5" />
-          <p>Создать</p>
+          <p>{{ mode === 'create' ? 'Создать' : 'Редактировать' }}</p>
         </div>
         <ClientOnly>
           <UiTabsList class="material__list">

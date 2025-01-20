@@ -1,16 +1,19 @@
 <script setup lang="ts">
 const { params } = useRoute();
 
-async function fetchPageDataFromApi() {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve({ label: 'Динамически', url: '/news/asdasda' }), 1000);
-  });
-}
+const { data: news } = await useFetchSecure<News>(`/news/${params.slug}`, { key: 'news-single' });
 
-const a = await fetchPageDataFromApi();
-useBreadcrumbs(a);
+useSeoMeta({
+  title: `ЕСЭД | ${news.value?.title}`,
+});
+
+useBreadcrumbs({
+  label: news.value!.title,
+  url: `/dashboard/news/${news.value?.slug}`,
+  parent: { slug: '/dashboard/news', title: 'Новости' },
+});
 </script>
 
 <template>
-  <h1>{{ params }}</h1>
+  <NewsFormEdit />
 </template>

@@ -4,6 +4,7 @@ type MaterialItemProps = {
 };
 
 const { item } = defineProps<MaterialItemProps>();
+const formatDate = computed(() => df.format(new Date(item.date)).toString());
 </script>
 
 <template>
@@ -44,6 +45,9 @@ const { item } = defineProps<MaterialItemProps>();
         <Icon name="solar:link-circle-bold" class="text-blue-500" />
         <p>{{ item.menuItem?.name }} {{ item.page?.name }}</p>
       </div>
+      <div class="material-item__date">
+        <p>{{ formatDate }}</p>
+      </div>
     </div>
   </NuxtLink>
 </template>
@@ -53,7 +57,7 @@ const { item } = defineProps<MaterialItemProps>();
   @apply flex w-full flex-col gap-y-2 rounded-md bg-accent bg-zinc-50 px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 dark:bg-zinc-900;
 
   &__status {
-    @apply flex size-4;
+    @apply flex size-4 flex-shrink-0;
   }
 
   &__wrapper {
@@ -90,6 +94,10 @@ const { item } = defineProps<MaterialItemProps>();
     &-item {
       @apply rounded-md bg-primary bg-zinc-100 px-2 py-1 dark:bg-zinc-800;
     }
+  }
+
+  &__date {
+    @apply ml-auto text-xs text-muted-foreground;
   }
 }
 </style>

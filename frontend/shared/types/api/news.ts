@@ -7,6 +7,7 @@ export interface News extends Entity {
   image: string;
   isPublished: boolean;
   menuItemId: string;
+  tags: Tags[];
   createdAt: string;
   updatedAt: string;
 }

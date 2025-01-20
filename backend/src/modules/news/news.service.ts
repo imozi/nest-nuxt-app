@@ -12,11 +12,14 @@ export class NewsService {
   ) {}
 
   async findAll(query: PaginateQuery) {
-    return await this.newsRepository.findMany({ ...query, params: { orderBy: { createdAt: 'desc' } } });
+    return await this.newsRepository.findMany({
+      ...query,
+      params: { include: { tags: true }, orderBy: { createdAt: 'desc' } },
+    });
   }
 
   async findBySlug(slug: string) {
-    return await this.newsRepository.findUnique({ where: { slug } });
+    return await this.newsRepository.findUnique({ where: { slug }, include: { tags: true } });
   }
 
   async create(data: NewsDto) {

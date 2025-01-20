@@ -4,10 +4,12 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import type { IFetchError } from 'ofetch';
 
-const { data: tags } = await useFetchSecure<ResponseData<Tags>>(`/tags`);
+const { data: tags } = await useFetchSecure<ResponseData<Tags>>('/tags');
+const { data: news } = useNuxtData<News>('news-single');
 
 const formSchema = toTypedSchema(
   object({
+    id: string(),
     title: string({
       required_error: 'Поле не должно быть пустым',
     }).trim(),
@@ -37,8 +39,8 @@ const onSubmit = handleSubmit(async (values) => {
 
   const promise = async () => {
     try {
-      await $fetchSecure(`/news`, { body: values, method: 'POST' });
-      return 'Новость успешно создана!';
+      await $fetchSecure(`/news`, { body: values, method: 'PATCH' });
+      return 'Новость успешно изменена!';
     } catch (error) {
       const err = (error as IFetchError<ResponseError>).data;
       throw createError({ message: err?.message, statusCode: err?.statusCode });
@@ -82,6 +84,21 @@ watch(values, () => {
     setFieldValue('slug', undefined);
   }
 });
+
+onBeforeMount(() => {
+  setFieldValue('id', news.value?.id);
+  setFieldValue('title', news.value?.title);
+  setFieldValue('slug', news.value?.slug);
+  setFieldValue('description', news.value?.description);
+  setFieldValue('text', news.value?.text);
+  setFieldValue('isPublished', `${news.value?.isPublished}`);
+  setFieldValue('date', news.value?.date);
+  setFieldValue(
+    'tags',
+    news.value?.tags.map((tag) => tag.id),
+  );
+  setFieldValue('image', news.value?.image);
+});
 </script>
 
 <template>
@@ -89,7 +106,7 @@ watch(values, () => {
     <div class="flex items-center">
       <div class="mr-auto flex items-center gap-x-2">
         <Icon name="solar:hashtag-square-linear" class="size-5" />
-        <p>Создать новость</p>
+        <p>Редактировать новость</p>
       </div>
       <div class="flex items-center gap-4">
         <UiAlertDialog>
@@ -99,7 +116,7 @@ watch(values, () => {
           <UiAlertDialogContent>
             <UiAlertDialogHeader>
               <UiAlertDialogTitle>Вы уверены?</UiAlertDialogTitle>
-              <UiAlertDialogDescription> Вы уверены что хотите отменить создание новости? </UiAlertDialogDescription>
+              <UiAlertDialogDescription> Вы уверены что хотите отменить редактирование новости? </UiAlertDialogDescription>
             </UiAlertDialogHeader>
             <UiAlertDialogFooter>
               <UiAlertDialogCancel>Нет</UiAlertDialogCancel>
@@ -247,7 +264,7 @@ watch(values, () => {
             <UiCardDescription> Изображение новости </UiCardDescription>
           </UiCardHeader>
           <UiCardContent>
-            <ChoiceImage @on:update-image="onUpdateImage" />
+            <ChoiceImage :image="news?.image" @on:update-image="onUpdateImage" />
           </UiCardContent>
         </UiCard>
       </div>

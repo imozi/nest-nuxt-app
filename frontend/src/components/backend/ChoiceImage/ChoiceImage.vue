@@ -31,7 +31,7 @@ const onSelectFile = (file: FileApi) => {
 
       <div class="file-content-dialog grid gap-4 overflow-y-auto px-6 py-4">
         <div class="flex flex-col justify-between">
-          <FilesViewer type="images" disabled choice @on:chice-file="onSelectFile" />
+          <FilesViewer type="images" double-click-choice disabled choice @on:chice-file="onSelectFile" />
         </div>
       </div>
     </UiDialogContent>

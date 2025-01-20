@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, type DateValue } from '@internationalized/date';
+import { CalendarDate, type DateValue } from '@internationalized/date';
 import { toDate } from 'radix-vue/date';
 
 const modelValue = defineModel<string | undefined>({ required: true });
 
-const df = new DateFormatter('ru-Ru', {
-  dateStyle: 'short',
-});
 const value = ref<DateValue>();
 const isOpen = ref<boolean>();
 
