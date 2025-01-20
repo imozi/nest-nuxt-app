@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { data: materials } = useFetchSecure<ResponseData<Material>>('/materials', { key: 'materials' });
+import { useFilterMaterials } from './composables/useFilterMaterials';
+
+const { data: materials, search } = await useFilterMaterials();
 </script>
 
 <template>
@@ -10,7 +12,14 @@ const { data: materials } = useFetchSecure<ResponseData<Material>>('/materials',
           <Icon name="solar:hashtag-square-linear" class="size-5" />
           <p>Материалы</p>
         </div>
-        <div class="materials__column" />
+        <div class="materials__column">
+          <div class="relative w-full max-w-sm items-center">
+            <UiInput id="search" v-model="search" type="text" placeholder="Поиск..." class="pl-10" />
+            <span class="absolute inset-y-0 start-0 flex items-center justify-center px-2">
+              <Icon name="lucide:search" class="size-4 text-muted-foreground" />
+            </span>
+          </div>
+        </div>
       </header>
       <UiSeparator />
       <div class="materials__content">

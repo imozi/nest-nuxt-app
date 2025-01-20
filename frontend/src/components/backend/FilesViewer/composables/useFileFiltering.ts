@@ -4,7 +4,7 @@ interface FileQueryParams extends QueryParams {
   type: FileUploadTypes;
 }
 
-export const useFileFiltering = async ({ limit = 15, type }: { limit?: number; type?: FileUploadTypes }) => {
+export const useFileFiltering = async ({ limit = 30, type }: { limit?: number; type?: FileUploadTypes }) => {
   const { query } = useRoute();
 
   const currentTab = ref<FileUploadTypes>(query.type ? (query.type as FileUploadTypes) : type ? type : 'all');
@@ -35,7 +35,7 @@ export const useFileFiltering = async ({ limit = 15, type }: { limit?: number; t
   const { data, refresh, status } = await useAsyncData(
     'files',
     () =>
-      $fetchSecure<ResponeData<FileApi>>(`/files${`${filteredFiles.type === 'all' ? '' : `/${filteredFiles.type}`}`}`, {
+      $fetchSecure<ResponseData<FileApi>>(`/files${`${filteredFiles.type === 'all' ? '' : `/${filteredFiles.type}`}`}`, {
         query: formatedFilterQuery(),
       }),
     {

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { data: news } = await useFetchSecure<ResponseData<News>>('/news');
+import { useFilterNews } from './composables/useFilterNews';
+
+const { data: news, search } = await useFilterNews();
 </script>
 
 <template>
@@ -8,9 +10,16 @@ const { data: news } = await useFetchSecure<ResponseData<News>>('/news');
       <header class="news__header">
         <div class="news__column">
           <Icon name="solar:hashtag-square-linear" class="size-5" />
-          <p>Материалы</p>
+          <p>Новости</p>
         </div>
-        <div class="materials__column" />
+        <div class="news__column">
+          <div class="relative w-full max-w-sm items-center">
+            <UiInput id="search" v-model="search" type="text" placeholder="Поиск..." class="pl-10" />
+            <span class="absolute inset-y-0 start-0 flex items-center justify-center px-2">
+              <Icon name="lucide:search" class="size-4 text-muted-foreground" />
+            </span>
+          </div>
+        </div>
       </header>
       <UiSeparator />
       <div class="news__content">

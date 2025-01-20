@@ -5,6 +5,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class PageRepository extends BasePostgresRepository<'Page'> {
   constructor(protected readonly prisma: PrismaService) {
-    super(prisma, 'page', [], ['createdAt', 'updatedAt', 'menuItemId']);
+    super(prisma, 'page', ['name', 'slug'], ['createdAt', 'updatedAt', 'menuItemId']);
   }
 }
