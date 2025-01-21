@@ -38,9 +38,9 @@ const onSubmit = handleSubmit(async (values) => {
       isSaved.value = false;
       return message;
     },
-    error: (message: string) => {
+    error: (err: ResponseError) => {
       isSaved.value = false;
-      return message;
+      return err.message;
     },
   });
 });

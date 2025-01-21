@@ -52,9 +52,9 @@ const onSubmit = handleSubmit(async (values) => {
       navigateTo('/dashboard/news');
       return message;
     },
-    error: (message: string) => {
+    error: (err: ResponseError) => {
       isSaved.value = false;
-      return message;
+      return err.message;
     },
   });
 });

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MenuRepository, MenuItemRepository } from './repository';
 import { MenuDeleteDto, MenuDto, MenuItemDto, MenuItemsDeleteDto } from './dto';
 import { PaginateQuery } from '@/shared/core/types';
@@ -69,10 +69,30 @@ export class MenuService {
   }
 
   async createMenu(data: MenuDto) {
+    const isUnique = await this.menuRepository.findUnique({
+      where: {
+        name: data.name,
+      },
+    });
+
+    if (isUnique) {
+      throw new HttpException('Меню с таким именем существует, измените имя', HttpStatus.CONFLICT);
+    }
+
     return await this.menuRepository.create(data);
   }
 
   async createMenuItem(data: MenuItemDto) {
+    const isUnique = await this.menuItemRepository.findUnique({
+      where: {
+        slug: data.slug,
+      },
+    });
+
+    if (isUnique) {
+      throw new HttpException('Пункт меню с таким алиасом существует, измените алиас', HttpStatus.CONFLICT);
+    }
+
     const maxOrder = await this.menuItemRepository.aggregate({
       _max: { order: true },
     });
@@ -87,6 +107,16 @@ export class MenuService {
   }
 
   async updateMenuItem(data: MenuItemDto) {
+    const isUnique = await this.menuItemRepository.findUnique({
+      where: {
+        slug: data.slug,
+      },
+    });
+
+    if (isUnique && isUnique.id !== data.id) {
+      throw new HttpException('Тег с таким именем существует, измените имя тега', HttpStatus.CONFLICT);
+    }
+
     return await this.menuItemRepository.update({
       ...data,
       menu: {

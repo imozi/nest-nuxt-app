@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'esed',
+      name: 'esed-frontend',
       port: '3000',
       script: './.output/server/index.mjs',
       watch: true,

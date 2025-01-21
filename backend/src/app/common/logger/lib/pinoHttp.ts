@@ -6,6 +6,7 @@ export const httpLogger = (mode?: string) =>
     name: 'HTTPLoggerService',
     base: null,
     autoLogging: !isDev(mode),
+    level: 'error',
     formatters: {
       level(label) {
         return { level: label };

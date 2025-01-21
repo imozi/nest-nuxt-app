@@ -1,20 +1,79 @@
 services:
   postgresql:
     image: postgres:alpine
-    container_name: postgresql-esed
-    hostname: db.esed.local
+    user: nobody
+    env_file:
+      - ./.env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - .temp:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    restart: unless-stopped
+      - ./database:/var/lib/postgresql/data
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.hostname == anode03
+          - node.labels.system == apps
+    networks:
+      - esed-db
+
+  nest:
+    image: esed-backend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP_PATH=./backend
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./nest-backend/:/app/
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.hostname == anode03
+          - node.labels.system == apps
+    networks:
+      - esed-backend
+      - esed-db
+
+  frontend:
+    image: esed-frontend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP_PATH=./frontend
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./nuxt-frontend/:/app/
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.hostname == anode02
+          - node.labels.system == apps
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.esed.rule=Host(`esed.kamgov.ru`)
+        - traefik.http.routers.esed.entrypoints=https
+        - traefik.http.routers.esed.tls=true
+        - traefik.http.services.esed.loadbalancer.server.port=3000
+
+    networks:
+      - traefik-proxy-local
+      - esed-frontend
+      - esed-backend
 
 networks:
-  default:
-    name: postgresql-net-esed
-    driver: bridge
+  traefik-proxy-local:
+    external: true
+  esed-frontend:
+    external: true
+  esed-backend:
+    external: true
+  esed-db:
+    external: true

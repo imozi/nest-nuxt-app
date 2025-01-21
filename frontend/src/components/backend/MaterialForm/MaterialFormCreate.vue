@@ -68,9 +68,9 @@ const onSubmit = handleSubmit(async (values) => {
       navigateTo('/dashboard/materials');
       return message;
     },
-    error: (message: string) => {
+    error: (err: ResponseError) => {
       isSaved.value = false;
-      return message;
+      return err.message;
     },
   });
 });

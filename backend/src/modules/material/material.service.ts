@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MaterialRepository } from './repository';
 import { PaginateQuery } from '@/shared/core/types';
 import { MaterialDto } from './dto/material.dto';
@@ -33,6 +33,16 @@ export class MaterialService {
   }
 
   async create(data: MaterialDto) {
+    const isUnique = await this.materialRepository.findUnique({
+      where: {
+        slug: data.slug,
+      },
+    });
+
+    if (isUnique) {
+      throw new HttpException('Материал с таким алисом существует, измените алиас', HttpStatus.CONFLICT);
+    }
+
     return this.materialRepository.create({
       ...data,
       resources: data.resources as unknown as Prisma.JsonValue,
@@ -55,6 +65,16 @@ export class MaterialService {
   }
 
   async update(data: MaterialDto) {
+    const isUnique = await this.materialRepository.findUnique({
+      where: {
+        slug: data.slug,
+      },
+    });
+
+    if (isUnique && isUnique.id !== data.id) {
+      throw new HttpException('Материал с таким алисом существует, измените алиас', HttpStatus.CONFLICT);
+    }
+
     return this.materialRepository.update({
       ...data,
       resources: data.resources as unknown as Prisma.JsonValue,
