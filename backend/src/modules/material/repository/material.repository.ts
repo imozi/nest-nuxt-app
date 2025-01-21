@@ -7,4 +7,8 @@ export class MaterialRepository extends BasePostgresRepository<'Material'> {
   constructor(protected readonly prisma: PrismaService) {
     super(prisma, 'material', ['slug', 'name'], ['menuItemId', 'pageId', 'createdAt', 'updatedAt']);
   }
+
+  async getTotal() {
+    return await this.prisma.material.count();
+  }
 }

@@ -79,4 +79,8 @@ export class MaterialService {
   async delete({ id }: MaterialDeleteDto) {
     return await this.materialRepository.delete([id]);
   }
+
+  async getTotal() {
+    return await this.materialRepository.getTotal();
+  }
 }

@@ -8,6 +8,12 @@ import { JwtAccessGuard } from '@/guards';
 export class MaterialController {
   constructor(private readonly materialService: MaterialService) {}
 
+  @Get('total')
+  @UseGuards(JwtAccessGuard)
+  async getTotal() {
+    return await this.materialService.getTotal();
+  }
+
   @Get()
   @UseGuards(JwtAccessGuard)
   async findAll(@Query() query: PaginateQuery) {

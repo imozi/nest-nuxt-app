@@ -69,6 +69,10 @@ onUnmounted(() => {
 
 const setAliasOnBlurName = () => {
   if (values.name && !values.slug) {
+    if (values.name.trim() === 'Новости') {
+      return setFieldValue('slug', 'news');
+    }
+
     setFieldValue('slug', createAlias(values.name));
   }
 };

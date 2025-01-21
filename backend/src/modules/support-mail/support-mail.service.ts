@@ -18,4 +18,8 @@ export class SupportMailService {
   async update(data: SupportMailUpdateDto) {
     return await this.supportMailRepository.update(data);
   }
+
+  async getTotal() {
+    return await this.supportMailRepository.getTotal();
+  }
 }

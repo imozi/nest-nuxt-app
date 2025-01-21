@@ -14,6 +14,12 @@ export class SupportMailController {
     return this.supportMailService.findAll(query);
   }
 
+  @Get('total')
+  @UseGuards(JwtAccessGuard)
+  async getTotal() {
+    return await this.supportMailService.getTotal();
+  }
+
   @Post()
   async create(@Body() data: SupportMailDto) {
     return await this.supportMailService.create(data);

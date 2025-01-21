@@ -16,12 +16,7 @@ watch(selected, () => {
 <template>
   <div class="support-mail-wrapper">
     <div class="pr-3 pt-2">
-      <div class="relative">
-        <UiInput id="search" type="text" placeholder="Поиск..." class="pl-10" />
-        <span class="absolute inset-y-0 start-0 flex items-center justify-center px-2">
-          <Icon name="lucide:search" class="size-4 text-muted-foreground" />
-        </span>
-      </div>
+      <slot name="support-list-header" />
     </div>
     <UiScrollArea class="support-mail-area" @on:scroll-bottom="emit('on:scroll-bottom')">
       <List class="support-mail-area__list">
