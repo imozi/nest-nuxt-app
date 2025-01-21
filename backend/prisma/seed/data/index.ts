@@ -2,7 +2,8 @@ import * as bcrypt from 'bcrypt';
 import { Prisma } from '@prisma/client';
 import { Seed } from './types';
 
-const { ADMIN_USER, ADMIN_SHORTCUT, ADMIN_PASSWORD, CRYPT_SALT } = process.env;
+const { ADMIN_USER, ADMIN_SHORTCUT, ADMIN_PASSWORD, MANAGER_USER, MANAGER_SHORTCUT, MANAGER_PASSWORD, CRYPT_SALT } =
+  process.env;
 
 export const Roles: Prisma.RoleCreateInput[] = [
   { name: Seed.RolesEnum.USER, description: Seed.RolesNameEnum.USER },
@@ -28,6 +29,26 @@ export const AccountsUser: Seed.AccountsUser[] = [
       surname: Seed.RolesNameEnum.ADMIN,
       patronymic: '',
       fullName: `${Seed.RolesNameEnum.ADMIN} ЕСЭД`,
+      birthday: new Date(),
+      gender: {
+        connect: {
+          name: Seed.GenderEnum.MALE,
+        },
+      },
+    },
+  },
+  {
+    roles: [Seed.RolesEnum.MANAGER],
+    account: {
+      email: MANAGER_USER!,
+      hash: bcrypt.hashSync(MANAGER_PASSWORD!, +CRYPT_SALT!),
+      shortcut: MANAGER_SHORTCUT!,
+    },
+    user: {
+      name: 'ЕСЭД',
+      surname: Seed.RolesNameEnum.MANAGER,
+      patronymic: '',
+      fullName: `${Seed.RolesNameEnum.MANAGER} ЕСЭД`,
       birthday: new Date(),
       gender: {
         connect: {
