@@ -15,6 +15,7 @@ const { data: supportMailsTotal } = await useFetchSecure<string>('/support-mail/
       </header>
       <UiSeparator />
       <div class="widgets__content">
+        <WidgetsSessions />
         <WidgetsMaterials v-if="materialsTotal" :total="materialsTotal" />
         <WidgetsSupportMails v-if="supportMailsTotal" :total="supportMailsTotal" />
       </div>
@@ -37,7 +38,7 @@ const { data: supportMailsTotal } = await useFetchSecure<string>('/support-mail/
   }
 
   &__content {
-    @apply flex gap-4 py-4;
+    @apply grid grid-flow-col gap-4 py-4;
   }
 
   &__list {

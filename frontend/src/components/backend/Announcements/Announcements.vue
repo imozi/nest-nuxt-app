@@ -21,7 +21,7 @@
             </ListItem>
             <ListItem class="announcements__list-item">
               <Icon name="solar:close-square-bold" class="size-4 text-destructive" />
-              <p>Сейчас в разработке фронтенд клиента</p>
+              <p>Сейчас в разработке (переделке) фронтенд клиента</p>
             </ListItem>
             <ListItem class="announcements__list-item">
               <Icon name="solar:info-square-bold" class="size-4 text-blue-600" />
