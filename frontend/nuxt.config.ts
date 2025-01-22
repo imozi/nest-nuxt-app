@@ -70,7 +70,6 @@ export default defineNuxtConfig({
   app: {
     rootAttrs: {
       id: 'portal',
-      // class: 'wrapper',
     },
     buildAssetsDir: isDev ? '/_nuxt/' : '/assets',
     head: {
@@ -91,6 +90,7 @@ export default defineNuxtConfig({
     public: {
       STORAGE: isDev ? process.env.API_STORAGE_DEV : process.env.API_STORAGE_PROD,
       API: isDev ? process.env.API_URL_DEV : process.env.API_URL_PROD,
+      BASE_URL: isDev ? process.env.BASE_URL_DEV : process.env.BASE_URL_PROD,
     },
   },
   srcDir: './src',

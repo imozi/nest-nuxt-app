@@ -9,12 +9,8 @@ const isLoading = ref<boolean>(false);
 
 const formSchema = toTypedSchema(
   object({
-    username: string({ required_error: 'Поле не должно быть пустым' })
-      .trim()
-      .min(1, 'Поле не должно быть пустым'),
-    password: string({ required_error: 'Поле не должно быть пустым' })
-      .trim()
-      .min(1, 'Поле не должно быть пустым'),
+    username: string({ required_error: 'Поле не должно быть пустым' }).trim().min(1, 'Поле не должно быть пустым'),
+    password: string({ required_error: 'Поле не должно быть пустым' }).trim().min(1, 'Поле не должно быть пустым'),
   }),
 );
 
@@ -25,7 +21,7 @@ const { handleSubmit } = useForm({
 const onSubmit = handleSubmit(async (values) => {
   try {
     isLoading.value = true;
-    const { accessToken } = await $fetchSecure<{ accessToken: string }>('auth/signin', {
+    const { accessToken } = await $fetchSecure<{ accessToken: string }>('/auth/signin', {
       method: 'POST',
       body: values,
     });
@@ -46,9 +42,7 @@ const onSubmit = handleSubmit(async (values) => {
     <UiCardHeader class="auth-card__header">
       <Logo class="auth-card__logo" />
       <UiCardTitle class="auth-card__title">Вход в систему</UiCardTitle>
-      <UiCardDescription class="auth-card__description">
-        электронного документооборота: полезные ресурсы и инструменты
-      </UiCardDescription>
+      <UiCardDescription class="auth-card__description"> электронного документооборота: полезные ресурсы и инструменты </UiCardDescription>
     </UiCardHeader>
     <UiCardContent class="auth-card__content">
       <form class="auth-card__form form" @submit="onSubmit">
@@ -60,11 +54,7 @@ const onSubmit = handleSubmit(async (values) => {
               </div>
               <div class="form__input">
                 <UiFormControl>
-                  <UiInput
-                    type="text"
-                    placeholder="Email или короткое имя"
-                    v-bind="componentField"
-                  />
+                  <UiInput type="text" placeholder="Email или короткое имя" v-bind="componentField" />
                 </UiFormControl>
               </div>
               <UiFormMessage class="form__error" />

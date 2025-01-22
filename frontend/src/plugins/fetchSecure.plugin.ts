@@ -10,7 +10,7 @@ export default defineNuxtPlugin(() => {
   let retryCount = 0;
 
   const $fetchSecure = $fetch.create({
-    baseURL: config.public.API,
+    baseURL: `${config.public.BASE_URL}/api`,
     retry: 2,
     retryDelay: 250,
     retryStatusCodes,

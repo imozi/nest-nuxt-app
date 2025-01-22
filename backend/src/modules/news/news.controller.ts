@@ -9,11 +9,13 @@ export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
   @Get()
+  @UseGuards(JwtAccessGuard)
   async findAll(@Query() query: PaginateQuery) {
     return this.newsService.findAll(query);
   }
 
   @Get(':slug')
+  @UseGuards(JwtAccessGuard)
   async findBySlug(@Param('slug') slug: string) {
     return await this.newsService.findBySlug(slug);
   }
