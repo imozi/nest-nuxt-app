@@ -4,6 +4,7 @@ useSeoMeta({
 });
 definePageMeta({
   name: 'Создать новость',
+  layout: 'dashboard',
 });
 useBreadcrumbs();
 </script>

@@ -1,16 +1,10 @@
 <script setup lang="ts">
-import { array, object, string } from 'zod';
-import { useForm, configure } from 'vee-validate';
-
-configure({
-  validateOnBlur: false,
-});
+import { object, string } from 'zod';
+import { useForm } from 'vee-validate';
 
 const isOpenDialog = ref<boolean>(false);
 const isOpenTooltip = ref<boolean>(false);
 const isSaved = ref<boolean>(false);
-
-const { data: menu } = useNuxtData<ResponseData<Menu>>('menu');
 
 const emit = defineEmits(['on:created']);
 
@@ -19,31 +13,41 @@ const formSchema = toTypedSchema(
     name: string({
       required_error: 'Поле не должно быть пустым',
     }).trim(),
-    slug: string({
+    email: string({
       required_error: 'Поле не должно быть пустым',
     }).trim(),
-    description: string().optional(),
-    menu: array(string()).min(1, { message: 'Должен быть указан хотя бы один пункт' }).default([]),
+    position: string({
+      required_error: 'Поле не должно быть пустым',
+    }).trim(),
+    organization: string({
+      required_error: 'Поле не должно быть пустым',
+    }).trim(),
+    question: string({
+      required_error: 'Поле не должно быть пустым',
+    }).trim(),
+    remoteId: string({
+      required_error: 'Поле не должно быть пустым',
+    })
+      .trim()
+      .default('000000000'),
+    status: string().default('new'),
   }),
 );
 
-const { handleSubmit, values, setFieldValue, resetForm } = useForm({
+const { handleSubmit, resetForm } = useForm({
   validationSchema: formSchema,
-  keepValuesOnUnmount: true,
 });
 
 const onSubmit = handleSubmit(async (values) => {
   isSaved.value = true;
 
-  const selectedMenu = values.menu.map((item) => menu.value?.data.find((elm) => elm.name === item)?.id);
-
   const promise = async () => {
     try {
-      await $fetchSecure(`/menu/items`, { body: { ...values, menu: selectedMenu }, method: 'POST' });
+      await $fetchSecure(`/support-mail`, { body: values, method: 'POST' });
       emit('on:created');
       isOpenDialog.value = false;
       resetForm();
-      return 'Пункт меню успешно создано!';
+      return 'Обращение успешно создано!';
     } catch (error) {
       const err = (error as IFetchError<ResponseError>).data;
       throw new Error(err?.message);
@@ -62,20 +66,6 @@ const onSubmit = handleSubmit(async (values) => {
     },
   });
 });
-
-onUnmounted(() => {
-  setFieldValue('menu', []);
-});
-
-const setAliasOnBlurName = () => {
-  if (values.name && !values.slug) {
-    if (values.name.trim() === 'Новости') {
-      return setFieldValue('slug', 'news');
-    }
-
-    setFieldValue('slug', createAlias(values.name));
-  }
-};
 
 const onClick = () => {
   isOpenDialog.value = !isOpenDialog.value;
@@ -98,63 +88,91 @@ const onMouseleave = () => {
         <UiTooltip :open="isOpenTooltip">
           <UiTooltipTrigger as-child>
             <UiButton variant="secondary" size="icon" @click.prevent="onClick" @mouseover="onMouseover" @mouseleave="onMouseleave">
-              <Icon name="solar:menu-dots-square-outline" class="size-5" />
+              <Icon name="solar:add-square-outline" class="size-5" />
             </UiButton>
           </UiTooltipTrigger>
           <UiTooltipContent>
-            <p>Создать пункт меню</p>
+            <p>Создать обращение</p>
           </UiTooltipContent>
         </UiTooltip>
       </UiTooltipProvider>
     </UiDialogTrigger>
 
-    <UiDialogContent class="menu__dialog">
-      <form class="menu__form" @submit="onSubmit">
+    <UiDialogContent class="support__dialog">
+      <form class="support__form" @submit="onSubmit">
         <UiDialogHeader>
-          <UiDialogTitle>Создать пункт меню</UiDialogTitle>
+          <UiDialogTitle>Создать новое обращение</UiDialogTitle>
           <UiDialogDescription>Заполните форму</UiDialogDescription>
         </UiDialogHeader>
 
         <UiFormField v-slot="{ componentField }" name="name">
           <UiFormItem class="flex flex-col gap-y-2">
-            <UiFormLabel>Наименование</UiFormLabel>
+            <UiFormLabel>ФИО</UiFormLabel>
 
             <UiFormControl>
-              <UiInput type="text" placeholder="Наименование" v-bind="componentField" @blur="setAliasOnBlurName" />
+              <UiInput type="text" placeholder="ФИО" v-bind="componentField" />
             </UiFormControl>
 
             <UiFormMessage />
           </UiFormItem>
         </UiFormField>
 
-        <UiFormField v-slot="{ componentField }" name="slug">
+        <UiFormField v-slot="{ componentField }" name="email">
           <UiFormItem class="flex flex-col gap-y-2">
-            <UiFormLabel>Алиас (ЧПУ)</UiFormLabel>
+            <UiFormLabel>Электронная почта</UiFormLabel>
 
             <UiFormControl>
-              <UiInput type="text" placeholder="Алиас" v-bind="componentField" />
+              <UiInput type="email" placeholder="example@mail.ru" v-bind="componentField" />
             </UiFormControl>
 
             <UiFormMessage />
           </UiFormItem>
         </UiFormField>
 
-        <UiFormField v-slot="{ componentField }" name="description">
+        <UiFormField v-slot="{ componentField }" name="organization">
           <UiFormItem class="flex flex-col gap-y-2">
-            <UiFormLabel>Описание</UiFormLabel>
+            <UiFormLabel>Организация</UiFormLabel>
 
             <UiFormControl>
-              <TiptapEditor v-bind="componentField" size="xs" />
+              <UiInput type="text" placeholder="Организация" v-bind="componentField" />
             </UiFormControl>
 
             <UiFormMessage />
           </UiFormItem>
         </UiFormField>
 
-        <UiFormField v-slot="{ componentField }" name="menu">
+        <UiFormField v-slot="{ componentField }" name="position">
           <UiFormItem class="flex flex-col gap-y-2">
-            <UiFormLabel>Прикрепить к пункту меню</UiFormLabel>
-            <ChoiceSelect v-if="menu" v-bind="componentField" :data="menu.data" />
+            <UiFormLabel>Должность</UiFormLabel>
+
+            <UiFormControl>
+              <UiInput type="text" placeholder="Должность" v-bind="componentField" />
+            </UiFormControl>
+
+            <UiFormMessage />
+          </UiFormItem>
+        </UiFormField>
+
+        <UiFormField v-slot="{ componentField }" name="question">
+          <UiFormItem class="flex flex-col gap-y-2">
+            <UiFormLabel>Проблема</UiFormLabel>
+
+            <UiFormControl>
+              <UiTextarea type="text" placeholder="Текст..." v-bind="componentField" class="min-h-52" />
+            </UiFormControl>
+
+            <UiFormMessage />
+          </UiFormItem>
+        </UiFormField>
+
+        <UiFormField v-slot="{ componentField }" name="remoteId">
+          <UiFormItem class="flex flex-col gap-y-2">
+            <UiFormLabel>Идентификатор ПО “Ассистент”</UiFormLabel>
+
+            <UiFormControl>
+              <UiInput type="text" placeholder="000000000" v-bind="componentField" />
+            </UiFormControl>
+
             <UiFormMessage />
           </UiFormItem>
         </UiFormField>
@@ -166,3 +184,13 @@ const onMouseleave = () => {
     </UiDialogContent>
   </UiDialog>
 </template>
+
+<style lang="scss">
+.support__form {
+  @apply flex flex-col gap-y-5;
+}
+
+.support__dialog {
+  @apply max-w-[500px];
+}
+</style>

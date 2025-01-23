@@ -7,10 +7,6 @@ type SupportMailList = {
 const { mails, loading } = defineProps<SupportMailList>();
 const selected = defineModel<SupportMail[]>('selected', { required: true });
 const emit = defineEmits(['on:scroll-bottom']);
-
-watch(selected, () => {
-  console.log(selected);
-});
 </script>
 
 <template>
@@ -18,7 +14,7 @@ watch(selected, () => {
     <div class="pr-3 pt-2">
       <slot name="support-list-header" />
     </div>
-    <UiScrollArea class="support-mail-area" @on:scroll-bottom="emit('on:scroll-bottom')">
+    <UiScrollArea v-if="mails.length" class="support-mail-area" @on:scroll-bottom="emit('on:scroll-bottom')">
       <List class="support-mail-area__list">
         <ListItem v-for="mail of mails" :key="mail.id" class="support-mail-area__item">
           <SupportMailCard :mail="mail" :selected="selected" />
@@ -28,6 +24,8 @@ watch(selected, () => {
         </ListItem>
       </List>
     </UiScrollArea>
+
+    <Empty v-else />
   </div>
 </template>
 

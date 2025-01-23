@@ -1,12 +1,61 @@
 <script setup lang="ts">
 import { useFilterSupport } from './composables/useFilterSupport';
 
-const { data: support, search, filters, status } = await useFilterSupport();
+const { data: support, search, filters, status, refresh } = await useFilterSupport();
 
 const selected = reactive<SupportMail[]>([]);
 
 const onRequestNextData = async () => {
   filters.page! += 1;
+};
+
+const updateStatus = async (newStatus: SupportMail['status']) => {
+  selected[0]!.status = newStatus;
+
+  const promise = async () => {
+    try {
+      await $fetchSecure('/support-mail', { method: 'PATCH', body: { id: selected[0]?.id, status: newStatus } });
+      refresh();
+      return 'Статус успешно изменен!';
+    } catch (error) {
+      const err = (error as IFetchError<ResponseError>).data;
+      throw new Error(err?.message);
+    }
+  };
+
+  toast.promise(promise, {
+    loading: 'Сохранение...',
+    success: (message: string) => {
+      return message;
+    },
+    error: (err: ResponseError) => {
+      return err.message;
+    },
+  });
+};
+
+const onDelete = async () => {
+  const promise = async () => {
+    try {
+      await $fetchSecure('/support-mail', { method: 'DELETE', body: { id: selected[0]?.id } });
+      selected.length = 0;
+      refresh();
+      return 'Обращение успешно удалено!';
+    } catch (error) {
+      const err = (error as IFetchError<ResponseError>).data;
+      throw new Error(err?.message);
+    }
+  };
+
+  toast.promise(promise, {
+    loading: 'Удаление...',
+    success: (message: string) => {
+      return message;
+    },
+    error: (err: ResponseError) => {
+      return err.message;
+    },
+  });
 };
 
 watch(search, () => {
@@ -20,7 +69,9 @@ watch(search, () => {
       <UiResizablePanelGroup direction="horizontal">
         <UiResizablePanel :default-size="30" :min-size="30" :max-size="30">
           <div class="grid grid-cols-[max-content,1fr]">
-            <div class="p-2" />
+            <div class="p-2">
+              <SupportMailCreate @on:created="refresh" />
+            </div>
             <SupportMailList
               :mails="support.data"
               :loading="status === 'pending'"
@@ -49,9 +100,7 @@ watch(search, () => {
 
           <div v-else class="support__mail-content">
             <div class="support__mail-controls">
-              <UiButton variant="ghost" size="icon">
-                <Icon name="" class="size-5" />
-              </UiButton>
+              <SupportControls :selected="selected" @update:status="updateStatus" @on:delete-confirmed="onDelete" />
             </div>
             <div class="support__mail-wrapper">
               <div class="support__mail-name">
@@ -90,6 +139,10 @@ watch(search, () => {
 
   &__mail-content {
     @apply flex flex-col px-5 py-3;
+  }
+
+  &__mail-controls {
+    @apply mb-5;
   }
 
   &__mail-wrapper {

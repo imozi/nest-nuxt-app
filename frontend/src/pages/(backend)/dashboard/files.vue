@@ -5,6 +5,7 @@ useSeoMeta({
 
 definePageMeta({
   name: 'Файлы',
+  layout: 'dashboard',
 });
 useBreadcrumbs();
 </script>

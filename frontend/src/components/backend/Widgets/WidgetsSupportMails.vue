@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const props = defineProps<{ total: string }>();
+const { data } = useNuxtData<{ mail: string }>('statistics');
+const { mail } = data.value!;
 </script>
 
 <template>
@@ -9,7 +10,7 @@ const props = defineProps<{ total: string }>();
     </div>
     <div class="widgets-support-mails__wrapper">
       <div class="widgets-support-mails__total">
-        <p>{{ props.total }}</p>
+        <p>{{ mail }}</p>
       </div>
       <div class="widgets-support-mails__name">
         <h3>Всего поступило обращений</h3>

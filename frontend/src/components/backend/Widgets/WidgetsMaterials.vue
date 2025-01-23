@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const props = defineProps<{ total: string }>();
+const { data } = useNuxtData<{ material: string }>('statistics');
+const { material } = data.value!;
 </script>
 
 <template>
@@ -9,7 +10,7 @@ const props = defineProps<{ total: string }>();
     </div>
     <div class="widgets-materials__wrapper">
       <div class="widgets-materials__total">
-        <p>{{ props.total }}</p>
+        <p>{{ material }}</p>
       </div>
       <div class="widgets-materials__name">
         <h3>Размещено материалов</h3>

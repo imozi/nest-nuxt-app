@@ -4,6 +4,7 @@ useSeoMeta({
 });
 definePageMeta({
   name: 'Теги',
+  layout: 'dashboard',
 });
 useBreadcrumbs();
 </script>

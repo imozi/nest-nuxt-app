@@ -4,9 +4,9 @@ import { BasePostgresRepository } from '@/shared/data-access';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class SupportMailRepository extends BasePostgresRepository<'SupportMail'> {
+export class SupportMailHistoryRepository extends BasePostgresRepository<'SupportMailHistory'> {
   constructor(protected readonly prisma: PrismaService) {
-    super(prisma, 'supportMail', ['email', 'name', 'organization']);
+    super(prisma, 'supportMailHistory', ['email', 'name', 'organization']);
   }
 
   async getTotal() {

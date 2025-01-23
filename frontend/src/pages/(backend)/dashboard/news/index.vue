@@ -5,6 +5,7 @@ useSeoMeta({
 
 definePageMeta({
   name: 'Новости',
+  layout: 'dashboard',
 });
 useBreadcrumbs();
 </script>

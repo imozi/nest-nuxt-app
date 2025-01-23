@@ -23,11 +23,13 @@ const { data: pages, search } = await useFilterPages();
       </header>
       <UiSeparator />
       <div class="pages__content">
-        <List class="pages__list">
+        <List v-if="pages.data.length" class="pages__list">
           <ListItem v-for="item of pages.data" :key="item.id" class="pages__item">
             <PagesItem :page="item" />
           </ListItem>
         </List>
+
+        <Empty v-else />
       </div>
     </div>
   </section>

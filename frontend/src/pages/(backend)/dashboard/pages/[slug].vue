@@ -2,6 +2,10 @@
 const { params } = useRoute();
 const { data: page } = await useFetchSecure<Page>(`pages/${params.slug}`, { key: 'page' });
 
+definePageMeta({
+  layout: 'dashboard',
+});
+
 useSeoMeta({
   title: `ЕСЭД | ${page.value?.name}`,
 });

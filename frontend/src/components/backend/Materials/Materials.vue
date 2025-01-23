@@ -23,11 +23,13 @@ const { data: materials, search } = await useFilterMaterials();
       </header>
       <UiSeparator />
       <div class="materials__content">
-        <List class="materials__list">
+        <List v-if="materials.data.length" class="materials__list">
           <ListItem v-for="item of materials.data" :key="item.id" class="materials__item">
             <MaterialsItem :item="item" />
           </ListItem>
         </List>
+
+        <Empty v-else />
       </div>
     </div>
   </section>

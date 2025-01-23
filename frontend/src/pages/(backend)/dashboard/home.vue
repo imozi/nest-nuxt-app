@@ -2,8 +2,10 @@
 useSeoMeta({
   title: `ЕСЭД | Главная`,
 });
+
 definePageMeta({
   name: 'Главная',
+  layout: 'dashboard',
 });
 
 useBreadcrumbs();

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { data: sessions } = await useFetchSecure<AccountSessionData>('/sessions/me');
+const { data } = useNuxtData<{ session: AccountSessionData }>('statistics');
+const { session } = data.value!;
 </script>
 
 <template>
@@ -9,7 +10,7 @@ const { data: sessions } = await useFetchSecure<AccountSessionData>('/sessions/m
     </div>
     <div class="widgets-sessions__wrapper">
       <div class="widgets-sessions__total">
-        <p>{{ sessions?.list.length }}</p>
+        <p>{{ session?.list.length }}</p>
         <div class="widgets-sessions__info" />
       </div>
       <div class="widgets-sessions__name">

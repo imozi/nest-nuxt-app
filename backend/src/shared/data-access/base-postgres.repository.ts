@@ -151,6 +151,10 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
     });
   }
 
+  async updateMany(data: Prisma.TypeMap['model'][T]['operations']['updateMany']['args']) {
+    return await (this.prisma[this.model] as any).updateMany(data);
+  }
+
   async delete(idList: Prisma.TypeMap['model'][T]['payload']['scalars']['id'][]) {
     await (this.prisma[this.model] as any).deleteMany({
       where: {
@@ -163,7 +167,7 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
     return { status: 'OK' };
   }
 
-  async transaction(action: []) {
+  async transaction(action: [...any]) {
     return await this.prisma.$transaction(action);
   }
 

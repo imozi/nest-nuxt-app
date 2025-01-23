@@ -26,17 +26,18 @@ const onSelectMail = () => {
   selected.value.push(mail);
 };
 
-const statusText = computed(() => {
-  const status = {
-    new: 'Новая',
-    progress: 'В работе',
-    technical: 'Проблемы',
-    closed: 'Выполненна',
-    deferred: 'Отложено',
-    viewed: 'Просмотрена',
-  };
-  return status[mail.status];
-});
+const statusText = (status: SupportMail['status']) =>
+  computed(() => {
+    const statusText = {
+      new: 'Новая',
+      progress: 'В работе',
+      technical: 'Проблемы',
+      closed: 'Выполненна',
+      deferred: 'Отложено',
+      viewed: 'Просмотрена',
+    };
+    return statusText[status];
+  });
 </script>
 
 <template>
@@ -61,7 +62,7 @@ const statusText = computed(() => {
       </div>
     </div>
     <div class="support-mail-card__status">
-      <UiBadge :variant="mail.status">{{ statusText }} </UiBadge>
+      <UiBadge :variant="mail.status">{{ statusText(mail.status) }} </UiBadge>
     </div>
   </UiButton>
 </template>

@@ -4,6 +4,7 @@ useSeoMeta({
 });
 definePageMeta({
   name: 'Меню',
+  layout: 'dashboard',
 });
 useBreadcrumbs();
 </script>

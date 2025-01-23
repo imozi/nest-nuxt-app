@@ -3,6 +3,10 @@ const { params } = useRoute();
 
 const { data: material } = await useFetchSecure<Material>(`/materials/${params.slug}`, { key: 'material' });
 
+definePageMeta({
+  layout: 'dashboard',
+});
+
 useSeoMeta({
   title: `ЕСЭД | ${material.value?.name}`,
 });

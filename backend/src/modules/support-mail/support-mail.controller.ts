@@ -1,8 +1,9 @@
 import { PaginateQuery } from '@/shared/core/types';
-import { Body, Controller, Get, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Delete, Query, UseGuards } from '@nestjs/common';
 import { SupportMailService } from './support-mail.service';
-import { JwtAccessGuard } from '@/guards';
-import { SupportMailDto, SupportMailUpdateDto } from './dto';
+import { JwtAccessGuard, RolesGuard } from '@/guards';
+import { SupportMailDeleteDto, SupportMailDto, SupportMailUpdateDto } from './dto';
+import { Roles } from '@/decorators';
 
 @Controller('support-mail')
 export class SupportMailController {
@@ -29,5 +30,12 @@ export class SupportMailController {
   @UseGuards(JwtAccessGuard)
   async update(@Body() data: SupportMailUpdateDto) {
     return await this.supportMailService.update(data);
+  }
+
+  @Delete()
+  @UseGuards(JwtAccessGuard, RolesGuard)
+  @Roles('admin')
+  async delete(@Body() data: SupportMailDeleteDto) {
+    return await this.supportMailService.delete(data);
   }
 }

@@ -4,6 +4,7 @@ useSeoMeta({
 });
 definePageMeta({
   name: 'Создать материал',
+  layout: 'dashboard',
 });
 
 useBreadcrumbs();

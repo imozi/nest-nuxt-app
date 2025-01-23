@@ -4,6 +4,7 @@ useSeoMeta({
 });
 definePageMeta({
   name: 'Обращения',
+  layout: 'dashboard',
 });
 useBreadcrumbs();
 </script>

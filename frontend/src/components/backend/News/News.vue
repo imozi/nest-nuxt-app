@@ -23,11 +23,13 @@ const { data: news, search } = await useFilterNews();
       </header>
       <UiSeparator />
       <div class="news__content">
-        <List class="news__list">
+        <List v-if="news.data.length" class="news__list">
           <ListItem v-for="item of news.data" :key="item.id" class="news__item">
             <NewsItem :news="item" />
           </ListItem>
         </List>
+
+        <Empty v-else />
       </div>
     </div>
   </section>

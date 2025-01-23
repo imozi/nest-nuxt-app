@@ -1,6 +1,13 @@
 <script setup lang="ts">
-const { data: materialsTotal } = await useFetchSecure<string>('/materials/total');
-const { data: supportMailsTotal } = await useFetchSecure<string>('/support-mail/total');
+await useAsyncData('statistics', async () => {
+  const [session, material, mail] = await Promise.all([
+    $fetchSecure<AccountSessionData>('/sessions/me'),
+    $fetchSecure<string>('/materials/total'),
+    $fetchSecure<string>('/support-mail/total'),
+  ]);
+
+  return { session, material, mail };
+});
 </script>
 
 <template>
@@ -16,8 +23,8 @@ const { data: supportMailsTotal } = await useFetchSecure<string>('/support-mail/
       <UiSeparator />
       <div class="widgets__content">
         <WidgetsSessions />
-        <WidgetsMaterials v-if="materialsTotal" :total="materialsTotal" />
-        <WidgetsSupportMails v-if="supportMailsTotal" :total="supportMailsTotal" />
+        <WidgetsMaterials />
+        <WidgetsSupportMails />
       </div>
     </div>
   </section>
