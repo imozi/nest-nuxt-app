@@ -66,28 +66,32 @@ watch(search, () => {
 <template>
   <ClientOnly v-if="support">
     <div class="support">
+      <div class="support__wrapper">
+        <header class="support__header">
+          <div class="support__column">
+            <Icon name="solar:hashtag-square-linear" class="size-5" />
+            <p>Обращения</p>
+          </div>
+          <div class="support__column">
+            <div class="relative w-full max-w-sm items-center">
+              <UiInput id="search" v-model="search" type="text" placeholder="Поиск..." class="pl-10" />
+              <span class="absolute inset-y-0 start-0 flex items-center justify-center px-2">
+                <Icon name="lucide:search" class="size-4 text-muted-foreground" />
+              </span>
+            </div>
+            <SupportMailCreate @on:created="refresh" />
+          </div>
+        </header>
+      </div>
+      <UiSeparator />
       <UiResizablePanelGroup direction="horizontal">
         <UiResizablePanel :default-size="30" :min-size="30" :max-size="30">
-          <div class="grid grid-cols-[max-content,1fr]">
-            <div class="p-2">
-              <SupportMailCreate @on:created="refresh" />
-            </div>
-            <SupportMailList
-              :mails="support.data"
-              :loading="status === 'pending'"
-              :selected="selected"
-              @on:scroll-bottom="onRequestNextData"
-            >
-              <template #support-list-header>
-                <div class="relative">
-                  <UiInput id="search" v-model="search" type="text" placeholder="Поиск..." class="pl-10" />
-                  <span class="absolute inset-y-0 start-0 flex items-center justify-center px-2">
-                    <Icon name="lucide:search" class="size-4 text-muted-foreground" />
-                  </span>
-                </div>
-              </template>
-            </SupportMailList>
-          </div>
+          <SupportMailList
+            :mails="support.data"
+            :loading="status === 'pending'"
+            :selected="selected"
+            @on:scroll-bottom="onRequestNextData"
+          />
         </UiResizablePanel>
         <UiResizableHandle disabled />
         <UiResizablePanel>
@@ -136,6 +140,18 @@ watch(search, () => {
 <style lang="scss">
 .support {
   @apply h-[calc(100vh_-_(var(--height-original)_+_(var(--height-inner)_*_2))_-_40px)];
+
+  &__header {
+    @apply flex items-center gap-x-5 pb-5;
+  }
+
+  &__column {
+    @apply flex items-center gap-x-2;
+
+    &:first-child {
+      @apply border-r pr-4;
+    }
+  }
 
   &__mail-content {
     @apply flex flex-col px-5 py-3;

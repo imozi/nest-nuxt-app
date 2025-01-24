@@ -21,22 +21,22 @@ const { material } = data.value!;
 
 <style lang="scss">
 .widgets-materials {
-  @apply flex gap-x-3 rounded-md border p-4;
+  @apply flex flex-[1_1_calc(33.333333%_-_1rem)] rounded-md border p-4;
 
   &__wrapper {
-    @apply flex flex-col;
+    @apply flex flex-grow flex-col;
   }
 
   &__name {
-    @apply mt-auto text-muted-foreground;
+    @apply mx-auto mt-auto text-muted-foreground;
   }
 
   &__total {
-    @apply text-3xl font-semibold;
+    @apply m-auto text-8xl font-semibold;
   }
 
   &__icon {
-    @apply flex h-16 w-16 items-center justify-center rounded-md bg-indigo-600 text-white;
+    @apply flex h-full w-9 items-center justify-center rounded-md bg-indigo-600 p-1 text-white;
   }
 }
 </style>

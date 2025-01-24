@@ -1,6 +1,15 @@
 <script setup lang="ts">
-const { data } = useNuxtData<{ mail: string }>('statistics');
-const { mail } = data.value!;
+const { data } = useNuxtData<{ mailYear: { month: string; count: number }[]; mail: string }>('statistics');
+const { mail, mailYear } = data.value!;
+
+const chartData = computed(() =>
+  mailYear.map((item) => {
+    return {
+      name: monthNumberToWord(new Date(item.month).getMonth()),
+      total: +item.count,
+    };
+  }),
+);
 </script>
 
 <template>
@@ -10,10 +19,11 @@ const { mail } = data.value!;
     </div>
     <div class="widgets-support-mails__wrapper">
       <div class="widgets-support-mails__total">
-        <p>{{ mail }}</p>
+        <p v-if="!+mail">{{ mail }}</p>
+        <UiDonutChart v-else index="name" category="total" show-legend show-tooltip :data="chartData" />
       </div>
       <div class="widgets-support-mails__name">
-        <h3>Всего поступило обращений</h3>
+        <h3>Всего обращений</h3>
       </div>
     </div>
   </div>
@@ -21,22 +31,22 @@ const { mail } = data.value!;
 
 <style lang="scss">
 .widgets-support-mails {
-  @apply flex gap-x-3 rounded-md border p-4;
+  @apply flex flex-[1_1_calc(33.333333%_-_1rem)] rounded-md border p-4;
 
   &__wrapper {
-    @apply flex flex-col;
+    @apply flex flex-grow flex-col;
   }
 
   &__name {
-    @apply mt-auto text-muted-foreground;
+    @apply mx-auto mt-auto text-muted-foreground;
   }
 
   &__total {
-    @apply text-3xl font-semibold;
+    @apply m-auto mb-2 flex items-center gap-x-3 text-8xl font-semibold;
   }
 
   &__icon {
-    @apply flex h-16 w-16 items-center justify-center rounded-md bg-teal-600 text-white;
+    @apply flex h-full w-9 items-center justify-center rounded-md bg-teal-600 p-1 text-white;
   }
 }
 </style>

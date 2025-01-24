@@ -69,30 +69,30 @@ const statusText = (status: SupportMail['status']) =>
 
 <style lang="scss">
 .support-mail-card {
-  @apply relative flex h-full whitespace-normal rounded-md border text-left text-sm;
+  @apply relative flex h-full justify-normal whitespace-normal break-all rounded-md border text-left;
 
   &--selected {
     @apply border-primary bg-muted text-accent-foreground;
   }
 
   &__wrapper {
-    @apply flex flex-col items-start gap-y-1;
+    @apply flex flex-col gap-y-1;
   }
 
   &__name {
-    @apply flex font-medium;
+    @apply flex text-sm font-medium;
   }
 
   &__question {
-    @apply line-clamp-1 font-normal;
+    @apply line-clamp-1 text-sm font-normal;
   }
 
   &__date {
-    @apply flex gap-x-2 font-normal;
+    @apply flex gap-x-2 text-sm;
   }
 
   &__status {
-    @apply absolute right-2 top-2 text-xs;
+    @apply absolute right-2 top-2 text-sm;
   }
 }
 </style>

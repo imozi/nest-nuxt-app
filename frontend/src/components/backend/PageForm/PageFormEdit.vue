@@ -61,8 +61,31 @@ const onSubmit = handleSubmit(async (values) => {
   });
 });
 
-const onClickCancel = () => {
-  navigateTo('/dashboard/pages');
+const onClickConfirmedDelete = () => {
+  isSaved.value = true;
+
+  const promise = async () => {
+    try {
+      await $fetchSecure(`/pages`, { body: { id: page.value?.id }, method: 'DELETE' });
+      return 'Страница успешно удалена!';
+    } catch (error) {
+      const err = (error as IFetchError<ResponseError>).data;
+      throw createError({ message: err?.message, statusCode: err?.statusCode });
+    }
+  };
+
+  toast.promise(promise, {
+    loading: 'Удаление...',
+    success: (message: string) => {
+      isSaved.value = false;
+      navigateTo('/dashboard/pages');
+      return message;
+    },
+    error: (err: ResponseError) => {
+      isSaved.value = false;
+      return err.message;
+    },
+  });
 };
 
 const setAliasOnBlurName = () => {
@@ -101,16 +124,16 @@ watch(values, () => {
       <div class="flex items-center gap-4">
         <UiAlertDialog>
           <UiAlertDialogTrigger as-child>
-            <UiButton variant="outline" class="text-muted-foreground"> Отмена </UiButton>
+            <UiButton variant="destructive"> Удалить </UiButton>
           </UiAlertDialogTrigger>
           <UiAlertDialogContent>
             <UiAlertDialogHeader>
               <UiAlertDialogTitle>Вы уверены?</UiAlertDialogTitle>
-              <UiAlertDialogDescription> Вы уверены что хотите отменить создание страницы? </UiAlertDialogDescription>
+              <UiAlertDialogDescription> Вы уверены что хотите удалить страницу? </UiAlertDialogDescription>
             </UiAlertDialogHeader>
             <UiAlertDialogFooter>
               <UiAlertDialogCancel>Нет</UiAlertDialogCancel>
-              <UiAlertDialogAction class="text-white" :disabled="isSaved" @click="onClickCancel"> Да </UiAlertDialogAction>
+              <UiAlertDialogAction class="text-white" :disabled="isSaved" @click="onClickConfirmedDelete"> Да </UiAlertDialogAction>
             </UiAlertDialogFooter>
           </UiAlertDialogContent>
         </UiAlertDialog>

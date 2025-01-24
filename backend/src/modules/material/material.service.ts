@@ -33,11 +33,13 @@ export class MaterialService {
   }
 
   async create(data: MaterialDto) {
-    const isUnique = await this.materialRepository.findUnique({
-      where: {
-        slug: data.slug,
-      },
-    });
+    const isUnique = data.slug
+      ? await this.materialRepository.findUnique({
+          where: {
+            slug: data.slug,
+          },
+        })
+      : false;
 
     if (isUnique) {
       throw new HttpException('Материал с таким алисом существует, измените алиас', HttpStatus.CONFLICT);

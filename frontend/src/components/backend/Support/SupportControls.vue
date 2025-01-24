@@ -49,8 +49,6 @@ watch(
 
 <template>
   <div class="support-controlls">
-    <SupportMailDelete v-if="isIncludeRole('admin')" @on:delete-confirmed="emit('on:delete-confirmed')" />
-
     <UiDropdownMenu v-model:open="isOpenDropdown">
       <UiDropdownMenuTrigger as-child>
         <UiTooltipProvider :delay-duration="100">
@@ -81,11 +79,15 @@ watch(
         </UiDropdownMenuRadioGroup>
       </UiDropdownMenuContent>
     </UiDropdownMenu>
+
+    <SupportMailDelete v-if="isIncludeRole('admin')" @on:delete-confirmed="emit('on:delete-confirmed')" />
+
+    <SupportHistory :selected="selected" />
   </div>
 </template>
 
 <style lang="scss">
 .support-controlls {
-  @apply flex items-center justify-end gap-x-2;
+  @apply flex items-center gap-x-2;
 }
 </style>

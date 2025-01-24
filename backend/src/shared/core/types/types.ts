@@ -31,6 +31,7 @@ export type DeviceInfo = {
 };
 
 export type PaginateQuery = {
+  id?: string;
   page: number;
   limit: number;
   search: string;

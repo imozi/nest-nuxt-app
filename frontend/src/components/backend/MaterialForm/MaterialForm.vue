@@ -7,11 +7,39 @@ const { mode = 'create', type = 'material' } = defineProps<MaterialFormProps>();
 
 const currentTab = ref<'material' | 'material-page'>(type);
 const formRef = useTemplateRef('formRef');
+const { data: material } = useNuxtData<MaterialSingle>('material');
 
 const isSaved = ref<boolean>(false);
 
 const onClickCancel = () => {
   navigateTo('/dashboard/materials');
+};
+
+const onClickConfirmedDelete = () => {
+  isSaved.value = true;
+
+  const promise = async () => {
+    try {
+      await $fetchSecure(`/materials`, { body: { id: material.value?.id }, method: 'DELETE' });
+      return 'Материал успешно удален!';
+    } catch (error) {
+      const err = (error as IFetchError<ResponseError>).data;
+      throw createError({ message: err?.message, statusCode: err?.statusCode });
+    }
+  };
+
+  toast.promise(promise, {
+    loading: 'Удаление...',
+    success: (message: string) => {
+      isSaved.value = false;
+      navigateTo('/dashboard/materials');
+      return message;
+    },
+    error: (err: ResponseError) => {
+      isSaved.value = false;
+      return err.message;
+    },
+  });
 };
 
 watch(currentTab, () => {
@@ -36,18 +64,24 @@ watch(currentTab, () => {
         <div class="menu__collumn">
           <UiAlertDialog>
             <UiAlertDialogTrigger as-child>
-              <UiButton variant="outline" class="text-muted-foreground"> Отмена </UiButton>
+              <UiButton v-if="mode === 'create'" variant="outline" class="text-muted-foreground"> Отмена </UiButton>
+              <UiButton v-else variant="destructive"> Удалить </UiButton>
             </UiAlertDialogTrigger>
             <UiAlertDialogContent>
               <UiAlertDialogHeader>
                 <UiAlertDialogTitle>Вы уверены?</UiAlertDialogTitle>
                 <UiAlertDialogDescription>
-                  Вы уверены что хотите отменить {{ mode === 'edit' ? 'редактирование' : 'создание' }} материала?
+                  Вы уверены что хотите {{ mode === 'edit' ? 'удалить материал' : 'отменить создание материала ' }}?
                 </UiAlertDialogDescription>
               </UiAlertDialogHeader>
               <UiAlertDialogFooter>
                 <UiAlertDialogCancel>Нет</UiAlertDialogCancel>
-                <UiAlertDialogAction class="text-white" :disabled="isSaved" @click="onClickCancel"> Да </UiAlertDialogAction>
+                <UiAlertDialogAction v-if="mode === 'create'" class="text-white" :disabled="isSaved" @click="onClickCancel">
+                  Да
+                </UiAlertDialogAction>
+                <UiAlertDialogAction v-else class="text-white" :disabled="isSaved" @click="onClickConfirmedDelete">
+                  Да
+                </UiAlertDialogAction>
               </UiAlertDialogFooter>
             </UiAlertDialogContent>
           </UiAlertDialog>

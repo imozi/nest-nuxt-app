@@ -1,12 +1,13 @@
 <script setup lang="ts">
 await useAsyncData('statistics', async () => {
-  const [session, material, mail] = await Promise.all([
+  const [session, material, mail, mailYear] = await Promise.all([
     $fetchSecure<AccountSessionData>('/sessions/me'),
     $fetchSecure<string>('/materials/total'),
     $fetchSecure<string>('/support-mail/total'),
+    $fetchSecure<{ month: string; count: number }[]>('/support-mail/total-year'),
   ]);
 
-  return { session, material, mail };
+  return { session, material, mail, mailYear };
 });
 </script>
 
@@ -24,6 +25,7 @@ await useAsyncData('statistics', async () => {
       <div class="widgets__content">
         <WidgetsSessions />
         <WidgetsMaterials />
+        <!-- <WidgetsMaterials /> -->
         <WidgetsSupportMails />
       </div>
     </div>
@@ -33,19 +35,15 @@ await useAsyncData('statistics', async () => {
 <style lang="scss">
 .widgets {
   &__header {
-    @apply flex items-center gap-x-5 pb-5;
+    @apply mt-1.5 flex items-center gap-x-5 pb-6;
   }
 
   &__column {
     @apply flex items-center gap-x-2;
-
-    &:first-child {
-      @apply border-r pr-4;
-    }
   }
 
   &__content {
-    @apply grid grid-flow-col gap-4 py-4;
+    @apply flex flex-wrap gap-4 py-4;
   }
 
   &__list {

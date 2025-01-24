@@ -1,8 +1,9 @@
 import { PrismaService } from '@/app/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { BaseRepository } from '../core/interfaces';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { ReturnTypeMeta } from '../core/types';
+import { ITXClientDenyList } from '@prisma/client/runtime/library';
 
 export abstract class BasePostgresRepository<T extends Prisma.ModelName> implements BaseRepository {
   private readonly MAX_DEFAULT_LIMIT = 50;
@@ -167,8 +168,12 @@ export abstract class BasePostgresRepository<T extends Prisma.ModelName> impleme
     return { status: 'OK' };
   }
 
-  async transaction(action: [...any]) {
+  async transaction(action: any[]) {
     return await this.prisma.$transaction(action);
+  }
+
+  async transactionStep(fn: (tx: Omit<PrismaClient, ITXClientDenyList>) => Promise<any>) {
+    return await this.prisma.$transaction(fn);
   }
 
   async aggregate(data: Prisma.TypeMap['model'][T]['operations']['aggregate']['args']) {

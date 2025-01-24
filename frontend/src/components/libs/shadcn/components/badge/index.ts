@@ -9,9 +9,8 @@ export const badgeVariants = cva(
       variant: {
         new: 'border-transparent bg-cyan-500 text-primary-foreground hover:bg-cyan-500/80',
         viewed: 'text-foreground',
-        progress: 'border-transparent bg-amber-600 text-primary-foreground hover:bg-amber-400/80',
-        technical:
-          'border-transparent bg-yellow-400 text-primary-foreground hover:bg-yellow-400/80',
+        progress: 'border-transparent bg-amber-500 text-primary-foreground hover:bg-amber-400/80',
+        technical: 'border-transparent bg-red-600 text-primary-foreground hover:bg-yellow-400/80',
         closed: 'border-transparent bg-green-600 text-primary-foreground hover:bg-green-400/80',
         deferred: 'border-transparent bg-violet-600 text-primary-foreground hover:bg-violet-400/80',
       },

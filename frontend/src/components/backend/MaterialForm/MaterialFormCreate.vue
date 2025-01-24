@@ -48,7 +48,7 @@ const onSubmit = handleSubmit(async (values) => {
   isSaved.value = true;
 
   if (values.menuItem === undefined && values.page === undefined) {
-    return toast.error('Прикрпите материал к пункту меню или странице');
+    return toast.error('Прикрепите материал к пункту меню или странице');
   }
 
   const promise = async () => {

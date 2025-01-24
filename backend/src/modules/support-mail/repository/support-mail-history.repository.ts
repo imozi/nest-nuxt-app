@@ -10,6 +10,6 @@ export class SupportMailHistoryRepository extends BasePostgresRepository<'Suppor
   }
 
   async getTotal() {
-    return await this.prisma.supportMail.count();
+    return await this.prisma.supportMailHistory.count();
   }
 }

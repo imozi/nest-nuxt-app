@@ -15,7 +15,7 @@ const emit = defineEmits(['on:scroll-bottom']);
       <slot name="support-list-header" />
     </div>
     <UiScrollArea v-if="mails.length" class="support-mail-area" @on:scroll-bottom="emit('on:scroll-bottom')">
-      <List class="support-mail-area__list">
+      <List v-auto-animate="{ duration: 200 }" class="support-mail-area__list">
         <ListItem v-for="mail of mails" :key="mail.id" class="support-mail-area__item">
           <SupportMailCard :mail="mail" :selected="selected" />
         </ListItem>

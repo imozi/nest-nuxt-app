@@ -69,7 +69,7 @@ const onMouseleave = () => {
       </header>
       <UiSeparator />
       <div class="tags__content">
-        <List class="tags__list">
+        <List v-auto-animate="{ duration: 200 }" class="tags__list">
           <ListItem v-for="tag of tags?.data" :key="tag.id" class="tags__item">
             <div class="tags__item-wrapper">
               <Icon name="solar:hashtag-square-linear" class="size-4" />

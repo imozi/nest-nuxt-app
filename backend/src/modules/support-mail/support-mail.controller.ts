@@ -21,6 +21,18 @@ export class SupportMailController {
     return await this.supportMailService.getTotal();
   }
 
+  @Get('total-year')
+  @UseGuards(JwtAccessGuard)
+  async getTotalYear() {
+    return await this.supportMailService.getTotalYear();
+  }
+
+  @Get('history')
+  @UseGuards(JwtAccessGuard)
+  async history(@Query() query: PaginateQuery) {
+    return await this.supportMailService.history(query);
+  }
+
   @Post()
   async create(@Body() data: SupportMailDto) {
     return await this.supportMailService.create(data);

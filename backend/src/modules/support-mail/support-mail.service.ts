@@ -13,7 +13,14 @@ export class SupportMailService {
   async findAll(query: PaginateQuery) {
     return await this.supportMailRepository.findMany({
       ...query,
-      params: { include: { history: { orderBy: { createdAt: 'desc' } } }, orderBy: { createdAt: 'desc' } },
+      params: { orderBy: { createdAt: 'desc' } },
+    });
+  }
+
+  async history(query: PaginateQuery) {
+    return await this.supportMailHistoryRepository.findMany({
+      ...query,
+      params: { where: { parentId: query.id }, orderBy: { createdAt: 'desc' } },
     });
   }
 
@@ -21,30 +28,35 @@ export class SupportMailService {
     const unique = await this.supportMailRepository.findUnique({ where: { email: data.email } });
 
     if (unique) {
-      await this.supportMailHistoryRepository.create({
-        name: unique.name,
-        email: unique.email,
-        position: unique.position,
-        organization: unique.organization,
-        question: unique.position,
-        status: unique.status,
-        remoteId: unique.remoteId,
-        createdAt: unique.createdAt as string,
-        updatedAt: unique.createdAt as string,
-      });
-      await this.supportMailRepository.delete([unique.id]);
-      const newMail = await this.supportMailRepository.create(data);
+      return await this.supportMailRepository.transactionStep(async (tx) => {
+        await tx.supportMailHistory.create({
+          data: {
+            name: unique.name,
+            email: unique.email,
+            position: unique.position,
+            organization: unique.organization,
+            question: unique.question,
+            status: unique.status,
+            remoteId: unique.remoteId,
+            createdAt: unique.createdAt as string,
+            updatedAt: unique.createdAt as string,
+          },
+        });
 
-      await this.supportMailHistoryRepository.updateMany({
-        where: {
-          email: data.email,
-        },
-        data: {
-          parentId: newMail.id,
-        },
-      });
+        await tx.supportMail.delete({ where: { id: unique.id } });
+        const newMail = await tx.supportMail.create({ data });
 
-      return newMail;
+        await tx.supportMailHistory.updateMany({
+          where: {
+            email: data.email,
+          },
+          data: {
+            parentId: newMail.id,
+          },
+        });
+
+        return newMail;
+      });
     }
 
     return await this.supportMailRepository.create(data);
@@ -55,7 +67,16 @@ export class SupportMailService {
   }
 
   async getTotal() {
-    return await this.supportMailRepository.getTotal();
+    return await this.supportMailRepository.transactionStep(async (tx) => {
+      const countMails = await tx.supportMail.count();
+      const countHistory = await tx.supportMailHistory.count();
+
+      return countMails + countHistory;
+    });
+  }
+
+  async getTotalYear() {
+    return await this.supportMailRepository.getTotalYear(new Date().getFullYear());
   }
 
   async delete({ id }: SupportMailDeleteDto) {
@@ -65,39 +86,43 @@ export class SupportMailService {
       return await this.supportMailRepository.delete([id]);
     }
 
-    const lastRecord = await this.supportMailHistoryRepository.findFirst({
-      where: {
-        email: mail.email,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
+    return await this.supportMailRepository.transactionStep(async (tx) => {
+      const lastRecord = await tx.supportMailHistory.findFirst({
+        where: {
+          email: mail.email,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      await tx.supportMail.delete({ where: { id } });
+      await tx.supportMailHistory.delete({ where: { id: lastRecord.id } });
+
+      const lastRecordMaild = await tx.supportMail.create({
+        data: {
+          name: lastRecord.name,
+          email: lastRecord.email,
+          position: lastRecord.position,
+          organization: lastRecord.organization,
+          question: lastRecord.question,
+          status: lastRecord.status,
+          remoteId: lastRecord.remoteId,
+          createdAt: lastRecord.createdAt as unknown as string,
+          updatedAt: lastRecord.createdAt as unknown as string,
+        },
+      });
+
+      await tx.supportMailHistory.updateMany({
+        where: {
+          email: lastRecordMaild.email,
+        },
+        data: {
+          parentId: lastRecordMaild.id,
+        },
+      });
+
+      return { status: 'OK' };
     });
-
-    await this.supportMailRepository.delete([id]);
-    await this.supportMailHistoryRepository.delete([lastRecord.id]);
-
-    const lastRecordMaild = await this.supportMailRepository.create({
-      name: lastRecord.name,
-      email: lastRecord.email,
-      position: lastRecord.position,
-      organization: lastRecord.organization,
-      question: lastRecord.position,
-      status: lastRecord.status,
-      remoteId: lastRecord.remoteId,
-      createdAt: lastRecord.createdAt as string,
-      updatedAt: lastRecord.createdAt as string,
-    });
-
-    await this.supportMailHistoryRepository.updateMany({
-      where: {
-        email: lastRecordMaild.email,
-      },
-      data: {
-        parentId: lastRecordMaild.id,
-      },
-    });
-
-    return { status: 'OK' };
   }
 }

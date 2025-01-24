@@ -45,7 +45,7 @@ const showEditDialog = (item: MenuItem) => {
     <ClientOnly>
       <UiTabsContent :value="currentTab!" class="menu__content">
         <template v-if="menuItems?.length">
-          <List class="menu__items">
+          <List v-auto-animate="{ duration: 200 }" class="menu__items">
             <ListItem v-for="item of menuItems" :key="item.id">
               <UiAccordion type="single" collapsible class="menu__accordion">
                 <UiAccordionItem :value="item.id">

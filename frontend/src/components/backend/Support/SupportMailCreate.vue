@@ -29,6 +29,7 @@ const formSchema = toTypedSchema(
       required_error: 'Поле не должно быть пустым',
     })
       .trim()
+      .min(9, { message: 'если id нет укажите 000000000' })
       .default('000000000'),
     status: string().default('new'),
   }),
@@ -87,7 +88,14 @@ const onMouseleave = () => {
       <UiTooltipProvider :delay-duration="100">
         <UiTooltip :open="isOpenTooltip">
           <UiTooltipTrigger as-child>
-            <UiButton variant="secondary" size="icon" @click.prevent="onClick" @mouseover="onMouseover" @mouseleave="onMouseleave">
+            <UiButton
+              variant="secondary"
+              size="icon"
+              class="flex h-full w-auto cursor-pointer items-center justify-start gap-2 p-2 dark:text-white"
+              @click.prevent="onClick"
+              @mouseover="onMouseover"
+              @mouseleave="onMouseleave"
+            >
               <Icon name="solar:add-square-outline" class="size-5" />
             </UiButton>
           </UiTooltipTrigger>
