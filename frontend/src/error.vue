@@ -22,7 +22,7 @@ const onClearError = () => clearError({ redirect: '/' });
           </div>
         </div>
         <div class="">
-          <UiButton type="button" @click="onClearError">Вернуться дамой</UiButton>
+          <UiButton type="button" @click="onClearError">Вернуться на главную</UiButton>
         </div>
       </div>
     </main>
