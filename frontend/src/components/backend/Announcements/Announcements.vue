@@ -13,11 +13,11 @@
           <List class="announcements__list">
             <ListItem class="announcements__list-item">
               <Icon name="solar:unread-bold" class="size-4 text-primary" />
-              <p>Основная часть работы админки готова</p>
+              <p>Основная часть работы админки готова, можно протестировать весь функционал</p>
             </ListItem>
             <ListItem class="announcements__list-item">
               <Icon name="solar:unread-bold" class="size-4 text-primary" />
-              <p>Можно протестировать весь функционал, кроме обращений они заполняются с стороны клиента</p>
+              <p>Некоторые функции не доступны менеджеру</p>
             </ListItem>
             <ListItem class="announcements__list-item">
               <Icon name="solar:close-square-bold" class="size-4 text-destructive" />

@@ -70,7 +70,7 @@ const onMouseleave = () => {
         <UiTooltip :open="isOpenTooltip">
           <UiTooltipTrigger as-child>
             <UiButton variant="secondary" size="icon" @click.prevent="onClick" @mouseover="onMouseover" @mouseleave="onMouseleave">
-              <Icon name="solar:file-remove-outline" class="size-5" />
+              <Icon name="solar:trash-bin-trash-outline" class="size-5" />
             </UiButton>
           </UiTooltipTrigger>
           <UiTooltipContent>

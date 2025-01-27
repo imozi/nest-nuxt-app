@@ -40,7 +40,7 @@ const onDeleteConfirmed = () => {
               @mouseover="onMouseover"
               @mouseleave="onMouseleave"
             >
-              <Icon name="solar:file-remove-linear" class="size-5" />
+              <Icon name="solar:trash-bin-trash-outline" class="size-5" />
             </UiButton>
           </UiTooltipTrigger>
           <UiTooltipContent>

@@ -58,6 +58,11 @@ const onDelete = async () => {
   });
 };
 
+const onCreated = () => {
+  selected.length = 0;
+  refresh();
+};
+
 watch(search, () => {
   selected.length = 0;
 });
@@ -79,7 +84,7 @@ watch(search, () => {
                 <Icon name="lucide:search" class="size-4 text-muted-foreground" />
               </span>
             </div>
-            <SupportMailCreate @on:created="refresh" />
+            <SupportMailCreate @on:created="onCreated" />
           </div>
         </header>
       </div>
@@ -139,7 +144,7 @@ watch(search, () => {
 
 <style lang="scss">
 .support {
-  @apply h-[calc(100vh_-_(var(--height-original)_+_(var(--height-inner)_*_2))_-_40px)];
+  @apply h-[calc(100vh_-_(var(--height-original)_+_(var(--height-inner)_*_2))_-_76px)];
 
   &__header {
     @apply flex items-center gap-x-5 pb-5;

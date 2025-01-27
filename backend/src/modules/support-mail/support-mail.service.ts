@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SupportMailHistoryRepository, SupportMailRepository } from './repository';
 import { PaginateQuery } from '@/shared/core/types';
-import { SupportMailDeleteDto, SupportMailDto, SupportMailUpdateDto } from './dto';
+import { SupportMailCountDto, SupportMailDeleteDto, SupportMailDto, SupportMailUpdateDto } from './dto';
 
 @Injectable()
 export class SupportMailService {
@@ -75,8 +75,20 @@ export class SupportMailService {
     });
   }
 
+  async updateHistory(data: SupportMailUpdateDto) {
+    return await this.supportMailHistoryRepository.update(data);
+  }
+
   async getTotalYear() {
     return await this.supportMailRepository.getTotalYear(new Date().getFullYear());
+  }
+
+  async getTotalNew({ email }: SupportMailCountDto) {
+    return this.supportMailHistoryRepository.getTotalNew(email);
+  }
+
+  async deleteHistory({ id }: SupportMailDeleteDto) {
+    return await this.supportMailHistoryRepository.delete([id]);
   }
 
   async delete({ id }: SupportMailDeleteDto) {

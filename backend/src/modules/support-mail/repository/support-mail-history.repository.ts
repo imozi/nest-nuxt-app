@@ -12,4 +12,15 @@ export class SupportMailHistoryRepository extends BasePostgresRepository<'Suppor
   async getTotal() {
     return await this.prisma.supportMailHistory.count();
   }
+
+  async getTotalNew(email: string) {
+    return this.prisma.supportMailHistory.count({
+      where: {
+        email,
+        status: {
+          not: 'closed',
+        },
+      },
+    });
+  }
 }
